@@ -48,6 +48,13 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 .xp-bar  { width:100%; height:7px; background:#0a0a1a; border:1px solid #333; border-radius:2px; overflow:hidden; margin-top:4px; }
 .xp-fill { height:100%; background:linear-gradient(90deg,#1e3a8a,#60a5fa); transition:width 0.3s ease; }
 
+/* HP / MP bars */
+.hp-bar  { width:100%; height:8px; background:#0a0a1a; border:1px solid #333; border-radius:2px; overflow:hidden; margin-top:2px; }
+.hp-fill { height:100%; background:linear-gradient(90deg,#4a1a1a,#c04040); transition:width 0.3s ease; }
+.mp-bar  { width:100%; height:8px; background:#0a0a1a; border:1px solid #333; border-radius:2px; overflow:hidden; margin-top:2px; }
+.mp-fill { height:100%; background:linear-gradient(90deg,#1a1a6a,#8060d0); transition:width 0.3s ease; }
+.regen-label { display:flex; justify-content:space-between; font-size:10px; color:#a89070; margin-top:5px; margin-bottom:2px; }
+
 /* Stats */
 .stat-row   { display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid #1e1e30; font-size:12px; }
 .stat-label { color:#a89070; }
@@ -168,7 +175,12 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
       <h3>Character</h3>
       <div class="stat-row"><span class="stat-label">Location</span><span class="stat-value" id="stat-location">-</span></div>
       <div class="stat-row"><span class="stat-label">Status</span><span class="stat-value" id="stat-status">Idle</span></div>
-      <div class="stat-row"><span class="stat-label">Gold</span><span class="stat-value">&#x1F4B0; <span id="stat-gold">0</span></span></div>
+      <div class="stat-row"><span class="stat-label">Gold</span><span class="stat-value">&#x1F4B0; <span id="stat-gold">100</span></span></div>
+      <div class="stat-row"><span class="stat-label">Char Level</span><span class="stat-value" id="stat-charlevel">1</span></div>
+      <div class="regen-label"><span>&#10084; HP</span><span><span id="stat-hp">5</span> / <span id="stat-maxhp">5</span></span></div>
+      <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
+      <div class="regen-label"><span>&#10022; MP</span><span><span id="stat-mp">1</span> / <span id="stat-maxmp">5</span></span></div>
+      <div class="mp-bar"><div class="mp-fill" id="mp-fill" style="width:20%"></div></div>
     </div>
 
     <div class="panel">
@@ -515,6 +527,7 @@ function onLoggedIn() {
   updateSkillDetail(selectedSkill);
   updateEquipmentUI();
   updateInventoryUI();
+  updateCharStatsUI();
   document.getElementById('stat-gold').textContent = state.gold;
   addLog(`Welcome, ${authUsername}! Select an action on the right to begin.`, 'travel');
 }
@@ -542,34 +555,91 @@ let state = {
   location:  'isenvale',
   skills:    defaultSkills(),
   inventory: {},
-  gold:      0,
+  gold:      100,
   equipment: {tool:null, accessory:null},
-  action:    null,   // {skillId, resourceId, startTime, endTime}
+  action:    null,
   travel:    null,
+  charXP:    0,
+  charLevel: 1,
+  hp:        5,
+  mp:        1,
 };
+
+let charXPBuffer = 0;   // fractional char XP accumulator — runtime only
+let regenTimer   = Date.now(); // HP/MP regen tracker — runtime only
 
 function resetState() {
   state.location  = 'isenvale';
   state.skills    = defaultSkills();
   state.inventory = {};
-  state.gold      = 0;
+  state.gold      = 100;
   state.equipment = {tool:null, accessory:null};
   state.action    = null;
   state.travel    = null;
+  state.charXP    = 0;
+  state.charLevel = 1;
+  state.hp        = 5;
+  state.mp        = 1;
+  charXPBuffer    = 0;
+  regenTimer      = Date.now();
 }
 
 function skillLevel(id) { return (state.skills[id] || {level:1}).level; }
 
+// ============================================================
+//  HP / MP
+// ============================================================
+function getMaxHP() {
+  // Base 3 + Combat Level + Character Level + gear (future) + food (future)
+  return 3 + skillLevel('combat') + state.charLevel;
+}
+function getMaxMP() {
+  // Magic Level + Character Level + 3 + gear (future) + food (future)
+  return skillLevel('magic') + state.charLevel + 3;
+}
+
+function updateCharStatsUI() {
+  const maxHP = getMaxHP(), maxMP = getMaxMP();
+  state.hp = Math.min(state.hp, maxHP);
+  state.mp = Math.min(state.mp, maxMP);
+  document.getElementById('stat-charlevel').textContent = state.charLevel;
+  document.getElementById('stat-hp').textContent        = state.hp;
+  document.getElementById('stat-maxhp').textContent     = maxHP;
+  document.getElementById('stat-mp').textContent        = state.mp;
+  document.getElementById('stat-maxmp').textContent     = maxMP;
+  document.getElementById('hp-fill').style.width = (maxHP > 0 ? (state.hp / maxHP * 100) : 0) + '%';
+  document.getElementById('mp-fill').style.width = (maxMP > 0 ? (state.mp / maxMP * 100) : 0) + '%';
+}
+
+function tickRegen(now) {
+  if (now - regenTimer >= 300000) { // 5 minutes
+    regenTimer = now;
+    const maxHP = getMaxHP(), maxMP = getMaxMP();
+    let changed = false;
+    if (state.hp < maxHP) { state.hp = Math.min(state.hp + 1, maxHP); changed = true; }
+    if (state.mp < maxMP) { state.mp = Math.min(state.mp + 1, maxMP); changed = true; }
+    if (changed) { updateCharStatsUI(); saveGame(); }
+  }
+}
+
 function getStateData() {
-  return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment };
+  return {
+    location:state.location, skills:state.skills, inventory:state.inventory,
+    gold:state.gold, equipment:state.equipment,
+    charXP:state.charXP, charLevel:state.charLevel, hp:state.hp, mp:state.mp,
+  };
 }
 
 function applyServerData(d) {
   state.location  = d.location  || 'isenvale';
   state.skills    = Object.assign(defaultSkills(), d.skills || {});
   state.inventory = d.inventory || {};
-  state.gold      = d.gold      || 0;
+  state.gold      = d.gold      !== undefined ? d.gold : 100;
   state.equipment = d.equipment || {tool:null, accessory:null};
+  state.charXP    = d.charXP    || 0;
+  state.charLevel = d.charLevel || 1;
+  state.hp        = d.hp        !== undefined ? d.hp : 5;
+  state.mp        = d.mp        !== undefined ? d.mp : 1;
 }
 
 async function saveGame() {
@@ -586,13 +656,28 @@ async function saveGame() {
 function xpIntoLevel(skillId) { return state.skills[skillId].xp - xpForLevel(state.skills[skillId].level); }
 function xpForNext(skillId)   { return xpForLevel(state.skills[skillId].level+1) - xpForLevel(state.skills[skillId].level); }
 
+function grantCharXP(skillXP) {
+  charXPBuffer += skillXP / 12;
+  const whole = Math.floor(charXPBuffer);
+  if (whole <= 0) return;
+  charXPBuffer -= whole;
+  state.charXP += whole;
+  while (state.charXP >= xpForLevel(state.charLevel + 1)) {
+    state.charLevel++;
+    addLog(`CHARACTER LEVEL UP! You are now character level ${state.charLevel}!`, 'levelup');
+  }
+  updateCharStatsUI();
+}
+
 function grantXP(skillId, amount) {
   if (!state.skills[skillId]) return;
   state.skills[skillId].xp += amount;
+  grantCharXP(amount);
   while (state.skills[skillId].xp >= xpForLevel(state.skills[skillId].level+1)) {
     state.skills[skillId].level++;
     addLog(`LEVEL UP! ${SKILL_DEFS[skillId].name} is now level ${state.skills[skillId].level}!`, 'levelup');
     if (skillId==='woodcutting') updateEquipmentUI();
+    if (skillId==='combat' || skillId==='magic') updateCharStatsUI();
   }
   updateSkillCell(skillId);
   if (skillId === selectedSkill) updateSkillDetail(skillId);
@@ -974,6 +1059,7 @@ function tickBotCheck(now) {
 function tick() {
   const now = Date.now();
   tickBotCheck(now);
+  tickRegen(now);
 
   if (state.action) {
     const total=state.action.endTime-state.action.startTime, elapsed=now-state.action.startTime;
