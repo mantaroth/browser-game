@@ -1185,11 +1185,17 @@ document.addEventListener('keydown', e => {
   if (authToken) {
     try {
       const res  = await fetch('/api/player', { headers: { 'Authorization': `Bearer ${authToken}` } });
-      const json = await res.json();
-      if (res.ok && json.data && Object.keys(json.data).length) {
-        applyServerData(json.data);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data && Object.keys(json.data).length) applyServerData(json.data);
+        onLoggedIn();
+      } else {
+        // Token expired or invalid — clear it and show login
+        sessionStorage.removeItem('tr_token');
+        sessionStorage.removeItem('tr_username');
+        authToken = null;
+        authUsername = null;
       }
-      onLoggedIn();
     } catch(e) {
       // Server unreachable — show login
     }
