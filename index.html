@@ -640,17 +640,16 @@ function tick() {
     document.getElementById('action-time-label').textContent = remain + 's';
 
     if (now >= state.action.endTime) {
-      const t = TREES[state.action.treeId];
-      state.action = null;
+      const t      = TREES[state.action.treeId];
+      const treeId = state.action.treeId;
       state.wc.cuts++;
-      document.getElementById('action-timer-div').style.display = 'none';
-      document.getElementById('stat-status').textContent = 'Idle';
       grantXP(t.xp);
       addItem(t.log);
       addLog(`You cut a ${t.log}. (+${t.xp} xp)`, 'success');
       saveGame();
-      updateActionSection();
-      updateTravelSection();
+      // Auto-repeat: restart the same action immediately
+      const restart = Date.now();
+      state.action = { treeId, startTime: restart, endTime: restart + t.time };
     }
   }
 
