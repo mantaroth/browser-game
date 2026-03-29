@@ -189,6 +189,73 @@
   /* Section divider */
   .sec-header { color: #a89070; font-size: 10px; margin: 6px 0 3px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #2a2a3e; padding-bottom: 2px; }
 
+  /* Login overlay */
+  #login-overlay {
+    position: fixed;
+    inset: 0;
+    background: #1a1a2e;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #login-overlay.hidden { display: none; }
+  #login-box {
+    background: #16213e;
+    border: 2px solid #4a3728;
+    border-radius: 6px;
+    padding: 32px 36px;
+    width: 320px;
+    text-align: center;
+  }
+  #login-box h1 { color: #c8a96e; font-size: 22px; letter-spacing: 3px; margin-bottom: 4px; }
+  #login-box .subtitle { color: #a89070; font-size: 11px; margin-bottom: 24px; }
+  .login-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #4a3728; }
+  .login-tab {
+    flex: 1;
+    padding: 8px;
+    background: none;
+    border: none;
+    color: #a89070;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .login-tab.active { color: #c8a96e; border-bottom-color: #c8a96e; }
+  .login-field {
+    width: 100%;
+    padding: 9px 10px;
+    margin-bottom: 10px;
+    background: #0a0a1a;
+    border: 1px solid #4a3728;
+    color: #e0d8c8;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    border-radius: 3px;
+    outline: none;
+  }
+  .login-field:focus { border-color: #c8a96e; }
+  .login-submit {
+    width: 100%;
+    padding: 10px;
+    background: #4a3728;
+    border: 1px solid #c8a96e;
+    color: #c8a96e;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  .login-submit:hover { background: #6a5040; }
+  #login-error { color: #e07070; font-size: 11px; margin-top: 10px; min-height: 16px; }
+
   /* Bot check modal */
   #botcheck-overlay {
     display: none;
@@ -232,6 +299,23 @@
 </head>
 <body>
 
+<!-- Login / Register overlay -->
+<div id="login-overlay">
+  <div id="login-box">
+    <h1>&#9876; TIMBERREALM</h1>
+    <div class="subtitle">A browser idle adventure</div>
+    <div class="login-tabs">
+      <button class="login-tab active" id="tab-login"   onclick="showTab('login')">Login</button>
+      <button class="login-tab"        id="tab-register" onclick="showTab('register')">Register</button>
+    </div>
+    <input class="login-field" id="login-username" type="text"     placeholder="Username"        autocomplete="username" />
+    <input class="login-field" id="login-password" type="password" placeholder="Password"        autocomplete="current-password" />
+    <input class="login-field" id="reg-password2"  type="password" placeholder="Confirm password" style="display:none" autocomplete="new-password" />
+    <button class="login-submit" id="login-submit-btn" onclick="submitLogin()">Enter World</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
 <!-- Bot check modal -->
 <div id="botcheck-overlay">
   <div id="botcheck-box">
@@ -247,7 +331,11 @@
 <div id="header">
   <h1>&#9876; TIMBERREALM</h1>
   <span style="color:#a89070;font-size:11px;">A browser idle adventure</span>
-  <span style="margin-left:auto;color:#555;font-size:10px;" id="save-indicator"></span>
+  <span style="margin-left:auto;display:flex;align-items:center;gap:12px;">
+    <span style="color:#a89070;font-size:11px;" id="header-username"></span>
+    <span style="color:#555;font-size:10px;" id="save-indicator"></span>
+    <button onclick="logout()" id="logout-btn" style="display:none;padding:4px 10px;background:#3a1a1a;border:1px solid #8a3030;color:#e07070;cursor:pointer;border-radius:3px;font-family:'Courier New',monospace;font-size:11px;">Logout</button>
+  </span>
 </div>
 
 <div id="layout">
@@ -449,10 +537,94 @@ function getChopMs() {
 function getChopSeconds() { return getChopMs() / 1000; }
 
 // ============================================================
-//  STATE
+//  AUTH
 // ============================================================
 
-const SAVE_KEY = 'timberrealm_v2';
+let authToken    = sessionStorage.getItem('tr_token')    || null;
+let authUsername = sessionStorage.getItem('tr_username') || null;
+let loginMode    = 'login'; // 'login' | 'register'
+
+function showTab(mode) {
+  loginMode = mode;
+  document.getElementById('tab-login').classList.toggle('active',    mode === 'login');
+  document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+  document.getElementById('reg-password2').style.display = mode === 'register' ? 'block' : 'none';
+  document.getElementById('login-submit-btn').textContent = mode === 'login' ? 'Enter World' : 'Create Account';
+  document.getElementById('login-error').textContent = '';
+}
+
+async function submitLogin() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+  errEl.textContent = '';
+
+  if (loginMode === 'register') {
+    const pw2 = document.getElementById('reg-password2').value;
+    if (password !== pw2) { errEl.textContent = 'Passwords do not match.'; return; }
+  }
+
+  const endpoint = loginMode === 'login' ? '/api/login' : '/api/register';
+  try {
+    const res  = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+    const json = await res.json();
+    if (!res.ok) { errEl.textContent = json.error || 'An error occurred.'; return; }
+
+    authToken    = json.token;
+    authUsername = json.username;
+    sessionStorage.setItem('tr_token',    authToken);
+    sessionStorage.setItem('tr_username', authUsername);
+
+    // Load saved data if logging in (register starts fresh)
+    if (loginMode === 'login' && json.data && Object.keys(json.data).length) {
+      applyServerData(json.data);
+    }
+
+    onLoggedIn();
+  } catch (e) {
+    errEl.textContent = 'Could not reach server. Try again.';
+  }
+}
+
+function onLoggedIn() {
+  document.getElementById('login-overlay').classList.add('hidden');
+  document.getElementById('header-username').textContent = authUsername;
+  document.getElementById('logout-btn').style.display = 'block';
+  buildMap();
+  updateLocationUI();
+  updateSkillUI();
+  updateEquipmentUI();
+  updateInventoryUI();
+  document.getElementById('stat-gold').textContent = state.gold;
+  addLog(`Welcome back, ${authUsername}!`, 'travel');
+}
+
+function logout() {
+  authToken    = null;
+  authUsername = null;
+  sessionStorage.removeItem('tr_token');
+  sessionStorage.removeItem('tr_username');
+  document.getElementById('header-username').textContent = '';
+  document.getElementById('logout-btn').style.display = 'none';
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('login-error').textContent = '';
+  // Reset state
+  state.location  = 'isenvale';
+  state.wc        = { xp:0, level:1, cuts:0 };
+  state.inventory = {};
+  state.gold      = 0;
+  state.equipment = { tool:null, accessory:null };
+  state.action    = null;
+  state.travel    = null;
+}
+
+// ============================================================
+//  STATE
+// ============================================================
 
 let state = {
   location:  'isenvale',
@@ -460,32 +632,38 @@ let state = {
   inventory: {},
   gold:      0,
   equipment: { tool: null, accessory: null },
-  action:    null,   // { treeId, startTime, endTime }
-  travel:    null,   // { from, to, startTime, endTime }
+  action:    null,
+  travel:    null,
 };
 
-function saveGame() {
-  localStorage.setItem(SAVE_KEY, JSON.stringify({
+function getStateData() {
+  return {
     location:  state.location,
     wc:        state.wc,
     inventory: state.inventory,
     gold:      state.gold,
     equipment: state.equipment,
-  }));
-  const el = document.getElementById('save-indicator');
-  el.textContent = 'Saved ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  };
 }
 
-function loadGame() {
+function applyServerData(d) {
+  state.location  = d.location  || 'isenvale';
+  state.wc        = d.wc        || { xp:0, level:1, cuts:0 };
+  state.inventory = d.inventory || {};
+  state.gold      = d.gold      || 0;
+  state.equipment = d.equipment || { tool:null, accessory:null };
+}
+
+async function saveGame() {
+  if (!authToken) return;
   try {
-    const d = JSON.parse(localStorage.getItem(SAVE_KEY));
-    if (!d) return;
-    state.location  = d.location  || 'isenvale';
-    state.wc        = d.wc        || { xp:0, level:1, cuts:0 };
-    state.inventory = d.inventory || {};
-    state.gold      = d.gold      || 0;
-    state.equipment = d.equipment || { tool: null, accessory: null };
-    addLog('Save game loaded.', 'travel');
+    await fetch('/api/save', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+      body:    JSON.stringify({ data: getStateData() }),
+    });
+    const el = document.getElementById('save-indicator');
+    el.textContent = 'Saved ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
   } catch(e) {}
 }
 
@@ -995,14 +1173,28 @@ function tick() {
 //  BOOT
 // ============================================================
 
-loadGame();
-buildMap();
-updateLocationUI();
-updateSkillUI();
-updateEquipmentUI();
-updateInventoryUI();
-document.getElementById('stat-gold').textContent = state.gold;
-addLog('Welcome to TimberRealm! Click a tree action on the right to begin chopping.', 'travel');
+// Allow Enter key to submit login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !document.getElementById('login-overlay').classList.contains('hidden')) {
+    submitLogin();
+  }
+});
+
+// If a valid session token exists, attempt to reload player data
+(async () => {
+  if (authToken) {
+    try {
+      const res  = await fetch('/api/player', { headers: { 'Authorization': `Bearer ${authToken}` } });
+      const json = await res.json();
+      if (res.ok && json.data && Object.keys(json.data).length) {
+        applyServerData(json.data);
+      }
+      onLoggedIn();
+    } catch(e) {
+      // Server unreachable — show login
+    }
+  }
+})();
 
 setInterval(tick, 100);
 setInterval(saveGame, 15000);
