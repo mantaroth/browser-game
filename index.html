@@ -188,9 +188,61 @@
 
   /* Section divider */
   .sec-header { color: #a89070; font-size: 10px; margin: 6px 0 3px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #2a2a3e; padding-bottom: 2px; }
+
+  /* Bot check modal */
+  #botcheck-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  #botcheck-overlay.active { display: flex; }
+  #botcheck-box {
+    background: #16213e;
+    border: 2px solid #c8a96e;
+    border-radius: 6px;
+    padding: 24px 28px;
+    max-width: 340px;
+    width: 90%;
+    text-align: center;
+  }
+  #botcheck-box h2 { color: #c8a96e; font-size: 15px; margin-bottom: 6px; letter-spacing: 1px; }
+  #botcheck-box p  { color: #a89070; font-size: 12px; margin-bottom: 16px; line-height: 1.6; }
+  #botcheck-question { color: #e0d8c8; font-size: 22px; margin-bottom: 16px; letter-spacing: 2px; }
+  #botcheck-timer { color: #e07070; font-size: 11px; margin-bottom: 14px; }
+  .botcheck-timer-bar { width: 100%; height: 8px; background: #0a0a1a; border: 1px solid #4a3728; border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
+  .botcheck-timer-fill { height: 100%; background: linear-gradient(90deg, #8a3030, #e07070); transition: width 0.1s linear; }
+  #botcheck-answers { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .botcheck-ans {
+    padding: 10px;
+    background: #0f3460;
+    border: 1px solid #4a3728;
+    color: #e0d8c8;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    transition: all 0.15s;
+  }
+  .botcheck-ans:hover { background: #1a4a80; border-color: #c8a96e; }
 </style>
 </head>
 <body>
+
+<!-- Bot check modal -->
+<div id="botcheck-overlay">
+  <div id="botcheck-box">
+    <h2>&#9888; ARE YOU HUMAN?</h2>
+    <p>Solve the puzzle to continue chopping.<br>Fail or ignore and your action will be cancelled.</p>
+    <div id="botcheck-question">?</div>
+    <div id="botcheck-timer">60s remaining</div>
+    <div class="botcheck-timer-bar"><div class="botcheck-timer-fill" id="botcheck-fill" style="width:100%"></div></div>
+    <div id="botcheck-answers"></div>
+  </div>
+</div>
 
 <div id="header">
   <h1>&#9876; TIMBERREALM</h1>
@@ -326,7 +378,7 @@ function xpForLevel(level) {
 // XP and level requirement are the differentiators.
 
 const TREES = {
-  pine:  { id:'pine',  name:'Pine Tree',  levelReq:1,  xp:25,  log:'Pine Log'  },
+  pine:  { id:'pine',  name:'Pine Tree',  levelReq:1,  xp:10,  log:'Pine Log'  },
   oak:   { id:'oak',   name:'Oak Tree',   levelReq:5,  xp:50,  log:'Oak Log'   },
   birch: { id:'birch', name:'Birch Tree', levelReq:10, xp:90,  log:'Birch Log' },
   yew:   { id:'yew',   name:'Yew Tree',   levelReq:20, xp:150, log:'Yew Log'   },
@@ -737,6 +789,7 @@ function startChopping(treeId) {
   const now = Date.now();
   const ms  = getChopMs();
   state.action = { treeId, startTime: now, endTime: now + ms };
+  botCheck.lastCheck = now; // reset 15-min window on each new chop session
   document.getElementById('action-label').textContent = `Chopping ${t.name}...`;
   document.getElementById('action-timer-div').style.display = 'block';
   document.getElementById('stat-status').textContent = `Chopping ${t.name}`;
@@ -795,11 +848,101 @@ function onMapClick(locId) {
 }
 
 // ============================================================
+//  BOT CHECK
+// ============================================================
+
+const BOT_CHECK_INTERVAL = 15 * 60 * 1000; // 15 minutes
+const BOT_CHECK_TIMEOUT  = 60 * 1000;       // 60 seconds to answer
+
+let botCheck = {
+  active:        false,
+  correctAnswer: null,
+  startTime:     null,
+  lastCheck:     Date.now(), // start clock on page load
+};
+
+function triggerBotCheck() {
+  if (botCheck.active) return;
+  botCheck.active    = true;
+  botCheck.startTime = Date.now();
+  botCheck.lastCheck = Date.now();
+
+  // Generate a simple addition question
+  const a      = Math.floor(Math.random() * 9) + 1;
+  const b      = Math.floor(Math.random() * 9) + 1;
+  const answer = a + b;
+  botCheck.correctAnswer = answer;
+
+  // Build 3 wrong answers (unique, plausible)
+  const wrongs = new Set();
+  while (wrongs.size < 3) {
+    const w = answer + (Math.floor(Math.random() * 7) - 3);
+    if (w !== answer && w > 0) wrongs.add(w);
+  }
+  const options = [answer, ...wrongs].sort(() => Math.random() - 0.5);
+
+  document.getElementById('botcheck-question').textContent = `${a}  +  ${b}  =  ?`;
+
+  const ans = document.getElementById('botcheck-answers');
+  ans.innerHTML = '';
+  for (const opt of options) {
+    const btn = document.createElement('button');
+    btn.className   = 'botcheck-ans';
+    btn.textContent = opt;
+    btn.onclick     = () => submitBotAnswer(opt);
+    ans.appendChild(btn);
+  }
+
+  document.getElementById('botcheck-overlay').classList.add('active');
+  addLog('Bot check triggered — solve the puzzle to keep chopping!', 'error');
+}
+
+function submitBotAnswer(val) {
+  if (!botCheck.active) return;
+  if (val === botCheck.correctAnswer) {
+    botCheck.active = false;
+    botCheck.lastCheck = Date.now();
+    document.getElementById('botcheck-overlay').classList.remove('active');
+    addLog('Bot check passed. Continuing...', 'success');
+  } else {
+    failBotCheck('Wrong answer.');
+  }
+}
+
+function failBotCheck(reason) {
+  botCheck.active = false;
+  botCheck.lastCheck = Date.now();
+  document.getElementById('botcheck-overlay').classList.remove('active');
+  cancelAction();
+  addLog(`Bot check failed: ${reason} Action cancelled.`, 'error');
+}
+
+function tickBotCheck(now) {
+  // Trigger a new check if action has been running 15+ min since last check
+  if (!botCheck.active && state.action) {
+    if (now - botCheck.lastCheck >= BOT_CHECK_INTERVAL) {
+      triggerBotCheck();
+    }
+  }
+
+  // Count down the active check
+  if (botCheck.active) {
+    const elapsed = now - botCheck.startTime;
+    const remain  = Math.max(0, BOT_CHECK_TIMEOUT - elapsed);
+    const pct     = (remain / BOT_CHECK_TIMEOUT) * 100;
+    document.getElementById('botcheck-fill').style.width    = pct + '%';
+    document.getElementById('botcheck-timer').textContent   = Math.ceil(remain / 1000) + 's remaining';
+    if (remain <= 0) failBotCheck('Time ran out.');
+  }
+}
+
+// ============================================================
 //  GAME TICK (100ms)
 // ============================================================
 
 function tick() {
   const now = Date.now();
+  tickBotCheck(now);
 
   // Action timer
   if (state.action) {
