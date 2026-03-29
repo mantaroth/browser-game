@@ -24,11 +24,7 @@
     gap: 16px;
   }
 
-  #header h1 {
-    color: #c8a96e;
-    font-size: 20px;
-    letter-spacing: 2px;
-  }
+  #header h1 { color: #c8a96e; font-size: 20px; letter-spacing: 2px; }
 
   #layout {
     display: grid;
@@ -105,6 +101,10 @@
   }
   .action-btn:hover:not(:disabled) { background: #1a4a80; border-color: #c8a96e; }
   .action-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .action-btn.shop-btn { background: #2a1a40; border-color: #6a3a8a; color: #c8a0e8; }
+  .action-btn.shop-btn:hover:not(:disabled) { background: #3a2a55; border-color: #c8a0e8; }
+  .action-btn.equip-btn { background: #1a2a10; border-color: #4a7a30; color: #a0d880; }
+  .action-btn.equip-btn:hover:not(:disabled) { background: #2a4a18; border-color: #a0d880; }
 
   .cancel-btn {
     width: 100%;
@@ -129,14 +129,7 @@
     font-size: 10px;
     margin-bottom: 3px;
   }
-  .timer-bar {
-    width: 100%;
-    height: 13px;
-    background: #0a0a1a;
-    border: 1px solid #4a3728;
-    border-radius: 2px;
-    overflow: hidden;
-  }
+  .timer-bar { width: 100%; height: 13px; background: #0a0a1a; border: 1px solid #4a3728; border-radius: 2px; overflow: hidden; }
   .timer-fill          { height: 100%; width: 0%; transition: width 0.1s linear; }
   .timer-fill.chop     { background: linear-gradient(90deg, #2d6a4f, #74c69d); }
   .timer-fill.travel   { background: linear-gradient(90deg, #4a3728, #c8a96e); }
@@ -150,12 +143,24 @@
   .stat-label { color: #a89070; }
   .stat-value { color: #e0d8c8; }
 
+  /* Equipped highlight */
+  .equipped-tag {
+    display: inline-block;
+    background: #1a2a10;
+    border: 1px solid #4a7a30;
+    border-radius: 2px;
+    padding: 1px 5px;
+    font-size: 10px;
+    color: #a0d880;
+  }
+
   /* Log */
   #log { height: 180px; overflow-y: auto; background: #0a0a1a; border: 1px solid #2a2a3e; padding: 6px; font-size: 11px; line-height: 1.6; }
   .log-entry         { color: #888; }
   .log-entry.success { color: #74c69d; }
   .log-entry.travel  { color: #c8a96e; }
   .log-entry.levelup { color: #ffd700; font-weight: bold; }
+  .log-entry.shop    { color: #c8a0e8; }
   .log-entry.error   { color: #e07070; }
 
   /* Location */
@@ -180,6 +185,9 @@
   .legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; font-size: 9px; }
   .legend-item { display: flex; align-items: center; gap: 3px; }
   .legend-dot { width: 8px; height: 8px; border-radius: 1px; border: 1px solid; }
+
+  /* Section divider */
+  .sec-header { color: #a89070; font-size: 10px; margin: 6px 0 3px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #2a2a3e; padding-bottom: 2px; }
 </style>
 </head>
 <body>
@@ -192,12 +200,29 @@
 
 <div id="layout">
 
-  <!-- LEFT: Character + Inventory -->
+  <!-- LEFT: Character + Equipment + Skill + Inventory -->
   <div>
     <div class="panel">
       <h3>Character</h3>
       <div class="stat-row"><span class="stat-label">Location</span><span class="stat-value" id="stat-location">-</span></div>
       <div class="stat-row"><span class="stat-label">Status</span><span class="stat-value" id="stat-status">Idle</span></div>
+      <div class="stat-row"><span class="stat-label">Gold</span><span class="stat-value">&#x1F4B0; <span id="stat-gold">0</span></span></div>
+    </div>
+
+    <div class="panel">
+      <h3>Equipment</h3>
+      <div class="stat-row">
+        <span class="stat-label">Tool</span>
+        <span class="stat-value" id="equip-tool-name">None</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Accessory</span>
+        <span class="stat-value" id="equip-acc-name">None</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Chop time</span>
+        <span class="stat-value"><span id="equip-choptime">60</span>s</span>
+      </div>
     </div>
 
     <div class="panel">
@@ -284,10 +309,9 @@
 
 <script>
 // ============================================================
-//  DATA
+//  XP TABLE
 // ============================================================
 
-// XP needed (cumulative) to reach a given level
 function xpForLevel(level) {
   if (level <= 1) return 0;
   let total = 0;
@@ -295,36 +319,57 @@ function xpForLevel(level) {
   return total;
 }
 
-// Trees: levelReq, time in ms, xp per chop, log item name
+// ============================================================
+//  TREES
+// ============================================================
+// All trees now share a unified chop timer (see getChopMs).
+// XP and level requirement are the differentiators.
+
 const TREES = {
-  pine:  { id:'pine',  name:'Pine Tree',  levelReq:1,  time:8000,  xp:25,  log:'Pine Log'  },
-  oak:   { id:'oak',   name:'Oak Tree',   levelReq:5,  time:14000, xp:50,  log:'Oak Log'   },
-  birch: { id:'birch', name:'Birch Tree', levelReq:10, time:20000, xp:90,  log:'Birch Log' },
-  yew:   { id:'yew',   name:'Yew Tree',   levelReq:20, time:30000, xp:150, log:'Yew Log'   },
+  pine:  { id:'pine',  name:'Pine Tree',  levelReq:1,  xp:25,  log:'Pine Log'  },
+  oak:   { id:'oak',   name:'Oak Tree',   levelReq:5,  xp:50,  log:'Oak Log'   },
+  birch: { id:'birch', name:'Birch Tree', levelReq:10, xp:90,  log:'Birch Log' },
+  yew:   { id:'yew',   name:'Yew Tree',   levelReq:20, xp:150, log:'Yew Log'   },
 };
 
-// 10 locations on a 4x5 grid (row, col)
+// ============================================================
+//  GEAR
+// ============================================================
+// slot: 'tool' or 'accessory'
+// reduce: seconds subtracted from the base chop timer
+
+const GEAR = {
+  basic_hatchet:   { id:'basic_hatchet',   name:'Basic Hatchet',     slot:'tool',      reduce:3,  cost:15  },
+  iron_hatchet:    { id:'iron_hatchet',     name:'Iron Hatchet',      slot:'tool',      reduce:7,  cost:60  },
+  steel_hatchet:   { id:'steel_hatchet',    name:'Steel Hatchet',     slot:'tool',      reduce:12, cost:200 },
+  forester_gloves: { id:'forester_gloves',  name:"Forester's Gloves", slot:'accessory', reduce:3,  cost:30  },
+  lucky_charm:     { id:'lucky_charm',      name:'Lucky Charm',       slot:'accessory', reduce:5,  cost:120 },
+};
+
+// ============================================================
+//  LOCATIONS
+// ============================================================
+
 const LOCATIONS = {
-  isenvale:    { id:'isenvale',    name:'Isenvale',     desc:'A quiet starter village ringed by pine forest. Smoke rises from the chimneys.',          pos:[0,0], trees:['pine'],               connects:['stonehaven','thornfield']              },
-  stonehaven:  { id:'stonehaven',  name:'Stonehaven',   desc:'A busy market town at the foothills. Oak groves line the cobbled roads.',                pos:[0,2], trees:['pine','oak'],          connects:['isenvale','brightwater','ashgate']     },
-  brightwater: { id:'brightwater', name:'Brightwater',  desc:'A riverside town. Tall oaks shade the mill and the waterwheel turns slowly.',            pos:[0,4], trees:['oak'],                 connects:['stonehaven','duskmill']                },
-  duskmill:    { id:'duskmill',    name:'Duskmill',     desc:'An old mill settlement deep in birch groves. The air smells of sawdust.',                pos:[1,4], trees:['oak','birch'],         connects:['brightwater','ironpeak']               },
-  ironpeak:    { id:'ironpeak',    name:'Ironpeak',     desc:'A highland village. Ancient birch forests stretch to the horizon in every direction.',   pos:[2,4], trees:['birch'],               connects:['duskmill','harrowfen']                 },
-  thornfield:  { id:'thornfield',  name:'Thornfield',   desc:'Rolling hills and pine thickets around a small farming community.',                      pos:[2,0], trees:['pine'],               connects:['isenvale','coldrun']                   },
-  coldrun:     { id:'coldrun',     name:'Coldrun',      desc:'A cold northern outpost. Hardy oak trees grow thick despite the chill.',                 pos:[3,1], trees:['oak'],                 connects:['thornfield','ashgate','harrowfen']     },
-  ashgate:     { id:'ashgate',     name:'Ashgate',      desc:'A dark, smoky crossroads town. Birch and yew grow around crumbling ruins.',              pos:[1,2], trees:['birch','yew'],         connects:['stonehaven','coldrun','harrowfen']     },
-  harrowfen:   { id:'harrowfen',   name:'Harrowfen',    desc:'A misty fen settlement, famous for its ancient yew groves and strange silence.',         pos:[3,3], trees:['yew'],                 connects:['ironpeak','coldrun','ashgate','embervale'] },
-  embervale:   { id:'embervale',   name:'Embervale',    desc:'A legendary vale where all four tree types grow. Only master woodcutters find it worth the journey.', pos:[3,4], trees:['pine','oak','birch','yew'], connects:['harrowfen'] },
+  isenvale:    { id:'isenvale',    name:'Isenvale',     desc:'A quiet starter village ringed by pine forest.',                                      pos:[0,0], trees:['pine'],               shop:['basic_hatchet','forester_gloves'],    connects:['stonehaven','thornfield']              },
+  stonehaven:  { id:'stonehaven',  name:'Stonehaven',   desc:'A busy market town at the foothills. Oak groves line the cobbled roads.',             pos:[0,2], trees:['pine','oak'],          shop:['basic_hatchet','iron_hatchet'],       connects:['isenvale','brightwater','ashgate']     },
+  brightwater: { id:'brightwater', name:'Brightwater',  desc:'A riverside town. Tall oaks shade the mill and the waterwheel turns slowly.',         pos:[0,4], trees:['oak'],                 shop:[],                                    connects:['stonehaven','duskmill']                },
+  duskmill:    { id:'duskmill',    name:'Duskmill',     desc:'An old mill settlement deep in birch groves. The air smells of sawdust.',             pos:[1,4], trees:['oak','birch'],         shop:['iron_hatchet','forester_gloves'],     connects:['brightwater','ironpeak']               },
+  ironpeak:    { id:'ironpeak',    name:'Ironpeak',     desc:'A highland village. Ancient birch forests stretch to the horizon.',                   pos:[2,4], trees:['birch'],               shop:['steel_hatchet'],                     connects:['duskmill','harrowfen']                 },
+  thornfield:  { id:'thornfield',  name:'Thornfield',   desc:'Rolling hills and pine thickets around a small farming community.',                   pos:[2,0], trees:['pine'],               shop:[],                                    connects:['isenvale','coldrun']                   },
+  coldrun:     { id:'coldrun',     name:'Coldrun',      desc:'A cold northern outpost. Hardy oak trees grow thick despite the chill.',              pos:[3,1], trees:['oak'],                 shop:['lucky_charm'],                       connects:['thornfield','ashgate','harrowfen']     },
+  ashgate:     { id:'ashgate',     name:'Ashgate',      desc:'A dark, smoky crossroads town. Birch and yew grow around crumbling ruins.',           pos:[1,2], trees:['birch','yew'],         shop:['iron_hatchet','lucky_charm'],         connects:['stonehaven','coldrun','harrowfen']     },
+  harrowfen:   { id:'harrowfen',   name:'Harrowfen',    desc:'A misty fen settlement, famous for its ancient yew groves.',                          pos:[3,3], trees:['yew'],                 shop:['steel_hatchet','lucky_charm'],        connects:['ironpeak','coldrun','ashgate','embervale'] },
+  embervale:   { id:'embervale',   name:'Embervale',    desc:'A legendary vale where all four tree types grow. Only masters make it here.',         pos:[3,4], trees:['pine','oak','birch','yew'], shop:['steel_hatchet','forester_gloves','lucky_charm'], connects:['harrowfen'] },
 };
 
-// Travel times in seconds between connected pairs
 const TRAVEL_TIMES = {
-  'isenvale-stonehaven':20,   'isenvale-thornfield':15,
-  'stonehaven-brightwater':20,'stonehaven-ashgate':25,
-  'brightwater-duskmill':15,  'duskmill-ironpeak':20,
-  'ironpeak-harrowfen':25,    'thornfield-coldrun':20,
-  'coldrun-ashgate':20,       'coldrun-harrowfen':25,
-  'ashgate-harrowfen':15,     'harrowfen-embervale':30,
+  'isenvale-stonehaven':20,    'isenvale-thornfield':15,
+  'stonehaven-brightwater':20, 'stonehaven-ashgate':25,
+  'brightwater-duskmill':15,   'duskmill-ironpeak':20,
+  'ironpeak-harrowfen':25,     'thornfield-coldrun':20,
+  'coldrun-ashgate':20,        'coldrun-harrowfen':25,
+  'ashgate-harrowfen':15,      'harrowfen-embervale':30,
 };
 
 function getTravelMs(a, b) {
@@ -332,17 +377,39 @@ function getTravelMs(a, b) {
 }
 
 // ============================================================
+//  CHOP TIMER
+// ============================================================
+// Base: 60s
+// Level reduction: -1s per odd level gained after 1 (level 3, 5, 7...)
+//   formula: floor((level - 1) / 2)
+// Gear reduction: tool.reduce + accessory.reduce (seconds)
+// Minimum: 15s
+
+function getChopMs() {
+  const levelReduction = Math.floor((state.wc.level - 1) / 2);
+  let gearReduction = 0;
+  if (state.equipment.tool)      gearReduction += GEAR[state.equipment.tool].reduce;
+  if (state.equipment.accessory) gearReduction += GEAR[state.equipment.accessory].reduce;
+  const seconds = Math.max(15, 60 - levelReduction - gearReduction);
+  return seconds * 1000;
+}
+
+function getChopSeconds() { return getChopMs() / 1000; }
+
+// ============================================================
 //  STATE
 // ============================================================
 
-const SAVE_KEY = 'timberrealm_v1';
+const SAVE_KEY = 'timberrealm_v2';
 
 let state = {
-  location: 'isenvale',
-  wc: { xp: 0, level: 1, cuts: 0 },
+  location:  'isenvale',
+  wc:        { xp: 0, level: 1, cuts: 0 },
   inventory: {},
-  action: null,   // { treeId, startTime, endTime }
-  travel: null,   // { from, to, startTime, endTime }
+  gold:      0,
+  equipment: { tool: null, accessory: null },
+  action:    null,   // { treeId, startTime, endTime }
+  travel:    null,   // { from, to, startTime, endTime }
 };
 
 function saveGame() {
@@ -350,6 +417,8 @@ function saveGame() {
     location:  state.location,
     wc:        state.wc,
     inventory: state.inventory,
+    gold:      state.gold,
+    equipment: state.equipment,
   }));
   const el = document.getElementById('save-indicator');
   el.textContent = 'Saved ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -362,6 +431,8 @@ function loadGame() {
     state.location  = d.location  || 'isenvale';
     state.wc        = d.wc        || { xp:0, level:1, cuts:0 };
     state.inventory = d.inventory || {};
+    state.gold      = d.gold      || 0;
+    state.equipment = d.equipment || { tool: null, accessory: null };
     addLog('Save game loaded.', 'travel');
   } catch(e) {}
 }
@@ -370,25 +441,33 @@ function loadGame() {
 //  XP & LEVELING
 // ============================================================
 
-function xpIntoLevel()  { return state.wc.xp - xpForLevel(state.wc.level); }
-function xpForNext()    { return xpForLevel(state.wc.level + 1) - xpForLevel(state.wc.level); }
+function xpIntoLevel() { return state.wc.xp - xpForLevel(state.wc.level); }
+function xpForNext()   { return xpForLevel(state.wc.level + 1) - xpForLevel(state.wc.level); }
 
 function grantXP(amount) {
   state.wc.xp += amount;
+  let leveled = false;
   while (state.wc.xp >= xpForLevel(state.wc.level + 1)) {
     state.wc.level++;
-    addLog(`LEVEL UP! Woodcutting is now level ${state.wc.level}!`, 'levelup');
+    leveled = true;
+    addLog(`LEVEL UP! Woodcutting is now level ${state.wc.level}! Chop time: ${getChopSeconds()}s`, 'levelup');
   }
   updateSkillUI();
+  if (leveled) updateEquipmentUI(); // chop time display may change
 }
 
 // ============================================================
-//  INVENTORY
+//  INVENTORY & GOLD
 // ============================================================
 
 function addItem(name) {
   state.inventory[name] = (state.inventory[name] || 0) + 1;
   updateInventoryUI();
+}
+
+function addGold(amount) {
+  state.gold += amount;
+  document.getElementById('stat-gold').textContent = state.gold;
 }
 
 // ============================================================
@@ -410,9 +489,9 @@ function addLog(msg, type) {
 // ============================================================
 
 function buildMap() {
-  const grid    = document.getElementById('map-grid');
+  const grid = document.getElementById('map-grid');
   grid.innerHTML = '';
-  const cells   = Array.from({length:4}, () => Array(5).fill(null));
+  const cells = Array.from({length:4}, () => Array(5).fill(null));
   for (const loc of Object.values(LOCATIONS)) cells[loc.pos[0]][loc.pos[1]] = loc;
 
   const cur      = state.location;
@@ -424,7 +503,7 @@ function buildMap() {
       const loc = cells[r][c];
       if (loc) {
         div.className = 'map-cell location';
-        if (loc.id === cur)           div.className += ' current-loc';
+        if (loc.id === cur)            div.className += ' current-loc';
         else if (adjacent.has(loc.id)) div.className += ' adjacent';
         div.textContent = loc.name;
         div.title = loc.id === cur ? `You are here: ${loc.name}` : loc.name;
@@ -450,11 +529,11 @@ function updateLocationUI() {
   const res = document.getElementById('location-resources');
   res.innerHTML = '';
   for (const tid of loc.trees) {
-    const t   = TREES[tid];
-    const ok  = state.wc.level >= t.levelReq;
+    const t  = TREES[tid];
+    const ok = state.wc.level >= t.levelReq;
     const tag = document.createElement('span');
     tag.className = 'resource-tag' + (ok ? '' : ' locked');
-    tag.textContent = `${t.name} (Lv${t.levelReq}+, ${t.xp}xp, ${t.time/1000}s)`;
+    tag.textContent = `${t.name} (Lv${t.levelReq}+, ${t.xp}xp)`;
     res.appendChild(tag);
   }
 
@@ -463,7 +542,26 @@ function updateLocationUI() {
 }
 
 // ============================================================
-//  RIGHT PANEL: TRAVEL
+//  EQUIPMENT UI
+// ============================================================
+
+function updateEquipmentUI() {
+  const tool = state.equipment.tool      ? GEAR[state.equipment.tool]      : null;
+  const acc  = state.equipment.accessory ? GEAR[state.equipment.accessory] : null;
+
+  document.getElementById('equip-tool-name').innerHTML = tool
+    ? `<span class="equipped-tag">${tool.name}</span>`
+    : '<span style="color:#555">None</span>';
+
+  document.getElementById('equip-acc-name').innerHTML = acc
+    ? `<span class="equipped-tag">${acc.name}</span>`
+    : '<span style="color:#555">None</span>';
+
+  document.getElementById('equip-choptime').textContent = getChopSeconds();
+}
+
+// ============================================================
+//  TRAVEL SECTION
 // ============================================================
 
 function updateTravelSection() {
@@ -477,22 +575,20 @@ function updateTravelSection() {
   document.getElementById('travel-timer-div').style.display = 'none';
 
   const loc = LOCATIONS[state.location];
-  if (!loc.connects.length) { sec.innerHTML = '<div style="color:#555;font-size:11px;">No exits.</div>'; return; }
-
   for (const destId of loc.connects) {
     const dest = LOCATIONS[destId];
     const secs = getTravelMs(state.location, destId) / 1000;
     const btn  = document.createElement('button');
-    btn.className  = 'action-btn';
+    btn.className   = 'action-btn';
     btn.textContent = `\u2192 ${dest.name} (${secs}s)`;
-    btn.disabled   = !!state.action;
-    btn.onclick    = () => startTravel(destId);
+    btn.disabled    = !!state.action;
+    btn.onclick     = () => startTravel(destId);
     sec.appendChild(btn);
   }
 }
 
 // ============================================================
-//  RIGHT PANEL: ACTIONS
+//  ACTION SECTION (woodcutting + shop)
 // ============================================================
 
 function updateActionSection() {
@@ -506,23 +602,58 @@ function updateActionSection() {
   document.getElementById('action-timer-div').style.display = 'none';
 
   const loc = LOCATIONS[state.location];
-  if (!loc.trees.length) { sec.innerHTML = '<div style="color:#555;font-size:11px;">Nothing to do here.</div>'; return; }
 
-  const header = document.createElement('div');
-  header.style.cssText = 'color:#a89070;font-size:10px;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px;';
-  header.textContent = 'Woodcutting';
-  sec.appendChild(header);
+  // --- Woodcutting ---
+  if (loc.trees.length) {
+    const wch = document.createElement('div');
+    wch.className = 'sec-header';
+    wch.textContent = `Woodcutting (${getChopSeconds()}s/chop)`;
+    sec.appendChild(wch);
 
-  for (const tid of loc.trees) {
-    const t    = TREES[tid];
-    const can  = state.wc.level >= t.levelReq;
-    const btn  = document.createElement('button');
-    btn.className  = 'action-btn';
-    btn.textContent = `Chop ${t.name}`;
-    btn.disabled   = !can || !!state.travel;
-    btn.title      = can ? `${t.xp} xp  |  ${t.time/1000}s` : `Requires Woodcutting level ${t.levelReq}`;
-    btn.onclick    = () => startChopping(tid);
-    sec.appendChild(btn);
+    for (const tid of loc.trees) {
+      const t   = TREES[tid];
+      const can = state.wc.level >= t.levelReq;
+      const btn = document.createElement('button');
+      btn.className   = 'action-btn';
+      btn.textContent = `Chop ${t.name}`;
+      btn.disabled    = !can || !!state.travel;
+      btn.title       = can ? `${t.xp} xp | ${t.gold} gold` : `Requires level ${t.levelReq}`;
+      btn.onclick     = () => startChopping(tid);
+      sec.appendChild(btn);
+    }
+  }
+
+  // --- Shop ---
+  if (loc.shop && loc.shop.length) {
+    const sh = document.createElement('div');
+    sh.className = 'sec-header';
+    sh.textContent = 'Shop';
+    sec.appendChild(sh);
+
+    for (const gearId of loc.shop) {
+      const g        = GEAR[gearId];
+      const owned    = !!state.inventory[g.name];
+      const equipped = state.equipment[g.slot] === g.id;
+      const btn      = document.createElement('button');
+      btn.className  = equipped ? 'action-btn equip-btn' : 'action-btn shop-btn';
+      btn.disabled   = !!state.travel;
+
+      if (equipped) {
+        btn.textContent = `[Equipped] ${g.name} — Unequip`;
+        btn.onclick = () => unequipGear(g.slot);
+      } else if (owned) {
+        btn.textContent = `[Owned] ${g.name} — Equip (-${g.reduce}s)`;
+        btn.onclick = () => equipGear(g.id);
+      } else {
+        btn.textContent = `Buy ${g.name} — ${g.cost}g (-${g.reduce}s)`;
+        btn.onclick = () => buyGear(gearId);
+      }
+      sec.appendChild(btn);
+    }
+  }
+
+  if (!loc.trees.length && (!loc.shop || !loc.shop.length)) {
+    sec.innerHTML = '<div style="color:#555;font-size:11px;">Nothing to do here.</div>';
   }
 }
 
@@ -558,7 +689,45 @@ function updateInventoryUI() {
 }
 
 // ============================================================
-//  ACTIONS
+//  GEAR: BUY / EQUIP / UNEQUIP
+// ============================================================
+
+function buyGear(gearId) {
+  const g = GEAR[gearId];
+  if (state.gold < g.cost) { addLog(`Not enough gold. Need ${g.cost}g.`, 'error'); return; }
+  if (state.inventory[g.name]) { addLog(`You already own ${g.name}.`, 'error'); return; }
+  state.gold -= g.cost;
+  document.getElementById('stat-gold').textContent = state.gold;
+  state.inventory[g.name] = 1;
+  addLog(`Bought ${g.name} for ${g.cost}g.`, 'shop');
+  saveGame();
+  updateInventoryUI();
+  updateActionSection();
+}
+
+function equipGear(gearId) {
+  const g = GEAR[gearId];
+  if (!state.inventory[g.name]) { addLog(`You don't own ${g.name}.`, 'error'); return; }
+  state.equipment[g.slot] = g.id;
+  addLog(`Equipped ${g.name}. Chop time is now ${getChopSeconds()}s.`, 'shop');
+  saveGame();
+  updateEquipmentUI();
+  updateActionSection();
+}
+
+function unequipGear(slot) {
+  const gearId = state.equipment[slot];
+  if (!gearId) return;
+  const g = GEAR[gearId];
+  state.equipment[slot] = null;
+  addLog(`Unequipped ${g.name}. Chop time is now ${getChopSeconds()}s.`, 'shop');
+  saveGame();
+  updateEquipmentUI();
+  updateActionSection();
+}
+
+// ============================================================
+//  ACTIONS: CHOP & TRAVEL
 // ============================================================
 
 function startChopping(treeId) {
@@ -566,13 +735,14 @@ function startChopping(treeId) {
   const t = TREES[treeId];
   if (state.wc.level < t.levelReq) { addLog(`Requires Woodcutting level ${t.levelReq}.`, 'error'); return; }
   const now = Date.now();
-  state.action = { treeId, startTime: now, endTime: now + t.time };
+  const ms  = getChopMs();
+  state.action = { treeId, startTime: now, endTime: now + ms };
   document.getElementById('action-label').textContent = `Chopping ${t.name}...`;
   document.getElementById('action-timer-div').style.display = 'block';
   document.getElementById('stat-status').textContent = `Chopping ${t.name}`;
   updateActionSection();
   updateTravelSection();
-  addLog(`You begin chopping the ${t.name}.`);
+  addLog(`You begin chopping the ${t.name}. (${ms/1000}s)`);
 }
 
 function startTravel(destId) {
@@ -631,13 +801,14 @@ function onMapClick(locId) {
 function tick() {
   const now = Date.now();
 
+  // Action timer
   if (state.action) {
     const total   = state.action.endTime - state.action.startTime;
     const elapsed = now - state.action.startTime;
     const pct     = Math.min(elapsed / total * 100, 100);
     const remain  = Math.max(0, Math.ceil((state.action.endTime - now) / 1000));
-    document.getElementById('action-fill').style.width  = pct + '%';
-    document.getElementById('action-time-label').textContent = remain + 's';
+    document.getElementById('action-fill').style.width        = pct + '%';
+    document.getElementById('action-time-label').textContent  = remain + 's';
 
     if (now >= state.action.endTime) {
       const t      = TREES[state.action.treeId];
@@ -645,24 +816,26 @@ function tick() {
       state.wc.cuts++;
       grantXP(t.xp);
       addItem(t.log);
-      addLog(`You cut a ${t.log}. (+${t.xp} xp)`, 'success');
+      addLog(`You cut a ${t.log}. (+${t.xp}xp)`, 'success');
       saveGame();
-      // Auto-repeat: restart the same action immediately
+      // Auto-repeat: recalculate timer (level/gear may have changed)
       const restart = Date.now();
-      state.action = { treeId, startTime: restart, endTime: restart + t.time };
+      const newMs   = getChopMs();
+      state.action  = { treeId, startTime: restart, endTime: restart + newMs };
     }
   }
 
+  // Travel timer
   if (state.travel) {
     const total   = state.travel.endTime - state.travel.startTime;
     const elapsed = now - state.travel.startTime;
     const pct     = Math.min(elapsed / total * 100, 100);
     const remain  = Math.max(0, Math.ceil((state.travel.endTime - now) / 1000));
-    document.getElementById('travel-fill').style.width  = pct + '%';
-    document.getElementById('travel-time-label').textContent = remain + 's';
+    document.getElementById('travel-fill').style.width        = pct + '%';
+    document.getElementById('travel-time-label').textContent  = remain + 's';
 
     if (now >= state.travel.endTime) {
-      const dest  = LOCATIONS[state.travel.to];
+      const dest     = LOCATIONS[state.travel.to];
       state.location = state.travel.to;
       state.travel   = null;
       document.getElementById('travel-timer-div').style.display = 'none';
@@ -683,8 +856,10 @@ loadGame();
 buildMap();
 updateLocationUI();
 updateSkillUI();
+updateEquipmentUI();
 updateInventoryUI();
-addLog('Welcome to TimberRealm! Click a tree action on the right to begin.', 'travel');
+document.getElementById('stat-gold').textContent = state.gold;
+addLog('Welcome to TimberRealm! Click a tree action on the right to begin chopping.', 'travel');
 
 setInterval(tick, 100);
 setInterval(saveGame, 15000);
