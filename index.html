@@ -346,6 +346,34 @@ const RESOURCES = {
 };
 
 // ============================================================
+//  ITEM PRICES  (base sell value in gold)
+// ============================================================
+const ITEM_PRICES = {
+  // Woodcutting
+  'Pine Log':2,      'Oak Log':4,       'Birch Log':7,     'Yew Log':12,
+  // Mining
+  'Copper Ore':3,    'Iron Ore':6,      'Silver Ore':10,   'Gold Ore':18,
+  // Fishing
+  'Raw Shrimp':2,    'Raw Trout':5,     'Raw Salmon':9,    'Raw Lobster':15,
+  // Harvesting
+  'Wheat':2,         'Herbs':5,         'Flax':8,          'Magic Herb':14,
+  // Cooking
+  'Bread':6,         'Cooked Fish':12,  'Stew':20,         'Feast Platter':35,
+  // Crafting
+  'Rope':5,          'Leather':12,      'Fine Cloth':22,   'Silk':38,
+  // Smithing
+  'Copper Bar':8,    'Iron Bar':15,     'Silver Bar':25,   'Gold Bar':40,
+  // Construction
+  'Fence Post':4,    'Stone Block':8,   'Tower Stone':15,  'Gate Stone':25,
+  // Combat drops
+  'Rat Tail':3,      'Wolf Pelt':10,    'Troll Hide':20,   'Dragon Scale':50,
+  // Magic
+  'Rune Shard':6,    'Ember Stone':14,  'Frost Crystal':25,'Arcane Dust':45,
+  // Trading products
+  'Trade Token':5,   'Contract':12,     'Deed':22,         'Guild Seal':40,
+};
+
+// ============================================================
 //  GEAR
 // ============================================================
 const GEAR = {
@@ -876,7 +904,7 @@ function updateActionSection() {
     sec.appendChild(wrap);
   }
 
-  // Shop
+  // Shop — Buy gear
   if (loc.shop && loc.shop.length) {
     const hdr = document.createElement('div');
     hdr.className = 'sec-header';
@@ -890,6 +918,7 @@ function updateActionSection() {
     wrap.style.display = open ? 'block' : 'none';
     for (const gearId of loc.shop) {
       const g       = GEAR[gearId];
+      const cost    = Math.max(1, g.cost - getBuyDiscount());
       const owned   = !!state.inventory[g.name];
       const eqpd    = state.equipment[g.slot]===g.id;
       const btn     = document.createElement('button');
@@ -904,10 +933,47 @@ function updateActionSection() {
         btn.onclick     = ()=>equipGear(g.id);
       } else {
         btn.className   = 'action-btn shop-btn';
-        btn.textContent = `Buy ${g.name} — ${g.cost}g (-${g.reduce}s)`;
+        btn.textContent = `Buy ${g.name} — ${cost}g (-${g.reduce}s)`;
         btn.onclick     = ()=>buyGear(gearId);
       }
       wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Sell items — available at any shop location
+  if (loc.shop) {
+    const sellable = Object.entries(state.inventory)
+      .filter(([name, qty]) => qty > 0 && ITEM_PRICES[name])
+      .sort(([a],[b]) => getSellPrice(b) - getSellPrice(a));
+
+    const bonus = tradingBonus();
+    const hdr   = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open  = !collapsedSkills['__sell'];
+    hdr.innerHTML = `<span>💰 Sell Items${bonus > 0 ? ' (+'+bonus+'g bonus)' : ''}</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__sell');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__sell';
+    wrap.style.display = open ? 'block' : 'none';
+
+    if (!sellable.length) {
+      const msg = document.createElement('div');
+      msg.style.cssText = 'color:#555;font-size:11px;padding:3px 0';
+      msg.textContent = 'No items to sell.';
+      wrap.appendChild(msg);
+    } else {
+      for (const [name, qty] of sellable) {
+        const price = getSellPrice(name);
+        const btn   = document.createElement('button');
+        btn.className   = 'action-btn shop-btn';
+        btn.textContent = `Sell ${name} ×${qty} — ${price}g each`;
+        btn.disabled    = !!state.travel;
+        btn.onclick     = ()=>sellItem(name);
+        wrap.appendChild(btn);
+      }
     }
     sec.appendChild(wrap);
   }
@@ -922,16 +988,38 @@ function toggleSkillSection(skillId) {
 }
 
 // ============================================================
+//  TRADING ECONOMY
+// ============================================================
+function tradingBonus()    { return Math.floor(skillLevel('trading') / 5) * 2; }
+function getSellPrice(item){ return Math.max(1, (ITEM_PRICES[item] || 0) + tradingBonus()); }
+function getBuyDiscount()  { return Math.floor(skillLevel('trading') / 5) * 2; }
+
+function sellItem(itemName) {
+  if (!state.inventory[itemName] || state.inventory[itemName] <= 0) return;
+  const price  = getSellPrice(itemName);
+  const tradXP = Math.max(1, Math.floor(price / 2));
+  state.inventory[itemName]--;
+  if (state.inventory[itemName] <= 0) delete state.inventory[itemName];
+  addGold(price);
+  grantXP('trading', tradXP);
+  addLog(`Sold ${itemName} for ${price}g. (+${tradXP} Trading xp)`, 'shop');
+  saveGame();
+  updateInventoryUI();
+  updateActionSection();
+}
+
+// ============================================================
 //  GEAR
 // ============================================================
 function buyGear(gearId) {
-  const g = GEAR[gearId];
-  if (state.gold < g.cost) { addLog(`Not enough gold. Need ${g.cost}g.`,'error'); return; }
+  const g    = GEAR[gearId];
+  const cost = Math.max(1, g.cost - getBuyDiscount());
+  if (state.gold < cost) { addLog(`Not enough gold. Need ${cost}g.`,'error'); return; }
   if (state.inventory[g.name]) { addLog(`You already own ${g.name}.`,'error'); return; }
-  state.gold -= g.cost;
+  state.gold -= cost;
   document.getElementById('stat-gold').textContent = state.gold;
   state.inventory[g.name] = 1;
-  addLog(`Bought ${g.name} for ${g.cost}g.`,'shop');
+  addLog(`Bought ${g.name} for ${cost}g.`,'shop');
   saveGame(); updateInventoryUI(); updateActionSection();
 }
 function equipGear(gearId) {
