@@ -109,7 +109,8 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 #top-section { display:flex; gap:0; border-bottom:2px solid #4a3728; }
 #mini-map-box { width:300px; min-width:300px; background:#16213e; padding:8px; border-right:1px solid #4a3728; }
 #mini-map-box h3 { color:#c8a96e; font-size:10px; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid #4a3728; padding-bottom:3px; margin-bottom:6px; }
-#fantasy-map { display:block; width:100%; border-radius:3px; border:1px solid #8b6914; cursor:default; }
+#fantasy-map { display:block; width:100%; border-radius:3px; border:1px solid #3a6a9a; cursor:default; }
+.map-world { transition: transform 0.85s cubic-bezier(0.4, 0, 0.2, 1); }
 .fmap-town {
   cursor:pointer;
   transform-box:fill-box;
@@ -1548,7 +1549,7 @@ const LOCATIONS = {
     kitchen:true,
     actions:{ woodcutting:['wc_pine'], crafting:['cr_rope'], construction:['cn_fence'], trading:['tr_barter'] },
     shop:['bronze_hatchet','lighter','tinderbox'],
-    connects:['stonehaven','thornfield','greenhouse','zhyack','nalurn_woods'],
+    connects:['thornfield','greenhouse','zhyack','nalurn_woods'],
   },
   stonehaven:  {
     id:'stonehaven',  name:'Stonehaven',  pos:[8,2],
@@ -1557,7 +1558,7 @@ const LOCATIONS = {
     actions:{ woodcutting:['wc_pine','wc_oak'], mining:['mn_copper'], smithing:['sm_copper'], trading:['tr_barter','tr_contract'], construction:['cn_fence','cn_wall'] },
     forge:['iron_hatchet'],
     shop:[],
-    connects:['isenvale','brightwater','ashgate','lake_essdar','essrom'],
+    connects:['ashgate','lake_essdar','essrom'],
 
   },
   brightwater: {
@@ -1566,14 +1567,14 @@ const LOCATIONS = {
     actions:{ fishing:['fi_mackerel','fi_salmon','fi_bass','fi_flounder'], trading:['tr_contract','tr_merchant'], crafting:['cr_rope','cr_leather'] },
     shop:['fishing_rod'],
     tackleShop:[{name:'Tuna Lure',cost:50},{name:'Shark Lure',cost:100}],
-    connects:['stonehaven','duskmill','pharos_peak'],
+    connects:['pharos_peak','cardina'],
   },
   duskmill:    {
     id:'duskmill',    name:'Duskmill',    pos:[5,4],
     desc:'An old mill town deep in birch groves. Crafters and woodcutters call it home.',
     actions:{ woodcutting:['wc_oak','wc_birch'], crafting:['cr_leather','cr_cloth'], construction:['cn_wall'] },
     shop:[],
-    connects:['brightwater','ironpeak','port_barin','kolar_post'],
+    connects:['port_barin','kolar_post'],
   },
   ironpeak:    {
     id:'ironpeak',    name:'Ironpeak',    pos:[2,4],
@@ -1581,7 +1582,7 @@ const LOCATIONS = {
     actions:{ mining:['mn_iron','mn_gold','mn_asterite'], smithing:['sm_iron','sm_silver'] },
     forge:['iron_hatchet','asterite_hatchet'],
     shop:[],
-    connects:['duskmill','harrowfen','haldos_outpost','cardina'],
+    connects:['haldos_outpost','cardina'],
   },
   thornfield:  {
     id:'thornfield',  name:'Thornfield',  pos:[4,0],
@@ -1597,7 +1598,7 @@ const LOCATIONS = {
     spells:true,
     actions:{ mining:['mn_silver'], fishing:['fi_flounder','fi_haddock','fi_tuna'] },
     shop:[],
-    connects:['thornfield','ashgate','harrowfen','giroc','radom_woods'],
+    connects:['thornfield','giroc','radom_woods'],
   },
   ashgate:     {
     id:'ashgate',     name:'Ashgate',     pos:[9,3],
@@ -1606,7 +1607,7 @@ const LOCATIONS = {
     actions:{ woodcutting:['wc_birch','wc_yew'], smithing:['sm_silver','sm_gold'], crafting:['cr_cloth','cr_silk'] },
     forge:['steel_hatchet'],
     shop:[],
-    connects:['stonehaven','coldrun','harrowfen','moskim'],
+    connects:['stonehaven','harrowfen','moskim'],
   },
   harrowfen:   {
     id:'harrowfen',   name:'Harrowfen',   pos:[6,4],
@@ -1616,7 +1617,7 @@ const LOCATIONS = {
     baitStation:['bait_mackerel','bait_bass'],
     tackleShop:[{name:'Lobster Trap',cost:75}],
     shop:[],
-    connects:['ironpeak','coldrun','ashgate','embervale','echtin','lake_trand','port_baron'],
+    connects:['ashgate','echtin','lake_trand','port_baron'],
   },
   embervale:   {
     id:'embervale',   name:'Embervale',   pos:[3,4],
@@ -1635,7 +1636,7 @@ const LOCATIONS = {
     baitStation:['bait_mackerel','bait_bass'],
     tackleShop:[{name:'Tuna Lure',cost:50},{name:'Shark Lure',cost:100},{name:'Lobster Trap',cost:75}],
     shop:[],
-    connects:['harrowfen','baron_plains','kolar_post'],
+    connects:['baron_plains','kolar_post'],
   },
 
   // ── New world locations ──────────────────────────────────────────────────
@@ -1698,7 +1699,7 @@ const LOCATIONS = {
     shipyard:true,
     actions:{ woodcutting:['wc_pine','wc_oak'], construction:['cn_fence','cn_wall'] },
     shop:[],
-    connects:['embervale','harrowfen','barin_plains','baron_plains','ponat_pier'],
+    connects:['embervale','barin_plains','baron_plains','ponat_pier'],
   },
   ravel: {
     id:'ravel', name:'Ravel', pos:[3,0],
@@ -2148,6 +2149,7 @@ const LOC_POS = {
   yisildor_bay:   {x:365, y:273},
   martral:        {x:415, y:273},
   // Row 8
+  skull_island: {x:310, y:338},
   irotho:         {x:15,  y:359},
   awaru:          {x:65,  y:359},
   ashia:          {x:115, y:359},
@@ -2157,132 +2159,122 @@ const LOC_POS = {
 
 
 // [locA, locB, control-point offset x, offset y from midpoint]
+
 const MAP_ROADS = [
-  // Row 0 chain
-  ['isenvale',      'nalurn_woods',    0,  -8],
-  ['nalurn_woods',  'kimdar',          0,  -8],
-  ['kimdar',        'ravel',           0,  -8],
-  ['ravel',         'thornfield',      0,  -8],
-  ['thornfield',    'greenhouse',      0,  -8],
-  // Row 0-1 verticals
-  ['isenvale',      'zhyack',         -8,   0],
-  ['nalurn_woods',  'naton',          -8,   0],
-  ['kimdar',        'therusia',       -8,   0],
-  ['ravel',         'giroc',          -8,   0],
-  ['thornfield',    'coldrun',        -8,   0],
-  ['greenhouse',    'radom_woods',    -8,   0],
-  ['galawi',        'rissdra',         0,  -8],
-  // Row 1 chain
-  ['zhyack',        'naton',           0,   8],
-  ['naton',         'therusia',        0,   8],
-  ['therusia',      'giroc',           0,   8],
-  ['giroc',         'coldrun',         0,   8],
-  ['coldrun',       'radom_woods',     0,   8],
-  ['radom_woods',   'galawi',          0,   8],
-  // Row 1-2 verticals
-  ['zhyack',        'onnix',          -8,   0],
-  ['naton',         'sepas',          -8,   0],
-  ['therusia',      'cardina_valley', -8,   0],
-  ['giroc',         'garando_mines',  -8,   0],
-  ['coldrun',       'barin_plains',   -8,   0],
-  ['radom_woods',   'ponat',          -8,   0],
-  ['galawi',        'port_schow',     -8,   0],
-  ['rissdra',       'lake_essdar',    -8,   0],
-  ['uzlea',         'essrom',         -8,   0],
-  // Row 2 chain
-  ['onnix',         'sepas',           0,   8],
-  ['sepas',         'cardina_valley',  0,   8],
-  ['cardina_valley','garando_mines',   0,   8],
-  ['garando_mines', 'barin_plains',    0,   8],
-  ['barin_plains',  'ponat',           0,   8],
-  ['ponat',         'port_schow',      0,   8],
-  ['port_schow',    'lake_essdar',     0,   8],
-  ['lake_essdar',   'stonehaven',      0,   8],
-  ['stonehaven',    'essrom',          0,   8],
-  // Row 2-3 verticals
-  ['onnix',         'pharos_peak',    -8,   0],
-  ['sepas',         'mount_pharos',   -8,   0],
-  ['cardina_valley','haldos_outpost', -8,   0],
-  ['garando_mines', 'baron_plains',   -8,   0],
-  ['barin_plains',  'ferboi',         -8,   0],
-  ['ponat',         'ponat_pier',     -8,   0],
-  ['port_schow',    'port_barin',     -8,   0],
-  ['lake_essdar',   'echtin',         -8,   0],
-  ['stonehaven',    'moskim',         -8,   0],
-  ['essrom',        'ashgate',        -8,   0],
-  // Row 3 chain
-  ['pharos_peak',   'mount_pharos',    0,   8],
-  ['mount_pharos',  'haldos_outpost',  0,   8],
-  ['haldos_outpost','baron_plains',    0,   8],
-  ['baron_plains',  'ferboi',          0,   8],
-  ['ferboi',        'ponat_pier',      0,   8],
-  ['ponat_pier',    'port_barin',      0,   8],
-  ['port_barin',    'echtin',          0,   8],
-  ['echtin',        'moskim',          0,   8],
-  ['moskim',        'ashgate',         0,   8],
-  // Row 3-4 verticals
-  ['pharos_peak',   'brightwater',    -8,   0],
-  ['mount_pharos',  'cardina',        -8,   0],
-  ['haldos_outpost','ironpeak',       -8,   0],
-  ['baron_plains',  'embervale',      -8,   0],
-  ['ferboi',        'kolar_post',     -8,   0],  // ferboi [4,3] to kolar_post [4,4]
-  ['port_barin',    'duskmill',       -8,   0],
-  ['echtin',        'harrowfen',      -8,   0],
-  ['moskim',        'droesar',        -8,   0],
-  // Row 4 chain
-  ['brightwater',   'cardina',         0,   8],
-  ['cardina',       'ironpeak',        0,   8],
-  ['ironpeak',      'embervale',       0,   8],
-  ['embervale',     'kolar_post',      0,   8],
-  ['kolar_post',    'duskmill',        0,   8],
-  ['duskmill',      'harrowfen',       0,   8],
-  ['harrowfen',     'port_baron',      0,   8],
-  ['port_baron',    'droesar',         0,   8],
-  // Row 4-5 verticals
-  ['cardina',       'jiroka',         -8,   0],
-  ['ironpeak',      'kudzum',         -8,   0],
-  ['embervale',     'hevalus_jungle', -8,   0],
-  ['kolar_post',    'hikori',         -8,   0],
-  ['harrowfen',     'lake_trand',     -8,   0],
-  ['port_baron',    'yisildor_bay',   -8,   0],
-  ['droesar',       'martral',        -8,   0],
-  // Row 5
-  ['jiroka',        'kudzum',          0,   8],
-  ['kudzum',        'hevalus_jungle',  0,   8],
-  ['hevalus_jungle','hikori',          0,   8],
-  ['hikori',        'hms_halieutika',  0,  -8],
-  ['hms_halieutika','lake_trand',      0,   8],
-  // Row 5-6 verticals
-  ['jiroka',        'bulbas',         -8,   0],
-  ['kudzum',        'cythe',          -8,   0],
-  ['hevalus_jungle','tropi',          -8,   0],
-  ['lake_trand',    'marossa',        -8,   0],
-  ['yisildor_bay',  'martral',         0,   8],
-  // Row 6
-  ['bulbas',        'cythe',           0,   8],
-  ['cythe',         'tropi',           0,   8],
-  ['marossa',       'unopos_mesa',     0,  -8],
-  ['marossa',       'yisildor_bay',    0,   8],
-  // Row 6-8 verticals (2-row gap)
-  ['bulbas',        'awaru',          -8,   0],
-  ['cythe',         'ashia',          -8,   0],
-  ['tropi',         'eptile',         -8,   0],
-  ['hikori',        'odude',          -8,   0],
-  // Row 8
-  ['irotho',        'awaru',           0,   8],
-  ['awaru',         'ashia',           0,   8],
-  ['ashia',         'eptile',          0,   8],
-  ['eptile',        'odude',           0,   8],
-  // Long-range connections
-  ['rissdra',       'danycia',        12, -20],
-  ['danycia',       'moskim',         20,  10],
+  // Orin — west coast spine
+  ['isenvale',     'zhyack',         -8,  0],
+  ['zhyack',       'onnix',          -8,  0],
+  ['onnix',        'pharos_peak',    -8,  0],
+  ['pharos_peak',  'brightwater',    -8,  0],
+  // Orin — central spine
+  ['isenvale',     'nalurn_woods',    0, -8],
+  ['nalurn_woods', 'naton',          -6,  0],
+  ['naton',        'sepas',          -6,  0],
+  ['sepas',        'mount_pharos',   -6,  0],
+  ['mount_pharos', 'cardina',        -6,  0],
+  // Orin — second spine
+  ['nalurn_woods', 'kimdar',          0, -8],
+  ['kimdar',       'therusia',       -4,  0],
+  ['therusia',     'cardina_valley', -4,  0],
+  ['cardina_valley','haldos_outpost',-4,  0],
+  ['haldos_outpost','ironpeak',      -4,  0],
+  // Orin — east spine
+  ['kimdar',       'ravel',           0, -8],
+  ['ravel',        'giroc',           0,  0],
+  ['giroc',        'garando_mines',   0,  0],
+  ['garando_mines','baron_plains',    0,  0],
+  ['baron_plains', 'ferboi',          0,  0],
+  // Orin — horizontal connectors
+  ['thornfield',   'coldrun',         0,  8],
+  ['coldrun',      'barin_plains',    0,  0],
+  ['barin_plains', 'ferboi',          8,  0],
+  ['ironpeak',     'embervale',       0,  8],
+  ['embervale',    'baron_plains',    8,  0],
+  ['embervale',    'kolar_post',      0,  8],
+  ['brightwater',  'cardina',         0,  8],
+  ['cardina',      'ironpeak',        0,  8],
+  ['ferboi',       'kolar_post',      8, -5],
+  // Gardan — top chain
+  ['greenhouse',   'radom_woods',     0, -8],
+  ['radom_woods',  'galawi',          0, -8],
+  ['galawi',       'rissdra',         0, -8],
+  ['rissdra',      'danycia',         8,-12],
+  // Gardan — mid chain
+  ['radom_woods',  'ponat',          -6,  0],
+  ['ponat',        'port_schow',     -6,  0],
+  ['port_schow',   'lake_essdar',    -6,  0],
+  ['lake_essdar',  'stonehaven',     -6,  0],
+  ['stonehaven',   'essrom',         -6,  0],
+  // Gardan — inner
+  ['ponat',        'ponat_pier',      0,  0],
+  ['lake_essdar',  'echtin',          0,  0],
+  ['stonehaven',   'moskim',          0,  0],
+  ['essrom',       'uzlea',           0,-10],
+  // Gardan — lower chain
+  ['ponat_pier',   'port_barin',     -6,  0],
+  ['port_barin',   'echtin',         -6,  0],
+  ['echtin',       'moskim',         -6,  0],
+  ['moskim',       'ashgate',        -6,  0],
+  // Gardan — south chain
+  ['kolar_post',   'duskmill',        0,  8],
+  ['duskmill',     'harrowfen',       0,  8],
+  ['harrowfen',    'port_baron',      0,  8],
+  ['port_baron',   'droesar',         0,  8],
+  // Gardan — verticals
+  ['port_barin',   'duskmill',        0,  0],
+  ['echtin',       'harrowfen',       0,  0],
+  ['moskim',       'droesar',         0,  0],
+  // Jiru — top chain
+  ['jiroka',       'kudzum',          0, -6],
+  ['kudzum',       'hevalus_jungle',  0, -6],
+  ['hevalus_jungle','hikori',         0, -6],
+  // Jiru — bottom chain
+  ['bulbas',       'cythe',           0,  6],
+  ['cythe',        'tropi',           0,  6],
+  // Jiru — verticals
+  ['jiroka',       'bulbas',         -6,  0],
+  ['kudzum',       'cythe',          -6,  0],
+  ['hevalus_jungle','tropi',         -6,  0],
+  // Marros
+  ['hms_halieutika','lake_trand',     0, -8],
+  ['unopos_mesa',  'marossa',         0,  0],
+  ['marossa',      'yisildor_bay',    0,  8],
+  ['yisildor_bay', 'martral',         0,  8],
+  ['lake_trand',   'marossa',        -8,  0],
+  // South Isles
+  ['irotho',       'awaru',           0,  8],
+  ['awaru',        'ashia',           0,  8],
+  ['ashia',        'eptile',          0,  8],
+  ['eptile',       'odude',           0,  8],
+];
+
+// ── Sea routes (cross-ocean) ──────────────────────────────────────────────
+const MAP_SEA_ROUTES = [
+  ['thornfield',   'greenhouse'],
+  ['coldrun',      'radom_woods'],
+  ['barin_plains', 'ponat'],
+  ['ferboi',       'ponat_pier'],
+  ['kolar_post',   'duskmill'],
+  ['cardina',      'jiroka'],
+  ['kolar_post',   'hikori'],
+  ['harrowfen',    'lake_trand'],
+  ['port_baron',   'yisildor_bay'],
+  ['droesar',      'martral'],
+  ['bulbas',       'awaru'],
+  ['cythe',        'ashia'],
+  ['tropi',        'eptile'],
+  ['hikori',       'odude'],
 ];
 
 
+
+
+let _lastMapLoc = null;
+
 function buildMap() {
   const svg = document.getElementById('fantasy-map');
-  svg.innerHTML = '';
-  const ns = 'http://www.w3.org/2000/svg';
+  svg.setAttribute('viewBox', '0 0 260 215');
+  const ns  = 'http://www.w3.org/2000/svg';
   const cur       = state.location;
   const adj       = new Set(LOCATIONS[cur].connects);
   const reachable = getReachableTowns(cur, getMaxHops());
@@ -2294,64 +2286,139 @@ function buildMap() {
     return e;
   }
 
-  // ── Defs ───────────────────────────────────────────────────
-  const defs = el('defs',{},svg);
+  // ── Defs ──────────────────────────────────────────────────
+  const defs = svg.querySelector('defs') || el('defs',{},svg);
+  defs.innerHTML = '';
 
-  const grad = el('radialGradient',{id:'fm-parch',cx:'45%',cy:'38%',r:'72%'},defs);
-  el('stop',{'offset':'0%','stop-color':'#e8d5a3'},grad);
-  el('stop',{'offset':'100%','stop-color':'#b89558'},grad);
+  // Ocean gradient
+  const oceanGrad = el('radialGradient',{id:'fm-ocean',cx:'45%',cy:'40%',r:'70%'},defs);
+  el('stop',{'offset':'0%','stop-color':'#1a5a8a'},oceanGrad);
+  el('stop',{'offset':'100%','stop-color':'#0a2a4a'},oceanGrad);
+
+  // Land gradient
+  const landGrad = el('linearGradient',{id:'fm-land',x1:'0%',y1:'0%',x2:'0%',y2:'100%'},defs);
+  el('stop',{'offset':'0%','stop-color':'#5a7a40'},landGrad);
+  el('stop',{'offset':'100%','stop-color':'#4a6632'},landGrad);
 
   // Vignette
   const vig = el('radialGradient',{id:'fm-vig',cx:'50%',cy:'50%',r:'70%'},defs);
-  el('stop',{'offset':'60%','stop-color':'transparent'},vig);
-  el('stop',{'offset':'100%','stop-color':'rgba(30,20,5,0.35)'},vig);
+  el('stop',{'offset':'55%','stop-color':'transparent'},vig);
+  el('stop',{'offset':'100%','stop-color':'rgba(0,10,25,0.5)'},vig);
 
-  // ── Background ─────────────────────────────────────────────
-  el('rect',{x:0,y:0,width:520,height:430,fill:'url(#fm-parch)',rx:3},svg);
-  // Texture lines
-  for(let i=0;i<430;i+=4) el('line',{x1:0,y1:i,x2:520,y2:i,stroke:'rgba(100,70,20,0.04)','stroke-width':1},svg);
-  // Vignette overlay
-  el('rect',{x:0,y:0,width:520,height:430,fill:'url(#fm-vig)',rx:3},svg);
-  // Border
-  el('rect',{x:3,y:3,width:514,height:424,fill:'none',stroke:'#8b6914','stroke-width':2,rx:2,opacity:0.8},svg);
-  el('rect',{x:7,y:7,width:506,height:416,fill:'none',stroke:'#8b6914','stroke-width':0.5,rx:1,opacity:0.4},svg);
+  // ── World group (panning) ──────────────────────────────────
+  // Remove old world group if exists
+  const oldWorld = document.getElementById('map-world');
+  if (oldWorld) oldWorld.remove();
 
-  // ── Roads ──────────────────────────────────────────────────
+  const world = el('g',{id:'map-world',class:'map-world'},svg);
+  world.style.transition = 'none'; // disable during build
+
+  // ── Ocean background ──────────────────────────────────────
+  el('rect',{x:-200,y:-200,width:900,height:900,fill:'url(#fm-ocean)'},world);
+
+  // Ocean wave texture
+  for(let wt=0; wt<6; wt++) {
+    const wy = -150 + wt*120;
+    for(let wx=-150; wx<700; wx+=60) {
+      const w = el('path',{d:`M ${wx} ${wy} Q ${wx+15} ${wy-4} ${wx+30} ${wy}`,
+        fill:'none', stroke:'rgba(100,180,240,0.06)', 'stroke-width':1.5}, world);
+    }
+  }
+
+  // ── Island shapes ─────────────────────────────────────────
+  const islandStyle = {fill:'url(#fm-land)', stroke:'#8ab870', 'stroke-width':1.5, opacity:0.9};
+  const islandCoast = {fill:'none', stroke:'#c8e890', 'stroke-width':0.5, opacity:0.4};
+
+  // Island 1 — Orin (northwest, rows 0-4, cols 0-4)
+  const orinPath = 'M 5,205 C -15,195 -20,160 -18,120 C -20,80 -18,40 5,8 C 25,-10 80,-18 130,-14 C 178,-18 225,-18 240,5 C 252,22 248,68 248,108 C 248,148 252,185 238,208 C 220,226 170,224 120,222 C 70,224 20,222 5,205 Z';
+  el('path',{d:orinPath, ...islandStyle},world);
+  el('path',{d:orinPath, ...islandCoast},world);
+
+  // Island 2 — Gardan (northeast, rows 0-4, cols 5-9)
+  const gardanPath = 'M 262,205 C 255,190 252,155 254,115 C 254,75 252,36 262,8 C 272,-10 315,-18 365,-14 C 415,-18 460,-16 492,5 C 508,22 510,68 508,108 C 508,148 510,183 496,208 C 478,226 435,224 390,222 C 345,224 298,226 268,215 C 263,212 262,208 262,205 Z';
+  el('path',{d:gardanPath, ...islandStyle},world);
+  el('path',{d:gardanPath, ...islandCoast},world);
+
+  // Island 3 — Jiru (southwest, rows 5-6)
+  const jiruPath = 'M 42,220 C 28,232 25,260 32,283 C 40,306 65,318 100,320 C 140,322 178,320 210,316 C 232,312 250,300 252,282 C 256,262 252,240 242,226 C 232,215 210,215 185,214 C 155,213 115,213 85,215 C 65,218 50,218 42,220 Z';
+  el('path',{d:jiruPath, ...islandStyle},world);
+  el('path',{d:jiruPath, ...islandCoast},world);
+
+  // Island 4 — Marros (southeast, rows 5-6)
+  const marrosPath = 'M 258,222 C 250,234 248,260 255,285 C 262,308 285,320 318,322 C 355,324 395,322 425,316 C 445,308 454,292 455,273 C 458,252 452,234 440,222 C 428,213 400,212 370,211 C 335,210 295,212 270,218 C 263,220 258,222 258,222 Z';
+  el('path',{d:marrosPath, ...islandStyle},world);
+  el('path',{d:marrosPath, ...islandCoast},world);
+
+  // Island 5 — South Isles (row 8)
+  const southPath = 'M 2,342 C -12,355 -15,375 -5,395 C 5,408 45,414 95,414 C 140,414 185,410 222,400 C 248,392 258,376 254,355 C 250,340 232,332 200,330 C 165,328 115,330 65,334 C 35,337 10,340 2,342 Z';
+  el('path',{d:southPath, ...islandStyle},world);
+  el('path',{d:southPath, ...islandCoast},world);
+
+  // ── Skull Island (hidden, fog-shrouded) ───────────────────
+  const skulldefs = el('filter',{id:'skull-fog',x:'-30%',y:'-30%',width:'160%',height:'160%'},defs);
+  el('feGaussianBlur',{stdDeviation:'3.5',result:'blur'},skulldefs);
+  const skullPath = 'M 275,312 C 268,320 266,338 272,353 C 280,368 298,375 318,373 C 338,371 352,360 353,345 C 354,330 342,316 326,311 C 310,306 285,308 275,312 Z';
+  el('path',{d:skullPath, fill:'#2a3a2a', stroke:'#4a5a3a','stroke-width':1, opacity:0.5, filter:'url(#skull-fog)'},world);
+  // Skull icon
+  const sk = el('g',{transform:'translate(312,338)',opacity:0.35, filter:'url(#skull-fog)'},world);
+  el('circle',{cx:0,cy:-3,r:6,fill:'#e0e0d0',stroke:'none'},sk);
+  el('rect',{x:-4,y:2,width:8,height:4,fill:'#e0e0d0',rx:1},sk);
+  el('circle',{cx:-2.5,cy:-4,r:1.8,fill:'#1a1a1a'},sk);
+  el('circle',{cx:2.5,cy:-4,r:1.8,fill:'#1a1a1a'},sk);
+  el('line',{x1:-4,y1:3,x2:-2,y2:5,stroke:'#1a1a1a','stroke-width':1},sk);
+  el('line',{x1:0,y1:2.5,x2:0,y2:5,stroke:'#1a1a1a','stroke-width':1},sk);
+  el('line',{x1:4,y1:3,x2:2,y2:5,stroke:'#1a1a1a','stroke-width':1},sk);
+  el('text',{x:0,y:18,'text-anchor':'middle',fill:'rgba(180,180,140,0.4)','font-size':7,'font-family':'serif','font-style':'italic','stroke':'none'},world).textContent='? ? ?';
+
+  // ── Vignette overlay ──────────────────────────────────────
+  el('rect',{x:-200,y:-200,width:900,height:900,fill:'url(#fm-vig)'},world);
+
+  // ── Sea routes ────────────────────────────────────────────
+  for (const [a,b] of MAP_SEA_ROUTES) {
+    const pa=LOC_POS[a], pb=LOC_POS[b];
+    if (!pa || !pb) continue;
+    const mx=(pa.x+pb.x)/2, my=(pa.y+pb.y)/2;
+    // slight curve perpendicular to the route
+    const dx=pb.x-pa.x, dy=pb.y-pa.y;
+    const len=Math.sqrt(dx*dx+dy*dy)||1;
+    const ox=-dy/len*12, oy=dx/len*12;
+    el('path',{
+      d:`M ${pa.x} ${pa.y} Q ${mx+ox} ${my+oy} ${pb.x} ${pb.y}`,
+      fill:'none', stroke:'#4a9ac8', 'stroke-width':1.5,
+      'stroke-dasharray':'4 5', opacity:0.55
+    },world);
+  }
+
+  // ── Land roads ────────────────────────────────────────────
   for (const [a,b,ox,oy] of MAP_ROADS) {
     const pa=LOC_POS[a], pb=LOC_POS[b];
+    if (!pa || !pb) continue;
     const mx=(pa.x+pb.x)/2+ox, my=(pa.y+pb.y)/2+oy;
-    el('path',{
-      d:`M ${pa.x} ${pa.y} Q ${mx} ${my} ${pb.x} ${pb.y}`,
-      fill:'none', stroke:'#7a5520', 'stroke-width':2,
-      'stroke-dasharray':'5 4', opacity:0.65
-    },svg);
-    // Road shadow/border
     el('path',{
       d:`M ${pa.x} ${pa.y} Q ${mx} ${my} ${pb.x} ${pb.y}`,
       fill:'none', stroke:'#4a3010', 'stroke-width':3.5,
       'stroke-dasharray':'5 4', opacity:0.15
-    },svg);
+    },world);
+    el('path',{
+      d:`M ${pa.x} ${pa.y} Q ${mx} ${my} ${pb.x} ${pb.y}`,
+      fill:'none', stroke:'#c8a064', 'stroke-width':1.8,
+      'stroke-dasharray':'5 4', opacity:0.6
+    },world);
   }
 
-  // ── Towns ──────────────────────────────────────────────────
+  // ── Towns ─────────────────────────────────────────────────
   for (const [id, loc] of Object.entries(LOCATIONS)) {
     const pos = LOC_POS[id];
     if (!pos) continue;
-    const isCur   = id===cur;
-    const isAdj   = adj.has(id);
-    const info    = reachable.get(id);
-    const isFar   = info && info.hops > 1;   // reachable via multi-hop
+    const isCur    = id===cur;
+    const isAdj    = adj.has(id);
+    const info     = reachable.get(id);
+    const isFar    = info && info.hops > 1;
     const canVisit = isAdj || isFar;
 
-    // outer: only translation (SVG attr) — CSS transform never touches this
-    const outer = el('g',{transform:`translate(${pos.x},${pos.y})`},svg);
-    // inner: CSS hover scale applied here, no SVG transform attr
+    const outer = el('g',{transform:`translate(${pos.x},${pos.y})`},world);
     const g = el('g',{},outer);
-    if (isCur) {
-      g.setAttribute('class','fmap-town');
-      g.setAttribute('cursor','pointer');
-      g.onclick = ()=>onMapClick(id);
-    } else if (canVisit) {
+    if (canVisit || isCur) {
       g.setAttribute('class','fmap-town');
       g.setAttribute('cursor','pointer');
       g.onclick = ()=>onMapClick(id);
@@ -2371,50 +2438,50 @@ function buildMap() {
       el('circle',{cx:0,cy:0,r:10,fill:'none',stroke:'#c8a050','stroke-width':1,'stroke-dasharray':'3 2',opacity:0.6},g);
     }
 
-    // Ground shadow
-    el('ellipse',{cx:1,cy:4,rx:9,ry:4,fill:'rgba(30,15,0,0.25)'},g);
-
-    // Castle body
-    const bc = isCur?'#1a4a30':isAdj?'#1a3a28':isFar?'#4a3a10':'#5a3a18';
-    const sc = isCur?'#74c69d':isAdj?'#4a8a6a':isFar?'#c8a050':'#9a7040';
+    el('ellipse',{cx:1,cy:4,rx:9,ry:4,fill:'rgba(0,10,0,0.3)'},g);
+    const bc = isCur?'#1a4a30':isAdj?'#1a3a28':isFar?'#3a2a08':'#2a1a0a';
+    const sc = isCur?'#74c69d':isAdj?'#4a8a6a':isFar?'#c8a050':'#7a5030';
     el('rect',{x:-7,y:-8,width:14,height:10,fill:bc,stroke:sc,'stroke-width':1,rx:0.5},g);
-    // Turrets
     for (const tx of [-7,-2,5]) el('rect',{x:tx,y:-12,width:4,height:5,fill:bc,stroke:sc,'stroke-width':1},g);
-    // Gate
     el('rect',{x:-2,y:-4,width:4,height:4,fill:'rgba(0,0,0,0.4)',rx:1},g);
 
-    // Label with outline for readability
-    const fc = isCur?'#e8fff4':isAdj?'#c8e8d0':isFar?'#e8d880':'#4a3010';
+    const fc = isCur?'#e8fff4':isAdj?'#c8e8d0':isFar?'#e8d880':'#c8d0a0';
     const fw = isCur?'bold':'normal';
     const t = el('text',{
-      x:0, y:16,
-      'text-anchor':'middle',
-      fill:fc,
-      'font-size':isCur?10:9,
-      'font-family':'serif',
-      'font-weight':fw,
-      'stroke':'#1a0f00',
-      'stroke-width':2.5,
-      'paint-order':'stroke'
+      x:0, y:16, 'text-anchor':'middle', fill:fc,
+      'font-size':isCur?8.5:7.5, 'font-family':'serif', 'font-weight':fw,
+      'stroke':'rgba(0,10,0,0.8)', 'stroke-width':2, 'paint-order':'stroke'
     },g);
     t.textContent = loc.name;
   }
 
-  // ── Compass rose ───────────────────────────────────────────
-  const cr = el('g',{transform:'translate(476,26)'},svg);
-  el('circle',{cx:0,cy:0,r:14,fill:'rgba(200,170,100,0.4)',stroke:'#8b6914','stroke-width':0.8},cr);
-  // N/S/E/W points
-  const pts=[['N',0,-13],['S',0,13],['E',13,0],['W',-13,0]];
-  for(const [lbl,px,py] of pts){
-    el('text',{x:px,y:py+3.5,'text-anchor':'middle',fill:'#5a3a10','font-size':6,'font-family':'serif','font-weight':'bold'},cr).textContent=lbl;
-  }
-  el('polygon',{points:'0,-11 2.5,-4 0,-7 -2.5,-4',fill:'#8b3010'},cr);
-  el('polygon',{points:'0,11 2.5,4 0,7 -2.5,4',fill:'#8b6914',opacity:0.5},cr);
-  el('circle',{cx:0,cy:0,r:2,fill:'#8b3010'},cr);
+  // ── Compass rose (fixed in viewport via separate group) ───
+  const cr = el('g',{transform:'translate(248,14)'},svg);
+  el('circle',{cx:0,cy:0,r:11,fill:'rgba(180,140,80,0.35)',stroke:'#6a5030','stroke-width':0.8},cr);
+  for(const [lbl,px,py] of [['N',0,-9],['S',0,9],['E',9,0],['W',-9,0]])
+    el('text',{x:px,y:py+3,'text-anchor':'middle',fill:'#4a3010','font-size':5,'font-family':'serif','font-weight':'bold'},cr).textContent=lbl;
+  el('polygon',{points:'0,-8 2,-3 0,-5 -2,-3',fill:'#8b3010'},cr);
+  el('polygon',{points:'0,8 2,3 0,5 -2,3',fill:'#8b6914',opacity:0.5},cr);
+  el('circle',{cx:0,cy:0,r:1.5,fill:'#8b3010'},cr);
 
-  // ── Title ──────────────────────────────────────────────────
-  el('text',{x:26,y:420,'font-size':8,fill:'#6a4a20','font-family':'serif','font-style':'italic',opacity:0.7},svg).textContent='The Known Realm';
+  // ── Pan to current location ────────────────────────────────
+  const curPos = LOC_POS[cur] || {x:130, y:107};
+  const tx = 130 - curPos.x;
+  const ty = 107 - curPos.y;
+
+  if (_lastMapLoc && _lastMapLoc !== cur && LOC_POS[_lastMapLoc]) {
+    const prev = LOC_POS[_lastMapLoc];
+    world.style.transform = `translate(${130-prev.x}px, ${130-prev.y}px)`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      world.style.transition = 'transform 0.85s cubic-bezier(0.4, 0, 0.2, 1)';
+      world.style.transform = `translate(${tx}px, ${ty}px)`;
+    }));
+  } else {
+    world.style.transform = `translate(${tx}px, ${ty}px)`;
+  }
+  _lastMapLoc = cur;
 }
+
 
 // ============================================================
 //  LOCATION UI
