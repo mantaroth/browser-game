@@ -1727,21 +1727,22 @@ function resetState() {
   state.equipment  = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null};
   state.action     = null;
   state.travel     = null;
-  state.hp         = { current:100, max:100 };
-  state.mp         = { current:20, max:20 };
-  state.charXp     = 0;
-  state.guildXp    = 0;
-  state.activeBuffs = {};
+  state.hp              = { current:getHpMax(), max:getHpMax() };
+  state.mp              = { current:getMpMax(), max:getMpMax() };
+  state.charXp          = 0;
+  state.guildXp         = 0;
+  state.lastDamageTaken = 0;
+  state.activeBuffs     = {};
 }
 
 function skillLevel(id) { return (state.skills[id] || {level:1}).level; }
 
 function getStateData() {
-  return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment, hp:state.hp, mp:state.mp, charXp:state.charXp, guildXp:state.guildXp };
+  return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment, hp:state.hp, mp:state.mp, charXp:state.charXp, guildXp:state.guildXp, lastDamageTaken:state.lastDamageTaken||0 };
 }
 
 function getMpMax()    { return 10 + skillLevel('magic') * 2; }
-function getHpMax()    { return 100; }
+function getHpMax()    { return skillLevel('combat') + getCharLevel(); } // +1 per combat lv, +1 per char lv
 function getCarryMax() { return 1000 + skillLevel('trading') * 50; }
 
 // ============================================================
@@ -1802,9 +1803,10 @@ function applyServerData(d) {
   state.equipment  = Object.assign(defaultEquip, d.equipment || {});
   state.hp         = d.hp        || { current:getHpMax(), max:getHpMax() };
   state.mp         = d.mp        || { current:getMpMax(), max:getMpMax() };
-  state.charXp     = d.charXp    || 0;
-  state.guildXp    = d.guildXp   || 0;
-  state.activeBuffs = {};
+  state.charXp          = d.charXp           || 0;
+  state.guildXp         = d.guildXp          || 0;
+  state.lastDamageTaken = d.lastDamageTaken  || 0;
+  state.activeBuffs     = {};
   if (state.location === 'greenhouse') { ghState = null; fetchGhState(); }
 }
 
@@ -3149,10 +3151,10 @@ function tick() {
     _lastMpRegen = now;
   }
 
-  // HP regen: 1 HP per 60s
-  if (now - _lastHpRegen >= 60000) {
+  // HP regen: 1 HP per 300s (5 min), only if no damage taken in last 300s
+  if (now - _lastHpRegen >= 300000) {
     const hpMax = getHpMax();
-    if (state.hp.current < hpMax) {
+    if (state.hp.current < hpMax && (now - (state.lastDamageTaken||0)) >= 300000) {
       state.hp.current = Math.min(hpMax, state.hp.current + 1);
       updateHpMpUI();
     }
@@ -3303,6 +3305,7 @@ function tick() {
           const variance = Math.floor(Math.random() * 5);
           dmgTaken = Math.max(1, mob.attack - getDefense() + variance);
           state.hp.current = Math.max(0, state.hp.current - dmgTaken);
+          state.lastDamageTaken = now;
           updateHpMpUI();
         }
 
