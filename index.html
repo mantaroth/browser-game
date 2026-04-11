@@ -464,7 +464,8 @@ function rollMob() {
 function getCombatMs() {
   const speedLv   = skillLevel('speed');
   const reduction = Math.floor((speedLv - 1) / 2);  // -1s per odd level: 3,5,7...
-  return Math.max(2, 27 - reduction) * 1000;
+  const buffBonus = (state.activeBuffs && state.activeBuffs.excite) ? (state.activeBuffs.excite.amount || 0) : 0;
+  return Math.max(2, 27 - reduction - buffBonus) * 1000;
 }
 
 // ============================================================
@@ -1565,7 +1566,7 @@ const TRAVEL_TIMES = {
 function getTravelMs(a, b) {
   const base = TRAVEL_TIMES[`${a}-${b}`] || TRAVEL_TIMES[`${b}-${a}`] || 30;
   const speedReduction = Math.floor((skillLevel('speed') - 1) / 4);
-  const buffBonus = (state.activeBuffs && state.activeBuffs.excite) ? 5 : 0;
+  const buffBonus = (state.activeBuffs && state.activeBuffs.excite) ? (state.activeBuffs.excite.amount || 0) : 0;
   return Math.max(15, base - speedReduction - buffBonus) * 1000;
 }
 
@@ -2697,7 +2698,7 @@ function completeSpell(spellId) {
     const dmg  = Math.floor(Math.random() * (maxD - minD + 1)) + minD;
     addLog(`${sp.name}: dealt ${dmg} damage to an enemy! (+${sp.magicXp} Magic xp)`, 'success');
   } else if (sp.effect === 'speed_boost') {
-    state.activeBuffs.excite = { endsAt: Date.now() + sp.duration * 1000 };
+    state.activeBuffs.excite = { endsAt: Date.now() + sp.duration * 1000, amount: sp.power };
     addLog(`${sp.name}: +${sp.power} Speed for ${sp.duration}s! (+${sp.magicXp} Magic xp)`, 'success');
   }
   saveGame();
@@ -2836,7 +2837,7 @@ function consumeItem(itemName) {
     addLog(`You drink the ${itemName} and recover ${healed} MP.`, 'success');
   } else if (effect.type === 'speed_boost') {
     const endsAt = Date.now() + effect.duration * 1000;
-    state.activeBuffs.excite = { endsAt };
+    state.activeBuffs.excite = { endsAt, amount: effect.amount };
     addLog(`You use the ${itemName}: +${effect.amount} Speed for ${effect.duration}s!`, 'success');
   }
   saveGame();
