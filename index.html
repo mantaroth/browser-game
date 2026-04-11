@@ -346,6 +346,22 @@ const RESOURCES = {
 };
 
 // ============================================================
+//  STONEHAVEN DYNAMIC COMBAT MOBS
+// ============================================================
+const STONEHAVEN_MOBS = [
+  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, weight:50 },
+  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, weight:30 },
+  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, weight:20 },
+];
+
+function rollMob() {
+  const total = STONEHAVEN_MOBS.reduce((s,m) => s + m.weight, 0);
+  let roll = Math.random() * total;
+  for (const m of STONEHAVEN_MOBS) { roll -= m.weight; if (roll <= 0) return m; }
+  return STONEHAVEN_MOBS[STONEHAVEN_MOBS.length - 1];
+}
+
+// ============================================================
 //  ITEM PRICES  (base sell value in gold)
 // ============================================================
 const ITEM_PRICES = {
@@ -391,14 +407,15 @@ const LOCATIONS = {
   isenvale:    {
     id:'isenvale',    name:'Isenvale',    pos:[0,0],
     desc:'A quiet starter village ringed by pine forest. Good for beginners.',
-    actions:{ woodcutting:['wc_pine'], harvesting:['hv_wheat'], cooking:['co_bread'], crafting:['cr_rope'], construction:['cn_fence'], combat:['cb_rat'], magic:['mg_study'], trading:['tr_barter'], speed:['sp_sprint'] },
+    actions:{ woodcutting:['wc_pine'], harvesting:['hv_wheat'], cooking:['co_bread'], crafting:['cr_rope'], construction:['cn_fence'], magic:['mg_study'], trading:['tr_barter'], speed:['sp_sprint'] },
     shop:['basic_hatchet','forester_gloves'],
     connects:['stonehaven','thornfield'],
   },
   stonehaven:  {
     id:'stonehaven',  name:'Stonehaven',  pos:[0,2],
     desc:'A busy market town at the foothills. Mining and trade thrive here.',
-    actions:{ woodcutting:['wc_pine','wc_oak'], mining:['mn_copper'], smithing:['sm_copper'], trading:['tr_barter','tr_contract'], construction:['cn_fence','cn_wall'], combat:['cb_rat','cb_wolf'] },
+    dynamicCombat:true,
+    actions:{ woodcutting:['wc_pine','wc_oak'], mining:['mn_copper'], smithing:['sm_copper'], trading:['tr_barter','tr_contract'], construction:['cn_fence','cn_wall'] },
     shop:['basic_hatchet','iron_hatchet'],
     connects:['isenvale','brightwater','ashgate'],
   },
@@ -419,28 +436,28 @@ const LOCATIONS = {
   ironpeak:    {
     id:'ironpeak',    name:'Ironpeak',    pos:[2,4],
     desc:'A highland fortress town. Rich ore veins and dangerous creatures abound.',
-    actions:{ mining:['mn_iron','mn_gold'], smithing:['sm_iron','sm_silver'], combat:['cb_wolf','cb_troll'] },
+    actions:{ mining:['mn_iron','mn_gold'], smithing:['sm_iron','sm_silver'] },
     shop:['steel_hatchet'],
     connects:['duskmill','harrowfen'],
   },
   thornfield:  {
     id:'thornfield',  name:'Thornfield',  pos:[2,0],
     desc:'Rolling hills and farms. Harvest crops and train your speed on the open roads.',
-    actions:{ woodcutting:['wc_pine'], harvesting:['hv_wheat','hv_herbs'], combat:['cb_rat','cb_wolf'], speed:['sp_sprint','sp_dash'], construction:['cn_fence'] },
+    actions:{ woodcutting:['wc_pine'], harvesting:['hv_wheat','hv_herbs'], speed:['sp_sprint','sp_dash'], construction:['cn_fence'] },
     shop:[],
     connects:['isenvale','coldrun'],
   },
   coldrun:     {
     id:'coldrun',     name:'Coldrun',     pos:[3,1],
     desc:'A cold northern outpost. Ice magic, fast runners and silver miners make their home here.',
-    actions:{ mining:['mn_silver'], fishing:['fi_trout','fi_salmon'], magic:['mg_ice'], combat:['cb_wolf'], speed:['sp_dash','sp_surge'] },
+    actions:{ mining:['mn_silver'], fishing:['fi_trout','fi_salmon'], magic:['mg_ice'], speed:['sp_dash','sp_surge'] },
     shop:['lucky_charm'],
     connects:['thornfield','ashgate','harrowfen'],
   },
   ashgate:     {
     id:'ashgate',     name:'Ashgate',     pos:[1,2],
     desc:'A dark crossroads town built on ancient ruins. Smiths and mages gather here.',
-    actions:{ woodcutting:['wc_birch','wc_yew'], smithing:['sm_silver','sm_gold'], magic:['mg_flame','mg_ice'], combat:['cb_troll'], crafting:['cr_cloth','cr_silk'] },
+    actions:{ woodcutting:['wc_birch','wc_yew'], smithing:['sm_silver','sm_gold'], magic:['mg_flame','mg_ice'], crafting:['cr_cloth','cr_silk'] },
     shop:['iron_hatchet','lucky_charm'],
     connects:['stonehaven','coldrun','harrowfen'],
   },
@@ -463,7 +480,6 @@ const LOCATIONS = {
       crafting:['cr_rope','cr_leather','cr_cloth','cr_silk'],
       smithing:['sm_copper','sm_iron','sm_silver','sm_gold'],
       construction:['cn_fence','cn_wall','cn_tower','cn_fort'],
-      combat:['cb_rat','cb_wolf','cb_troll','cb_dragon'],
       magic:['mg_study','mg_flame','mg_ice','mg_arcane'],
       trading:['tr_barter','tr_contract','tr_merchant','tr_grand'],
       speed:['sp_sprint','sp_dash','sp_surge','sp_swift'],
@@ -892,6 +908,7 @@ function updateActionSection() {
     wrap.style.display = open ? 'block' : 'none';
     for (const resId of resIds) {
       const r   = RESOURCES[resId];
+      if (r.levelReq > 10) continue;
       const can = lv >= r.levelReq;
       const btn = document.createElement('button');
       btn.className   = 'action-btn';
@@ -901,6 +918,27 @@ function updateActionSection() {
       btn.onclick     = ()=>startAction(skillId, resId);
       wrap.appendChild(btn);
     }
+    sec.appendChild(wrap);
+  }
+
+  // Dynamic Combat (Stonehaven)
+  if (loc.dynamicCombat) {
+    const combatLv = skillLevel('combat');
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__combat'];
+    hdr.innerHTML = `<span>⚔ Combat (Lv${combatLv})</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__combat');
+    sec.appendChild(hdr);
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__combat';
+    wrap.style.display = open ? 'block' : 'none';
+    const btn = document.createElement('button');
+    btn.className = 'action-btn';
+    btn.textContent = 'Hunt — a creature lurks nearby';
+    btn.disabled = !!state.travel || !!state.action;
+    btn.onclick = ()=>startDynamicCombat();
+    wrap.appendChild(btn);
     sec.appendChild(wrap);
   }
 
@@ -978,7 +1016,7 @@ function updateActionSection() {
     sec.appendChild(wrap);
   }
 
-  if (!skillsHere.length && (!loc.shop||!loc.shop.length))
+  if (!skillsHere.length && !loc.dynamicCombat && (!loc.shop||!loc.shop.length))
     sec.innerHTML = '<div style="color:#555;font-size:11px;">Nothing to do here.</div>';
 }
 
@@ -1054,6 +1092,20 @@ function startAction(skillId, resourceId) {
   document.getElementById('stat-status').textContent = r.name;
   updateActionSection(); updateTravelSection();
   addLog(`You begin: ${r.name}. (${ms/1000}s)`);
+}
+
+function startDynamicCombat() {
+  if (state.action || state.travel) return;
+  const mob = rollMob();
+  const now = Date.now();
+  const ms  = Math.max(15000, mob.hp * 3000);
+  state.action = { type:'dynamicCombat', mob, skillId:'combat', startTime:now, endTime:now+ms };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Fighting ${mob.name}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Fighting ${mob.name}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`A ${mob.name} appears! (HP:${mob.hp}, ${ms/1000}s)`);
 }
 
 function startTravel(destId) {
@@ -1154,14 +1206,28 @@ function tick() {
     document.getElementById('action-fill').style.width       = Math.min(elapsed/total*100,100)+'%';
     document.getElementById('action-time-label').textContent = Math.max(0,Math.ceil((state.action.endTime-now)/1000))+'s';
     if (now>=state.action.endTime) {
-      const {skillId,resourceId} = state.action;
-      const r = RESOURCES[resourceId];
-      grantXP(skillId, r.xp);
-      if (r.product) addItem(r.product);
-      addLog(`${r.name} complete. (+${r.xp} ${SKILL_DEFS[skillId].name} xp)${r.product?' → '+r.product:''}`, 'success');
-      saveGame();
-      const restart=Date.now(), ms=getActionMs(skillId);
-      state.action = {skillId, resourceId, startTime:restart, endTime:restart+ms};
+      if (state.action.type === 'dynamicCombat') {
+        const { mob } = state.action;
+        grantXP('combat', mob.xp);
+        addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp)`, 'success');
+        saveGame();
+        const next = rollMob();
+        const now2 = Date.now(), ms2 = Math.max(15000, next.hp * 3000);
+        state.action = { type:'dynamicCombat', mob:next, skillId:'combat', startTime:now2, endTime:now2+ms2 };
+        botCheck.lastCheck = now2;
+        document.getElementById('action-label').textContent = `Fighting ${next.name}...`;
+        document.getElementById('stat-status').textContent = `Fighting ${next.name}`;
+        addLog(`A ${next.name} appears! (HP:${next.hp}, ${ms2/1000}s)`);
+      } else {
+        const {skillId,resourceId} = state.action;
+        const r = RESOURCES[resourceId];
+        grantXP(skillId, r.xp);
+        if (r.product) addItem(r.product);
+        addLog(`${r.name} complete. (+${r.xp} ${SKILL_DEFS[skillId].name} xp)${r.product?' → '+r.product:''}`, 'success');
+        saveGame();
+        const restart=Date.now(), ms=getActionMs(skillId);
+        state.action = {skillId, resourceId, startTime:restart, endTime:restart+ms};
+      }
     }
   }
 
