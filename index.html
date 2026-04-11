@@ -224,7 +224,7 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 <div id="top-section">
   <div id="mini-map-box">
     <h3>World Map</h3>
-    <svg id="fantasy-map" viewBox="0 0 520 430"></svg>
+    <svg id="fantasy-map" viewBox="0 0 120 100"></svg>
   </div>
   <div id="chat-panel">
     <div class="chat-tabs">
@@ -2211,74 +2211,74 @@ function addLog(msg, type) {
 // ============================================================
 const LOC_POS = {
   // ── Orin ────────────────────────────────────────────────────────────
-  isenvale:          {x:102 ,y:187 },
-  nalurn_woods:      {x:75  ,y:171 },
-  kimdar:            {x:48  ,y:154 },
-  ravel:             {x:28  ,y:135 },
-  thornfield:        {x:113 ,y:26  },
-  zhyack:            {x:147 ,y:191 },
-  naton:             {x:111 ,y:168 },
-  therusia:          {x:68  ,y:144 },
-  giroc:             {x:36  ,y:115 },
-  coldrun:           {x:112 ,y:42  },
-  onnix:             {x:190 ,y:184 },
-  sepas:             {x:148 ,y:161 },
-  cardina_valley:    {x:97  ,y:132 },
-  garando_mines:     {x:64  ,y:100 },
-  barin_plains:      {x:114 ,y:58  },
-  pharos_peak:       {x:218 ,y:167 },
-  mount_pharos:      {x:175 ,y:147 },
-  haldos_outpost:    {x:133 ,y:124 },
-  baron_plains:      {x:106 ,y:92  },
-  ferboi:            {x:120 ,y:75  },
-  brightwater:       {x:222 ,y:147 },
-  cardina:           {x:194 ,y:132 },
-  ironpeak:          {x:168 ,y:117 },
-  embervale:         {x:148 ,y:100 },
-  kolar_post:        {x:159 ,y:83  },
+  isenvale:          {x:125 ,y:98  },
+  nalurn_woods:      {x:100 ,y:151 },
+  kimdar:            {x:72  ,y:203 },
+  ravel:             {x:67  ,y:260 },
+  thornfield:        {x:493 ,y:493 },
+  zhyack:            {x:220 ,y:67  },
+  naton:             {x:187 ,y:141 },
+  therusia:          {x:140 ,y:221 },
+  giroc:             {x:128 ,y:306 },
+  coldrun:           {x:460 ,y:453 },
+  onnix:             {x:335 ,y:67  },
+  sepas:             {x:289 ,y:143 },
+  cardina_valley:    {x:232 ,y:236 },
+  garando_mines:     {x:226 ,y:331 },
+  barin_plains:      {x:429 ,y:412 },
+  pharos_peak:       {x:435 ,y:94  },
+  mount_pharos:      {x:380 ,y:164 },
+  haldos_outpost:    {x:331 ,y:240 },
+  baron_plains:      {x:337 ,y:331 },
+  ferboi:            {x:407 ,y:367 },
+  brightwater:       {x:487 ,y:143 },
+  cardina:           {x:455 ,y:192 },
+  ironpeak:          {x:427 ,y:242 },
+  embervale:         {x:419 ,y:293 },
+  kolar_post:        {x:478 ,y:330 },
   // ── Gardan ──────────────────────────────────────────────────────────
-  greenhouse:        {x:779 ,y:26  },
-  danycia:           {x:846 ,y:54  },
-  radom_woods:       {x:777 ,y:55  },
-  galawi:            {x:801 ,y:61  },
-  rissdra:           {x:824 ,y:59  },
-  uzlea:             {x:722 ,y:191 },
-  ponat:             {x:755 ,y:70  },
-  port_schow:        {x:746 ,y:98  },
-  lake_essdar:       {x:723 ,y:110 },
-  stonehaven:        {x:711 ,y:137 },
-  essrom:            {x:718 ,y:165 },
-  ponat_pier:        {x:732 ,y:56  },
-  port_barin:        {x:709 ,y:67  },
-  echtin:            {x:699 ,y:96  },
-  moskim:            {x:687 ,y:124 },
-  ashgate:           {x:672 ,y:147 },
-  duskmill:          {x:687 ,y:52  },
-  harrowfen:         {x:677 ,y:78  },
-  port_baron:        {x:656 ,y:90  },
-  droesar:           {x:662 ,y:116 },
+  greenhouse:        {x:1078,y:67  },
+  danycia:           {x:1219,y:118 },
+  radom_woods:       {x:1079,y:140 },
+  galawi:            {x:1129,y:147 },
+  rissdra:           {x:1175,y:136 },
+  uzlea:             {x:992 ,y:493 },
+  ponat:             {x:1038,y:183 },
+  port_schow:        {x:1025,y:255 },
+  lake_essdar:       {x:979 ,y:293 },
+  stonehaven:        {x:961 ,y:361 },
+  essrom:            {x:980 ,y:428 },
+  ponat_pier:        {x:989 ,y:155 },
+  port_barin:        {x:944 ,y:189 },
+  echtin:            {x:929 ,y:263 },
+  moskim:            {x:911 ,y:335 },
+  ashgate:           {x:885 ,y:397 },
+  duskmill:          {x:899 ,y:157 },
+  harrowfen:         {x:883 ,y:224 },
+  port_baron:        {x:841 ,y:260 },
+  droesar:           {x:859 ,y:324 },
   // ── Jiru ────────────────────────────────────────────────────────────
-  jiroka:            {x:68  ,y:616 },
-  kudzum:            {x:123 ,y:615 },
-  hevalus_jungle:    {x:178 ,y:613 },
-  hikori:            {x:216 ,y:584 },
-  bulbas:            {x:67  ,y:661 },
-  cythe:             {x:122 ,y:662 },
-  tropi:             {x:177 ,y:658 },
+  jiroka:            {x:58  ,y:884 },
+  kudzum:            {x:186 ,y:878 },
+  hevalus_jungle:    {x:316 ,y:871 },
+  hikori:            {x:402 ,y:816 },
+  bulbas:            {x:61  ,y:964 },
+  cythe:             {x:191 ,y:961 },
+  tropi:             {x:320 ,y:951 },
   // ── Marros ──────────────────────────────────────────────────────────
-  hms_halieutika:    {x:653 ,y:662 },
-  lake_trand:        {x:680 ,y:637 },
-  unopos_mesa:       {x:677 ,y:584 },
-  marossa:           {x:706 ,y:611 },
-  yisildor_bay:      {x:758 ,y:608 },
-  martral:           {x:807 ,y:604 },
+  hms_halieutika:    {x:829 ,y:964 },
+  lake_trand:        {x:876 ,y:918 },
+  unopos_mesa:       {x:877 ,y:816 },
+  marossa:           {x:922 ,y:868 },
+  yisildor_bay:      {x:1009,y:864 },
+  martral:           {x:1091,y:858 },
   // ── South Isles ─────────────────────────────────────────────────────
-  skull_island:      {x:430 ,y:420 },
-  irotho:            {x:30  ,y:937 },
-  awaru:             {x:73  ,y:954 },
-  ashia:             {x:118 ,y:964 },
-  eptile:            {x:164 ,y:966 },
-  odude:             {x:210 ,y:960 },
+  skull_island:      {x:640 ,y:570 },
+  irotho:            {x:40  ,y:1306},
+  awaru:             {x:83  ,y:1338},
+  ashia:             {x:128 ,y:1357},
+  eptile:            {x:174 ,y:1364},
+  odude:             {x:220 ,y:1358},
 };
 
 
@@ -2398,7 +2398,7 @@ let _lastMapLoc = null;
 
 function buildMap() {
   const svg = document.getElementById('fantasy-map');
-  svg.setAttribute('viewBox', '0 0 260 215');
+  svg.setAttribute('viewBox', '0 0 120 100');
   const ns  = 'http://www.w3.org/2000/svg';
   const cur       = state.location;
   const adj       = new Set(LOCATIONS[cur].connects);
@@ -2439,12 +2439,12 @@ function buildMap() {
   world.style.transition = 'none'; // disable during build
 
   // ── Ocean background ──────────────────────────────────────
-  el('rect',{x:-600,y:-600,width:2400,height:2400,fill:'url(#fm-ocean)'},world);
+  el('rect',{x:-1600,y:-1600,width:5000,height:5000,fill:'url(#fm-ocean)'},world);
 
   // Ocean wave texture
-  for(let wt=0; wt<18; wt++) {
-    const wy = -500 + wt*120;
-    for(let wx=-500; wx<1300; wx+=60) {
+  for(let wt=0; wt<30; wt++) {
+    const wy = -1600 + wt*120;
+    for(let wx=-1600; wx<2900; wx+=90) {
       const w = el('path',{d:`M ${wx} ${wy} Q ${wx+15} ${wy-4} ${wx+30} ${wy}`,
         fill:'none', stroke:'rgba(100,180,240,0.06)', 'stroke-width':1.5}, world);
     }
@@ -2454,82 +2454,89 @@ function buildMap() {
   const islandStyle = {fill:'url(#fm-land)', stroke:'#8ab870', 'stroke-width':1.5, opacity:0.9};
   const islandCoast = {fill:'none', stroke:'#c8e890', 'stroke-width':0.5, opacity:0.4};
 
-  // Orin — large western island (towns x:20-220, y:20-192)
+  // Orin — large western island (towns x:67-493, y:67-493)
   const orinPath = [
-    'M 4,212',
-    'C -8,202 -16,182 -16,155',
-    'C -16,125 -10,95 -12,65',
-    'C -14,35 -6,8 10,-6',
-    'C 28,-16 65,-20 105,-17',
-    'C 142,-18 180,-16 210,-8',
-    'C 232,-2 245,14 247,40',
-    'C 249,65 246,97 246,130',
-    'C 247,162 244,186 231,200',
-    'C 215,212 182,215 145,214',
-    'C 105,215 62,215 26,213',
-    'C 13,213 4,212 4,212 Z'
+    'M 20,540',
+    'C -5,520 -18,480 -20,420',
+    'C -22,355 -16,282 -18,208',
+    'C -20,132 -8,55 15,12',
+    'C 38,-22 90,-32 165,-26',
+    'C 240,-20 325,-10 405,0',
+    'C 468,10 518,38 538,82',
+    'C 556,124 552,185 548,250',
+    'C 544,315 540,378 538,432',
+    'C 536,482 520,518 492,536',
+    'C 458,555 405,558 325,556',
+    'C 240,556 150,548 82,543',
+    'C 48,540 20,540 20,540 Z'
   ].join(' ');
   el('path',{d:orinPath, ...islandStyle},world);
   el('path',{d:orinPath, ...islandCoast},world);
 
-  // Gardan — large eastern island (towns x:650-850, y:20-192)
+  // Gardan — large eastern island (towns x:841-1219, y:67-493)
   const gardanPath = [
-    'M 628,212',
-    'C 620,200 618,178 621,150',
-    'C 621,120 618,88 623,58',
-    'C 626,30 636,4 653,-8',
-    'C 670,-18 703,-20 736,-16',
-    'C 768,-16 800,-10 828,2',
-    'C 853,12 868,35 870,65',
-    'C 872,95 870,125 868,155',
-    'C 868,182 866,200 853,210',
-    'C 836,220 808,220 773,218',
-    'C 736,218 693,218 660,218',
-    'C 640,218 628,215 628,212 Z'
+    'M 808,535',
+    'C 782,515 768,478 768,415',
+    'C 768,348 770,278 774,208',
+    'C 776,135 784,58 804,15',
+    'C 824,-18 868,-32 940,-26',
+    'C 1012,-20 1090,-8 1160,5',
+    'C 1220,18 1265,48 1284,92',
+    'C 1300,134 1296,196 1292,260',
+    'C 1288,324 1284,386 1282,440',
+    'C 1280,490 1264,522 1236,538',
+    'C 1200,556 1144,558 1070,556',
+    'C 992,556 905,548 845,540',
+    'C 818,538 808,535 808,535 Z'
   ].join(' ');
   el('path',{d:gardanPath, ...islandStyle},world);
   el('path',{d:gardanPath, ...islandCoast},world);
 
-  // Jiru — SW island (towns x:70-220, y:580-623)
+  // Jiru — SW tropical island (towns x:58-402, y:816-964)
   const jiruPath = [
-    'M 46,615',
-    'C 38,630 40,650 52,664',
-    'C 65,678 90,685 122,684',
-    'C 155,686 185,682 210,670',
-    'C 232,658 238,638 236,618',
-    'C 234,598 222,584 202,578',
-    'C 180,572 150,570 118,570',
-    'C 85,570 62,578 50,594',
-    'C 44,602 45,610 46,615 Z'
+    'M -2,1000',
+    'C -18,1020 -15,1048 4,1066',
+    'C 22,1082 62,1090 115,1088',
+    'C 172,1090 242,1078 310,1058',
+    'C 372,1040 420,1012 440,978',
+    'C 460,942 452,904 428,875',
+    'C 404,846 362,826 308,815',
+    'C 252,802 182,796 115,798',
+    'C 50,800 8,820 -8,850',
+    'C -24,880 -18,918 -6,952',
+    'C 0,975 -2,998 -2,1000 Z'
   ].join(' ');
   el('path',{d:jiruPath, ...islandStyle},world);
   el('path',{d:jiruPath, ...islandCoast},world);
 
-  // Marros — SE island (towns x:650-800, y:580-623)
+  // Marros — SE island (towns x:829-1091, y:816-964)
   const marrosPath = [
-    'M 630,615',
-    'C 622,630 624,650 636,664',
-    'C 649,678 674,685 706,684',
-    'C 739,686 769,682 794,670',
-    'C 816,658 822,638 820,618',
-    'C 818,598 806,584 786,578',
-    'C 764,572 734,570 702,570',
-    'C 669,570 646,578 634,594',
-    'C 628,602 629,610 630,615 Z'
+    'M 792,998',
+    'C 776,1018 774,1048 792,1066',
+    'C 810,1082 848,1090 898,1088',
+    'C 952,1090 1012,1078 1068,1058',
+    'C 1120,1038 1155,1010 1162,976',
+    'C 1170,942 1158,902 1134,872',
+    'C 1110,842 1070,824 1018,813',
+    'C 966,800 904,796 848,800',
+    'C 796,802 760,822 748,852',
+    'C 736,882 742,920 754,952',
+    'C 764,976 788,994 792,998 Z'
   ].join(' ');
   el('path',{d:marrosPath, ...islandStyle},world);
   el('path',{d:marrosPath, ...islandCoast},world);
 
-  // South Isles — bottom chain (towns x:20-220, y:950)
+  // South Isles — remote chain (towns x:40-220, y:1306-1364)
   const southPath = [
-    'M 4,940',
-    'C -8,950 -12,968 -3,982',
-    'C 8,995 42,1002 88,1000',
-    'C 130,1001 175,997 215,986',
-    'C 240,978 252,962 249,944',
-    'C 246,928 228,921 196,919',
-    'C 160,917 115,918 72,924',
-    'C 38,928 12,936 4,940 Z'
+    'M -5,1395',
+    'C -20,1412 -18,1435 2,1452',
+    'C 20,1468 58,1476 105,1474',
+    'C 155,1476 200,1464 235,1448',
+    'C 265,1432 278,1408 274,1384',
+    'C 270,1360 248,1342 210,1332',
+    'C 172,1320 125,1313 78,1316',
+    'C 35,1316 2,1334 -10,1360',
+    'C -20,1382 -12,1393 -5,1395 Z'
   ].join(' ');
   el('path',{d:southPath, ...islandStyle},world);
   el('path',{d:southPath, ...islandCoast},world);
@@ -2537,10 +2544,10 @@ function buildMap() {
   // ── Skull Island (hidden, fog-shrouded) ───────────────────
   const skulldefs = el('filter',{id:'skull-fog',x:'-30%',y:'-30%',width:'160%',height:'160%'},defs);
   el('feGaussianBlur',{stdDeviation:'3.5',result:'blur'},skulldefs);
-  const skullPath = 'M 393,406 C 386,414 384,432 390,447 C 398,462 416,469 436,467 C 456,465 470,454 471,439 C 472,424 460,410 444,405 C 428,400 403,402 393,406 Z';
+  const skullPath = 'M 604,555 C 596,564 594,582 600,597 C 608,612 626,619 646,617 C 666,615 680,604 681,589 C 682,574 670,560 654,555 C 638,549 612,551 604,555 Z';
   el('path',{d:skullPath, fill:'#2a3a2a', stroke:'#4a5a3a','stroke-width':1, opacity:0.5, filter:'url(#skull-fog)'},world);
   // Skull icon
-  const sk = el('g',{transform:'translate(430,425)',opacity:0.35, filter:'url(#skull-fog)'},world);
+  const sk = el('g',{transform:'translate(640,565)',opacity:0.35, filter:'url(#skull-fog)'},world);
   el('circle',{cx:0,cy:-3,r:6,fill:'#e0e0d0',stroke:'none'},sk);
   el('rect',{x:-4,y:2,width:8,height:4,fill:'#e0e0d0',rx:1},sk);
   el('circle',{cx:-2.5,cy:-4,r:1.8,fill:'#1a1a1a'},sk);
@@ -2548,10 +2555,10 @@ function buildMap() {
   el('line',{x1:-4,y1:3,x2:-2,y2:5,stroke:'#1a1a1a','stroke-width':1},sk);
   el('line',{x1:0,y1:2.5,x2:0,y2:5,stroke:'#1a1a1a','stroke-width':1},sk);
   el('line',{x1:4,y1:3,x2:2,y2:5,stroke:'#1a1a1a','stroke-width':1},sk);
-  el('text',{x:430,y:452,'text-anchor':'middle',fill:'rgba(180,180,140,0.4)','font-size':7,'font-family':'serif','font-style':'italic','stroke':'none'},world).textContent='? ? ?';
+  el('text',{x:640,y:600,'text-anchor':'middle',fill:'rgba(180,180,140,0.4)','font-size':7,'font-family':'serif','font-style':'italic','stroke':'none'},world).textContent='? ? ?';
 
   // ── Vignette overlay ──────────────────────────────────────
-  el('rect',{x:-600,y:-600,width:2400,height:2400,fill:'url(#fm-vig)'},world);
+  el('rect',{x:-1600,y:-1600,width:5000,height:5000,fill:'url(#fm-vig)'},world);
 
   // ── Sea routes ────────────────────────────────────────────
   for (const [a,b] of MAP_SEA_ROUTES) {
@@ -2646,12 +2653,12 @@ function buildMap() {
 
   // ── Pan to current location ────────────────────────────────
   const curPos = LOC_POS[cur] || {x:130, y:107};
-  const tx = 130 - curPos.x;
-  const ty = 107 - curPos.y;
+  const tx = 60 - curPos.x;
+  const ty = 50 - curPos.y;
 
   if (_lastMapLoc && _lastMapLoc !== cur && LOC_POS[_lastMapLoc]) {
     const prev = LOC_POS[_lastMapLoc];
-    world.style.transform = `translate(${130-prev.x}px, ${130-prev.y}px)`;
+    world.style.transform = `translate(${60-prev.x}px, ${50-prev.y}px)`;
     requestAnimationFrame(() => requestAnimationFrame(() => {
       world.style.transition = 'transform 0.85s cubic-bezier(0.4, 0, 0.2, 1)';
       world.style.transform = `translate(${tx}px, ${ty}px)`;
