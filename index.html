@@ -324,8 +324,10 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
       <div class="stat-row"><span class="stat-label">Head</span><span class="stat-value" id="equip-head">None</span></div>
       <div class="stat-row"><span class="stat-label">Neck</span><span class="stat-value" id="equip-neck">None</span></div>
       <div class="stat-row"><span class="stat-label">Upper Body</span><span class="stat-value" id="equip-upper_body">None</span></div>
+      <div class="stat-row"><span class="stat-label">Lower Body</span><span class="stat-value" id="equip-lower_body">None</span></div>
       <div class="stat-row"><span class="stat-label">Gloves</span><span class="stat-value" id="equip-gloves">None</span></div>
       <div class="stat-row"><span class="stat-label">Left Hand</span><span class="stat-value" id="equip-left_hand">None</span></div>
+      <div class="stat-row"><span class="stat-label">Ring</span><span class="stat-value" id="equip-ring">None</span></div>
       <div class="stat-row"><span class="stat-label">Chop time</span><span class="stat-value"><span id="equip-choptime">60</span>s</span></div>
       <div class="stat-row"><span class="stat-label">Combat Speed</span><span class="stat-value"><span id="equip-combat-speed">27.0</span>s</span></div>
     </div>
@@ -486,7 +488,21 @@ function getCombatMs() {
 // ============================================================
 const GEAR = {
   // ── Fishing Rod ────────────────────────────────────────────
-  fishing_rod:         {id:'fishing_rod',         name:'Fishing Rod',           slot:'rod',        skill:'fishing',     levelReq:1,  reduceTime:0, attack:0,  defense:0,  cost:25,   weight:2  },
+  fishing_rod:         {id:'fishing_rod',         name:'Fishing Rod',           slot:'rod',        skill:'fishing',     levelReq:1,  reduceTime:0, magicFishFinding:0, defense:0, cost:25,   weight:2  },
+  fur_coat:            {id:'fur_coat',            name:'Fur Coat',              slot:'upper_body', skill:'fishing',     levelReq:1,  reduceTime:1, magicFishFinding:0, defense:0, cost:80,   weight:4  },
+  ring_of_fish:        {id:'ring_of_fish',        name:'Ring of the Fish',      slot:'ring',       skill:'fishing',     levelReq:5,  reduceTime:1, magicFishFinding:0, defense:0, cost:150,  weight:0  },
+  heirloom_fishing_cap:{id:'heirloom_fishing_cap',name:'Heirloom Fishing Cap',  slot:'head',       skill:'fishing',     levelReq:10, reduceTime:1, magicFishFinding:0, defense:0, cost:200,  weight:1  },
+  heirloom_fishing_rod:{id:'heirloom_fishing_rod',name:'Heirloom Fishing Rod',  slot:'rod',        skill:'fishing',     levelReq:15, reduceTime:1, magicFishFinding:0, defense:0, cost:350,  weight:2  },
+  pearl_necklace:      {id:'pearl_necklace',      name:'Pearl Necklace',        slot:'neck',       skill:'fishing',     levelReq:20, reduceTime:1, magicFishFinding:0, defense:1, cost:500,  weight:1,  fishingSet:true },
+  heavy_fishing_rod:   {id:'heavy_fishing_rod',   name:'Heavy Fishing Rod',     slot:'rod',        skill:'fishing',     levelReq:25, reduceTime:1, magicFishFinding:0, defense:0, cost:600,  weight:4  },
+  scale_bracelet:      {id:'scale_bracelet',      name:'Scale Bracelet',        slot:'left_hand',  skill:'fishing',     levelReq:30, reduceTime:0, magicFishFinding:1, defense:0, cost:800,  weight:1,  charLvlReq:30 },
+  fish_waders:         {id:'fish_waders',         name:'Fish Waders',           slot:'lower_body', skill:'fishing',     levelReq:35, reduceTime:2, magicFishFinding:0, defense:2, cost:1000, weight:5,  fishingSet:true },
+  scale_rim:           {id:'scale_rim',           name:'Scale Rim',             slot:'head',       skill:'fishing',     levelReq:40, reduceTime:2, magicFishFinding:0, defense:2, cost:1200, weight:2,  charLvlReq:30, fishingSet:true },
+  bamboo_fishing_rod:  {id:'bamboo_fishing_rod',  name:'Bamboo Fishing Rod',    slot:'rod',        skill:'fishing',     levelReq:45, reduceTime:1, magicFishFinding:2, defense:0, cost:1500, weight:2,  fishingSet:true },
+  aluminum_fishing_rod:{id:'aluminum_fishing_rod',name:'Aluminum Fishing Rod',  slot:'rod',        skill:'fishing',     levelReq:45, reduceTime:2, magicFishFinding:0, defense:0, cost:1400, weight:3  },
+  amber_ring:          {id:'amber_ring',          name:'Amber Ring',            slot:'ring',       skill:'fishing',     levelReq:55, reduceTime:2, magicFishFinding:0, defense:0, cost:2000, weight:0,  fishingSet:true },
+  small_fishing_net:   {id:'small_fishing_net',   name:'Small Fishing Net',     slot:'left_hand',  skill:'fishing',     levelReq:60, reduceTime:2, magicFishFinding:0, defense:2, cost:2500, weight:3  },
+  fishing_gloves:      {id:'fishing_gloves',      name:'Fishing Gloves',        slot:'gloves',     skill:'fishing',     levelReq:65, reduceTime:1, magicFishFinding:1, defense:3, cost:3000, weight:1,  fishingSet:true },
   // ── Tools (hatchets) ───────────────────────────────────────
   bronze_hatchet:      {id:'bronze_hatchet',      name:'Bronze Hatchet',        slot:'tool',       skill:'woodcutting', levelReq:0,  reduceTime:0, attack:1,  defense:0,  cost:10,   weight:2  },
   nagaromi_hatchet:    {id:'nagaromi_hatchet',     name:'Nagaromi Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:5,  reduceTime:0, attack:2,  defense:0,  cost:50,   weight:3  },
@@ -581,6 +597,13 @@ const ITEM_WEIGHTS = {
   'Lobster':5, 'Striped Marlin':9, 'Swordfish':7, 'Amberjack':6, 'Barracuda':6,
   // Fishing tackle (in inventory)
   'Fishing Rod':2, 'Tuna Lure':1, 'Shark Lure':1, 'Lobster Trap':3, 'Bait':1,
+  // Fishing gear
+  'Fur Coat':4, 'Ring of the Fish':0, 'Heirloom Fishing Cap':1, 'Heirloom Fishing Rod':2,
+  'Pearl Necklace':1, 'Heavy Fishing Rod':4, 'Scale Bracelet':1, 'Fish Waders':5,
+  'Scale Rim':2, 'Bamboo Fishing Rod':2, 'Aluminum Fishing Rod':3, 'Amber Ring':0,
+  'Small Fishing Net':3, 'Fishing Gloves':1,
+  // Fishing foods
+  'Seafood Stirfry':1, 'Tuna Salad':1, 'Spicy Burger':1,
   // Trade
   'Contract':1, 'Deed':1, 'Guild Seal':1,
   // Gear in inventory (matches GEAR weight below)
@@ -813,7 +836,7 @@ const CONSUMABLE_EFFECTS = {
   'Tuna Steak':              { type:'heal_hp', amount:25 },
   'Cooked Salmon':           { type:'heal_hp', amount:20 },
   'Shark Steak':             { type:'heal_hp', amount:30 },
-  'Bottle of Soup':          { type:'heal_hp', amount:25 },
+  'Bottle of Soup':          { type:'fishing_boost', amount:2, duration:1200 },           // -2 fishing time 20min
   'Seafood Platter':         { type:'heal_hp', amount:50 },
   'Stew':                    { type:'heal_hp', amount:40 },
   'Pizza':                   { type:'heal_hp', amount:45 },
@@ -847,6 +870,10 @@ const CONSUMABLE_EFFECTS = {
   'Parsnip Mashed Potatoes': { type:'sawmill_boost',      amount:1, duration:1200 }, // -1 sawmill time 20min
   'Fried Steak':             { type:'construction_boost', amount:2, duration:1500 }, // -2 construction time 25min
   'Pepper Steak':            { type:'construction_boost', amount:3, duration:1200 }, // -3 construction time 20min
+  // ── Fishing foods ─────────────────────────────────────────────────────────
+  'Seafood Stirfry':         { type:'fishing_boost',      amount:1, duration:1800 }, // -1 fishing time 30min
+  'Tuna Salad':              { type:'magic_fish_boost',   amount:2, duration:1800 }, // +2 magic fish finding 30min
+  'Spicy Burger':            { type:'bait_boost',         amount:1, duration:1200 }, // -1 bait-making time 20min
   'Barracuda Stew':          { type:'heal_hp', amount:80 },
   'Roasted Vegetables':      { type:'heal_hp', amount:70 },
   // MP healers
@@ -858,7 +885,7 @@ const CONSUMABLE_EFFECTS = {
   'Peach Brandy':     { type:'speed_boost', amount:5, duration:120 },
   'Bottle of Beer':   { type:'speed_boost', amount:2, duration:60  },
   'Bottle of Wine':   { type:'speed_boost', amount:4, duration:90  },
-  'Fine Whiskey':     { type:'speed_boost', amount:8, duration:60  },
+  'Fine Whiskey':     { type:'fishing_boost', amount:3, duration:1500, magicFishPenalty:3, magicFishPenaltyDuration:1800 }, // -3 fishing 25min, -3 mff 30min
   'Candy':            { type:'speed_boost', amount:1, duration:120 },
 };
 
@@ -1642,7 +1669,7 @@ const LOCATIONS = {
 
   // ── New world locations ──────────────────────────────────────────────────
   nalurn_woods:    { id:'nalurn_woods',    name:'Nalurn Woods',      pos:[1,0], desc:'Ancient forest, famed for yew.',      actions:{ woodcutting:['wc_yew'] }, shop:[], connects:['isenvale','kimdar','naton'] },
-  kimdar:          { id:'kimdar',          name:'Kimdar',            pos:[2,0], desc:'A shipbuilding rival to Ferboi.',      shipyard:true, actions:{ construction:['cn_wall'] }, shop:[], connects:['nalurn_woods','ravel','therusia'] },
+  kimdar:          { id:'kimdar',          name:'Kimdar',            pos:[2,0], desc:'A shipbuilding rival to Ferboi. Amberjack fished from player docks (boat required). Mackerel after "Mack Daddy" quest.', shipyard:true, actions:{ construction:['cn_wall'], fishing:['fi_amberjack'] }, shop:[], connects:['nalurn_woods','ravel','therusia'] },
   danycia:         { id:'danycia',         name:'Danycia',           pos:[8,0], desc:'A warm port with exotic traders.',    shop:[], connects:['rissdra','moskim'] },
   zhyack:          { id:'zhyack',          name:'Zhyack',            pos:[0,1], desc:'The edge of the known world.',        shop:[], connects:['isenvale','naton','onnix'] },
   naton:           { id:'naton',           name:'Naton',             pos:[1,1], desc:'A grey industrial town.',             shop:[], connects:['zhyack','nalurn_woods','therusia','sepas'] },
@@ -1652,20 +1679,20 @@ const LOCATIONS = {
   galawi:          { id:'galawi',          name:'Galawi',            pos:[6,1], desc:'A desert trading post.',              shop:[], connects:['radom_woods','rissdra','port_schow'] },
   rissdra:         { id:'rissdra',         name:'Rissdra',           pos:[7,1], desc:'A timber town famed for its wood shop.', actions:{ woodcutting:['wc_pine','wc_oak'] }, shop:[], connects:['galawi','danycia','lake_essdar'] },
   uzlea:           { id:'uzlea',           name:'Uzlea',             pos:[9,1], desc:'A secretive mage city.',              spells:true, shop:[], connects:['essrom'] },
-  onnix:           { id:'onnix',           name:'Onnix',             pos:[0,2], desc:'A hidden valley town.',               shop:[], connects:['zhyack','sepas','pharos_peak'] },
+  onnix:           { id:'onnix',           name:'Onnix',             pos:[0,2], desc:'A hidden valley town.',               shop:[], tackleShop:[{name:'Lobster Trap',cost:75}], actions:{ fishing:['fi_lobster'] }, connects:['zhyack','sepas','pharos_peak'] },
   sepas:           { id:'sepas',           name:'Sepas',             pos:[1,2], desc:'A southern coastal resort town.',     shop:[], connects:['onnix','naton','cardina_valley','mount_pharos'] },
   cardina_valley:  { id:'cardina_valley',  name:'Cardina Valley',    pos:[2,2], desc:'A lush valley south of Cardina.',     shop:[], connects:['sepas','therusia','garando_mines','haldos_outpost'] },
   garando_mines:   { id:'garando_mines',   name:'Garando Mines',     pos:[3,2], desc:'Rich ore veins and dangerous depths.',shop:[], connects:['cardina_valley','giroc','barin_plains','baron_plains'] },
   barin_plains:    { id:'barin_plains',    name:'Barin Plains',      pos:[4,2], desc:'Open grassland stretching to the horizon.', shop:[], connects:['garando_mines','coldrun','ponat','ferboi'] },
   ponat:           { id:'ponat',           name:'Ponat',             pos:[5,2], desc:'A river town known for its market.',  shop:[], connects:['barin_plains','radom_woods','port_schow','ponat_pier'] },
   port_schow:      { id:'port_schow',      name:'Port Schow',        pos:[6,2], desc:'A quiet fishing port.',              shop:[], connects:['ponat','galawi','lake_essdar','port_barin'] },
-  lake_essdar:     { id:'lake_essdar',     name:'Lake Essdar',       pos:[7,2], desc:'A peaceful lakeside retreat.',        shop:[], connects:['port_schow','rissdra','stonehaven','echtin'] },
+  lake_essdar:     { id:'lake_essdar',     name:'Lake Essdar',       pos:[7,2], desc:'A peaceful lakeside retreat.',        shop:[], actions:{ fishing:['fi_bass','fi_flounder'] }, connects:['port_schow','rissdra','stonehaven','echtin'] },
   essrom:          { id:'essrom',          name:'Essrom',            pos:[9,2], desc:'A mining hub deep in the mountains.', shop:[], connects:['uzlea','stonehaven'] },
   pharos_peak:     { id:'pharos_peak',     name:'Pharos Peak',       pos:[0,3], desc:'The summit above Mount Pharos.',      shop:[], connects:['onnix','mount_pharos','brightwater'] },
   mount_pharos:    { id:'mount_pharos',    name:'Mount Pharos',      pos:[1,3], desc:'A sacred mountain peak.',             shop:[], connects:['pharos_peak','sepas','haldos_outpost','cardina'] },
   haldos_outpost:  { id:'haldos_outpost',  name:'Haldos Outpost',    pos:[2,3], desc:'A remote military outpost.',          shop:[], connects:['mount_pharos','cardina_valley','baron_plains','ironpeak'] },
   baron_plains:    { id:'baron_plains',    name:'Baron Plains',      pos:[3,3], desc:'Rolling plains once ruled by a great baron.', shop:[], connects:['haldos_outpost','garando_mines','ferboi','embervale'] },
-  ponat_pier:      { id:'ponat_pier',      name:'Ponat Pier',        pos:[5,3], desc:'The waterfront docks of Ponat.',      shop:[], connects:['ferboi','ponat','port_barin','kolar_post'] },
+  ponat_pier:      { id:'ponat_pier',      name:'Ponat Pier',        pos:[5,3], desc:'The waterfront docks of Ponat.',      shop:['fishing_rod'], actions:{ fishing:['fi_mackerel','fi_haddock','fi_tuna','fi_barracuda'] }, connects:['ferboi','ponat','port_barin','kolar_post'] },
   port_barin:      { id:'port_barin',      name:'Port Barin',        pos:[6,3], desc:'A busy western harbour.',             shop:[], connects:['ponat_pier','port_schow','echtin','duskmill','therusia'] },
   echtin:          { id:'echtin',          name:'Echtin',            pos:[7,3], desc:'An ancient walled city.',             shop:[], connects:['port_barin','lake_essdar','moskim','harrowfen'] },
   moskim:          { id:'moskim',          name:'Moskim',            pos:[8,3], desc:'A windswept coastal settlement.',     shop:[], connects:['echtin','danycia','ashgate','droesar'] },
@@ -1677,19 +1704,19 @@ const LOCATIONS = {
   kudzum:          { id:'kudzum',          name:'Kudzum',            pos:[2,5], desc:'A jungle border town.',               shop:[], connects:['jiroka','hevalus_jungle','cythe'] },
   hevalus_jungle:  { id:'hevalus_jungle',  name:'Hevalus Jungle',    pos:[3,5], desc:'Dense jungle teeming with wildlife.', shop:[], connects:['kudzum','hikori','tropi'] },
   hikori:          { id:'hikori',          name:'Hikori',            pos:[4,5], desc:'A clifftop village with sea views.',  shop:[], connects:['hevalus_jungle','kolar_post','hms_halieutika','odude'] },
-  hms_halieutika:  { id:'hms_halieutika',  name:'HMS Halieutika',    pos:[6,5], desc:'A grand warship anchored offshore.', shop:[], connects:['hikori','lake_trand'] },
-  lake_trand:      { id:'lake_trand',      name:'Lake Trand',        pos:[7,5], desc:'Deep cold waters, rich in pike.',    shop:[], connects:['hms_halieutika','harrowfen','marossa'] },
+  hms_halieutika:  { id:'hms_halieutika',  name:'HMS Halieutika',    pos:[6,5], desc:"Captain Fred's deep-sea fishing vessel. Buy a ticket at Port Barin (~120 vessi). Fish over Side (Mackerel/Flounder/Haddock/Salmon) or Stern (Tuna/Shark/Salmon/Marlin) — no rod needed on board.", shop:[], tackleShop:[{name:'Tuna Lure',cost:50},{name:'Shark Lure',cost:100}], actions:{ fishing:['fi_mackerel','fi_salmon','fi_flounder','fi_haddock','fi_tuna','fi_shark','fi_marlin'] }, connects:['hikori','lake_trand'] },
+  lake_trand:      { id:'lake_trand',      name:'Lake Trand',        pos:[7,5], desc:'Deep cold waters, rich in pike.',    shop:[], actions:{ fishing:['fi_bass','fi_flounder','fi_oyster'] }, connects:['hms_halieutika','harrowfen','marossa'] },
   bulbas:          { id:'bulbas',          name:'Bulbas',            pos:[1,6], desc:'A small inland market town.',        shop:[], connects:['jiroka','cythe','awaru'] },
   cythe:           { id:'cythe',           name:'Cythe',             pos:[2,6], desc:'A mysterious town shrouded in fog.', shop:[], connects:['bulbas','kudzum','tropi','ashia'] },
   tropi:           { id:'tropi',           name:'Tropi',             pos:[3,6], desc:'A tropical island settlement.',      shop:[], connects:['cythe','hevalus_jungle','eptile'] },
   unopos_mesa:     { id:'unopos_mesa',     name:'Unopos Mesa',       pos:[5,6], desc:'A high desert plateau town.',        shop:[], connects:['marossa'] },
   marossa:         { id:'marossa',         name:'Marossa',           pos:[6,6], desc:'A sprawling port capital.',          shop:[], connects:['lake_trand','unopos_mesa','yisildor_bay'] },
-  yisildor_bay:    { id:'yisildor_bay',    name:'Yisildor Bay',      pos:[7,6], desc:'A sheltered bay with coral reefs.',  shop:[], connects:['marossa','port_baron','martral'] },
+  yisildor_bay:    { id:'yisildor_bay',    name:'Yisildor Bay',      pos:[7,6], desc:'A sheltered bay with coral reefs.',  shop:[], tackleShop:[{name:'Shark Lure',cost:100}], actions:{ fishing:['fi_flounder','fi_haddock','fi_tuna','fi_shark'] }, connects:['marossa','port_baron','martral'] },
   martral:         { id:'martral',         name:'Martral',           pos:[8,6], desc:'A city of craftsmen and scholars.',  shop:[], connects:['yisildor_bay','droesar'] },
   irotho:          { id:'irotho',          name:'Irotho',            pos:[0,8], desc:'A volcanic island settlement.',      shop:[], connects:['awaru'] },
   awaru:           { id:'awaru',           name:'Awaru',             pos:[1,8], desc:'A coastal fishing village.',         shop:[], connects:['irotho','ashia','bulbas'] },
   ashia:           { id:'ashia',           name:'Ashia',             pos:[2,8], desc:'A remote settlement in the highlands.', shop:[], connects:['awaru','eptile','cythe'] },
-  eptile:          { id:'eptile',          name:'Eptile',            pos:[3,8], desc:'A swampy delta town.',               shop:[], connects:['ashia','tropi','odude'] },
+  eptile:          { id:'eptile',          name:'Eptile',            pos:[3,8], desc:'A swampy delta town. The only known bait-making spot.',  shop:[], actions:{ fishing:['fi_flounder','fi_pike'] }, baitStation:['bait_mackerel','bait_bass'], connects:['ashia','tropi','odude'] },
   odude:           { id:'odude',           name:'Odude',             pos:[4,8], desc:'A frontier settlement on the plains.',shop:[], connects:['eptile','hikori'] },
 
 
@@ -1698,7 +1725,7 @@ const LOCATIONS = {
     id:'ferboi', name:'Ferboi', pos:[4,3],
     desc:'A bustling port town on the southern coast. The shipyard here builds everything from skiffs to leviathans.',
     shipyard:true,
-    actions:{ woodcutting:['wc_pine','wc_oak'], construction:['cn_fence','cn_wall'] },
+    actions:{ woodcutting:['wc_pine','wc_oak'], construction:['cn_fence','cn_wall'], fishing:['fi_swordfish'] },
     shop:[],
     connects:['embervale','barin_plains','baron_plains','ponat_pier'],
   },
@@ -1923,6 +1950,36 @@ function getPathTravelMs(path) {
 }
 
 // ============================================================
+//  KING OF FISHING SET
+// ============================================================
+// Pieces: Scale Rim, Pearl Necklace, Fishing Gloves, Fish Waders, Amber Ring, Bamboo Fishing Rod
+const FISHING_SET_BONUSES = [
+  { pieces:3, reduceTime:1, magicFishFinding:0 },
+  { pieces:4, reduceTime:2, magicFishFinding:0 },
+  { pieces:5, reduceTime:3, magicFishFinding:1 },
+  { pieces:6, reduceTime:4, magicFishFinding:2 },
+];
+function getFishingSetBonus() {
+  let count = 0;
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (g && g.fishingSet) count++;
+  }
+  return FISHING_SET_BONUSES.filter(b => b.pieces <= count).pop() || { reduceTime:0, magicFishFinding:0 };
+}
+function getTotalMagicFishFinding() {
+  let mff = 0;
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (g) mff += g.magicFishFinding || 0;
+  }
+  mff += getFishingSetBonus().magicFishFinding;
+  if (state.activeBuffs.magic_fish_boost)   mff += state.activeBuffs.magic_fish_boost.amount   || 0;
+  if (state.activeBuffs.magic_fish_penalty) mff += state.activeBuffs.magic_fish_penalty.amount  || 0; // negative
+  return mff;
+}
+
+// ============================================================
 //  ACTION TIMER  (base 60s, -1s per odd level, gear for woodcutting)
 // ============================================================
 function getActionMs(skillId, isSawmill) {
@@ -1933,11 +1990,16 @@ function getActionMs(skillId, isSawmill) {
     const g = gearId && GEAR[gearId];
     if (!g) continue;
     if (skillId === 'woodcutting' && g.skill === 'woodcutting') gearReduction += g.reduceTime || 0;
+    if (skillId === 'fishing'     && g.skill === 'fishing')     gearReduction += g.reduceTime || 0;
     if (isSawmill)                                               gearReduction += g.reduceSawmill || 0;
     if (skillId === 'construction')                              gearReduction += g.reduceConstruction || 0;
   }
   if (isSawmill     && state.activeBuffs.sawmill_boost)      gearReduction += state.activeBuffs.sawmill_boost.amount || 0;
   if (skillId === 'construction' && state.activeBuffs.construction_boost) gearReduction += state.activeBuffs.construction_boost.amount || 0;
+  if (skillId === 'fishing') {
+    gearReduction += getFishingSetBonus().reduceTime;
+    if (state.activeBuffs.fishing_boost) gearReduction += state.activeBuffs.fishing_boost.amount || 0;
+  }
   return Math.max(15, 60 - levelReduction - gearReduction) * 1000;
 }
 function getActionSec(skillId) { return getActionMs(skillId) / 1000; }
@@ -2028,7 +2090,7 @@ let state = {
   skills:    defaultSkills(),
   inventory: {},
   gold:      0,
-  equipment: {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null},
+  equipment: {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, left_hand:null, head:null, ring:null},
   action:    null,
   travel:    null,
   hp:        { current:100, max:100 },
@@ -2043,7 +2105,7 @@ function resetState() {
   state.skills     = defaultSkills();
   state.inventory  = {};
   state.gold       = 0;
-  state.equipment  = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null};
+  state.equipment  = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, left_hand:null, head:null, ring:null};
   state.action     = null;
   state.travel     = null;
   state.hp              = { current:getHpMax(), max:getHpMax() };
@@ -2122,7 +2184,7 @@ function applyServerData(d) {
   state.skills     = Object.assign(defaultSkills(), d.skills || {});
   state.inventory  = d.inventory || {};
   state.gold       = d.gold      || 0;
-  const defaultEquip = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null};
+  const defaultEquip = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, left_hand:null, head:null, ring:null};
   state.equipment  = Object.assign(defaultEquip, d.equipment || {});
   state.hp         = d.hp        || { current:getHpMax(), max:getHpMax() };
   state.mp         = d.mp        || { current:getMpMax(), max:getMpMax() };
@@ -2728,7 +2790,7 @@ function updateSkillDetail(id) {
 //  EQUIPMENT UI
 // ============================================================
 function updateEquipmentUI() {
-  const slots = ['tool','rod','neck','gloves','upper_body','left_hand','head'];
+  const slots = ['tool','rod','neck','gloves','upper_body','lower_body','left_hand','head','ring'];
   for (const slot of slots) {
     const gearId = state.equipment[slot];
     const el = document.getElementById('equip-' + slot);
@@ -3711,6 +3773,21 @@ function consumeItem(itemName) {
     const endsAt = Date.now() + effect.duration * 1000;
     state.activeBuffs.construction_boost = { endsAt, amount: effect.amount };
     addLog(`You eat the ${itemName}: -${effect.amount}s Construction time for ${effect.duration/60}min!`, 'success');
+  } else if (effect.type === 'fishing_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.fishing_boost = { endsAt, amount: effect.amount };
+    if (effect.magicFishPenalty) {
+      state.activeBuffs.magic_fish_penalty = { endsAt: Date.now() + effect.magicFishPenaltyDuration * 1000, amount: -effect.magicFishPenalty };
+    }
+    addLog(`You use the ${itemName}: -${effect.amount}s Fishing time for ${Math.floor(effect.duration/60)}min!`, 'success');
+  } else if (effect.type === 'magic_fish_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.magic_fish_boost = { endsAt, amount: effect.amount };
+    addLog(`You use the ${itemName}: +${effect.amount} Magic Fish Finding for ${Math.floor(effect.duration/60)}min!`, 'success');
+  } else if (effect.type === 'bait_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.bait_boost = { endsAt, amount: effect.amount };
+    addLog(`You eat the ${itemName}: -${effect.amount}s Bait-making time for ${Math.floor(effect.duration/60)}min!`, 'success');
   }
   saveGame();
 }
@@ -4134,6 +4211,21 @@ function tick() {
   if (state.activeBuffs.construction_boost && now >= state.activeBuffs.construction_boost.endsAt) {
     delete state.activeBuffs.construction_boost;
     addLog('Construction time boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.fishing_boost && now >= state.activeBuffs.fishing_boost.endsAt) {
+    delete state.activeBuffs.fishing_boost;
+    addLog('Fishing time boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.magic_fish_boost && now >= state.activeBuffs.magic_fish_boost.endsAt) {
+    delete state.activeBuffs.magic_fish_boost;
+    addLog('Magic Fish Finding boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.magic_fish_penalty && now >= state.activeBuffs.magic_fish_penalty.endsAt) {
+    delete state.activeBuffs.magic_fish_penalty;
+  }
+  if (state.activeBuffs.bait_boost && now >= state.activeBuffs.bait_boost.endsAt) {
+    delete state.activeBuffs.bait_boost;
+    addLog('Bait-making boost has worn off.', 'travel');
   }
 
   tickBotCheck(now);
