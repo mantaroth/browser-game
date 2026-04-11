@@ -331,6 +331,10 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
       <h3>Inventory</h3>
       <div id="inventory"><div style="color:#555;font-size:11px;">Empty</div></div>
     </div>
+    <div class="panel" id="buildings-panel">
+      <h3>Your Buildings</h3>
+      <div id="buildings-list"><div style="color:#555;font-size:11px;">None</div></div>
+    </div>
   </div>
 </div>
 
@@ -512,7 +516,15 @@ const GEAR = {
   lighter:             {id:'lighter',              name:'Lighter',               slot:'left_hand',  skill:'cooking',     levelReq:0,  reduceTime:0, attack:0,  defense:0,  cost:5,    weight:0  },
   tinderbox:           {id:'tinderbox',            name:'Tinderbox',             slot:'left_hand',  skill:'cooking',     levelReq:0,  reduceTime:0, attack:0,  defense:0,  cost:8,    weight:1  },
   // ── Head ───────────────────────────────────────────────────
-  wooden_crown:        {id:'wooden_crown',         name:'Wooden Crown',          slot:'head',       skill:'woodcutting', levelReq:45, reduceTime:1, attack:0,  defense:2,  cost:900,  weight:2  },
+  wooden_crown:        {id:'wooden_crown',         name:'Wooden Crown',          slot:'head',       skill:'woodcutting',    levelReq:45, reduceTime:1,  reduceSawmill:0, reduceConstruction:0, attack:0, defense:2, cost:900,  weight:2 },
+  // ── Construction tools ─────────────────────────────────────
+  iron_saw:            {id:'iron_saw',             name:'Iron Saw',              slot:'tool',       skill:'construction',   levelReq:10, reduceTime:0,  reduceSawmill:1, reduceConstruction:0, attack:0, defense:0, cost:150,  weight:3 },
+  steel_saw:           {id:'steel_saw',            name:'Steel Saw',             slot:'tool',       skill:'construction',   levelReq:20, reduceTime:0,  reduceSawmill:2, reduceConstruction:0, attack:0, defense:0, cost:400,  weight:4 },
+  hardened_saw:        {id:'hardened_saw',         name:'Hardened Saw',          slot:'tool',       skill:'construction',   levelReq:50, reduceTime:0,  reduceSawmill:3, reduceConstruction:0, attack:0, defense:0, cost:1500, weight:5 },
+  // ── Construction gloves ────────────────────────────────────
+  inspico_gloves:      {id:'inspico_gloves',       name:'Inspico Gloves',        slot:'gloves',     skill:'construction',   levelReq:12, reduceTime:0,  reduceSawmill:1, reduceConstruction:0, attack:0, defense:0, cost:200,  weight:1 },
+  // ── Construction helmet ────────────────────────────────────
+  carpenters_helmet:   {id:'carpenters_helmet',    name:'Carpenters Helmet',     slot:'head',       skill:'construction',   levelReq:25, reduceTime:0,  reduceSawmill:0, reduceConstruction:2, attack:0, defense:1, cost:500,  weight:2 },
 };
 
 // ============================================================
@@ -578,6 +590,12 @@ const ITEM_WEIGHTS = {
   'Woodcutters Gloves':1, 'Heavy Gloves':2, 'Knuckle Guards':2,
   'Chipwood Jerkin':3, 'Heavy Cloak':5,
   'Vine Bracelet':1, 'Fancy Bark Bracelet':1, 'Wooden Crown':2,
+  // Construction gear
+  'Iron Saw':3, 'Steel Saw':4, 'Hardened Saw':5, 'Inspico Gloves':1, 'Carpenters Helmet':2,
+  // Construction foods
+  'Fried Steak':1,
+  // Weapons
+  'Heavy Catapult':20, 'Super Catapult':25, 'Trebuchet':30, 'Heavy Trebuchet':35,
 };
 
 // ============================================================
@@ -589,6 +607,103 @@ const RECIPES = {
   asterite_hatchet: { id:'asterite_hatchet', name:'Asterite Hatchet', produces:'asterite_hatchet', skill:'smithing', levelReq:45, time:60, xp:300, materials:{'Asterite Ore':5} },
   arcanium_hatchet: { id:'arcanium_hatchet', name:'Arcanium Hatchet', produces:'arcanium_hatchet', skill:'smithing', levelReq:55, time:75, xp:400, materials:{'Arcanium Ore':5} },
 };
+
+// ============================================================
+//  HOUSE TYPES  (lumber * 0.4s build time, 0.2 xp per lumber)
+// ============================================================
+const HOUSE_TYPES = [
+  { id:'house_1k',    levelReq:0,  stones:1000,    lumber:500,    xp:100,   costGold:100 },
+  { id:'house_2k5',   levelReq:5,  stones:2500,    lumber:1200,   xp:240,   costGold:100 },
+  { id:'house_5k',    levelReq:10, stones:5000,    lumber:2300,   xp:460,   costGold:100 },
+  { id:'house_7k5',   levelReq:15, stones:7500,    lumber:3400,   xp:680,   costGold:100 },
+  { id:'house_15k',   levelReq:20, stones:15000,   lumber:6600,   xp:1320,  costGold:100 },
+  { id:'house_25k',   levelReq:25, stones:25000,   lumber:10500,  xp:2100,  costGold:100 },
+  { id:'house_50k',   levelReq:30, stones:50000,   lumber:20000,  xp:4000,  costGold:100 },
+  { id:'house_100k',  levelReq:40, stones:100000,  lumber:38000,  xp:7600,  costGold:100 },
+  { id:'house_250k',  levelReq:50, stones:250000,  lumber:85000,  xp:17000, costGold:100 },
+  { id:'house_500k',  levelReq:60, stones:500000,  lumber:150000, xp:30000, costGold:100 },
+  { id:'house_750k',  levelReq:70, stones:750000,  lumber:220000, xp:44000, costGold:100 },
+  { id:'house_1m',    levelReq:80, stones:1000000, lumber:280000, xp:56000, costGold:100 },
+  { id:'house_1m5',   levelReq:90, stones:1500000, lumber:400000, xp:80000, costGold:100 },
+];
+function getHouseName(h) {
+  const s = h.stones;
+  if (s >= 1000000) return `${(s/1000000).toFixed(s%1000000===0?0:1)}M-Stone House`;
+  if (s >= 1000)    return `${(s/1000).toFixed(s%1000===0?0:1)}k-Stone House`;
+  return `${s}-Stone House`;
+}
+
+// ============================================================
+//  SHELF TYPES  (upgrade existing houses — requires house levelReq + 15)
+// ============================================================
+const SHELF_TYPES = {
+  'house_1k':   { levelReq:15, lumberPerShelf:1,  capPerShelf:2,  maxCap:1500,    charXp:5, skillXp:40  },
+  'house_2k5':  { levelReq:20, lumberPerShelf:1,  capPerShelf:3,  maxCap:3751,    charXp:5, skillXp:45  },
+  'house_5k':   { levelReq:25, lumberPerShelf:2,  capPerShelf:4,  maxCap:7504,    charXp:5, skillXp:50  },
+  'house_7k5':  { levelReq:30, lumberPerShelf:2,  capPerShelf:5,  maxCap:11250,   charXp:5, skillXp:55  },
+  'house_15k':  { levelReq:35, lumberPerShelf:3,  capPerShelf:6,  maxCap:22500,   charXp:5, skillXp:60  },
+  'house_25k':  { levelReq:40, lumberPerShelf:3,  capPerShelf:7,  maxCap:37509,   charXp:5, skillXp:65  },
+  'house_50k':  { levelReq:45, lumberPerShelf:3,  capPerShelf:8,  maxCap:75008,   charXp:5, skillXp:70  },
+  'house_100k': { levelReq:55, lumberPerShelf:4,  capPerShelf:10, maxCap:150010,  charXp:5, skillXp:80  },
+  'house_250k': { levelReq:65, lumberPerShelf:4,  capPerShelf:12, maxCap:375016,  charXp:5, skillXp:90  },
+  'house_500k': { levelReq:75, lumberPerShelf:4,  capPerShelf:15, maxCap:750020,  charXp:5, skillXp:100 },
+  'house_750k': { levelReq:85, lumberPerShelf:5,  capPerShelf:18, maxCap:1125030, charXp:5, skillXp:110 },
+  'house_1m':   { levelReq:95, lumberPerShelf:5,  capPerShelf:21, maxCap:1500031, charXp:5, skillXp:120 },
+};
+
+// ============================================================
+//  BOAT TYPES  (built at shipyard, 100 gold license fee)
+// ============================================================
+const BOAT_TYPES = [
+  { id:'boat_100s2',  levelReq:5,  name:'Small Sloop',      capacity:100,  speed:2, lumber:600  },
+  { id:'boat_100s5',  levelReq:10, name:'Coastal Cutter',   capacity:100,  speed:5, lumber:1000 },
+  { id:'boat_200s3',  levelReq:10, name:'River Barge',      capacity:200,  speed:3, lumber:1100 },
+  { id:'boat_100s7',  levelReq:15, name:'Swift Skiff',      capacity:100,  speed:7, lumber:1100 },
+  { id:'boat_200s5',  levelReq:15, name:'Trading Sloop',    capacity:200,  speed:5, lumber:1300 },
+  { id:'boat_500s3',  levelReq:15, name:'Cargo Barge',      capacity:500,  speed:3, lumber:1800 },
+  { id:'boat_150s8',  levelReq:20, name:'Fast Clipper',     capacity:150,  speed:8, lumber:2000 },
+  { id:'boat_800s4',  levelReq:20, name:'Merchant Galley',  capacity:800,  speed:4, lumber:2200 },
+  { id:'boat_200s9',  levelReq:30, name:'Racing Skiff',     capacity:200,  speed:9, lumber:2500 },
+  { id:'boat_1ks4',   levelReq:30, name:'Heavy Freighter',  capacity:1000, speed:4, lumber:2500 },
+  { id:'boat_1ks6',   levelReq:40, name:'Armed Merchant',   capacity:1000, speed:6, lumber:3000 },
+  { id:'boat_1k5s7',  levelReq:50, name:'Galleon',          capacity:1500, speed:7, lumber:3500 },
+  { id:'boat_2ks7',   levelReq:60, name:'Great Galleon',    capacity:2000, speed:7, lumber:4000 },
+  { id:'boat_3ks7',   levelReq:70, name:'Man-of-War',       capacity:3000, speed:7, lumber:5000 },
+  { id:'boat_1ks9',   levelReq:80, name:'Iron-Hull Racer',  capacity:1000, speed:9, lumber:5000 },
+  { id:'boat_5ks6',   levelReq:90, name:'Leviathan',        capacity:5000, speed:6, lumber:6000 },
+];
+
+// ============================================================
+//  CATAPULT TYPES  (built at Ravel Siegeworks)
+// ============================================================
+const CATAPULT_TYPES = [
+  { id:'super_catapult',  levelReq:30, name:'Super Catapult',  lumber:150, requires:'Heavy Catapult', xpSuccess:600, xpFail:300  },
+  { id:'trebuchet',       levelReq:40, name:'Trebuchet',       lumber:170, requires:'Super Catapult', xpSuccess:800, xpFail:400  },
+  { id:'heavy_trebuchet', levelReq:50, name:'Heavy Trebuchet', lumber:200, requires:'Trebuchet',      xpSuccess:1000,xpFail:500  },
+];
+
+// ============================================================
+//  GUILD BUILDING TYPES  (data only — requires guild system)
+// ============================================================
+const GUILD_BUILDING_TYPES = [
+  { id:'storehouse',   name:'Storehouse',       guildLvl:5,  maxLevel:11 },
+  { id:'headquarters', name:'Guild HQ',         guildLvl:6,  maxLevel:5  },
+  { id:'shop',         name:'Guild Shop',       guildLvl:7,  maxLevel:13 },
+  { id:'kitchen',      name:'Guild Kitchen',    guildLvl:8,  maxLevel:7  },
+  { id:'sawmill_g',    name:'Guild Sawmill',    guildLvl:9,  maxLevel:5  },
+  { id:'furnace',      name:'Guild Furnace',    guildLvl:10, maxLevel:4  },
+  { id:'smithy',       name:'Guild Smithy',     guildLvl:11, maxLevel:5  },
+  { id:'crafting_hut', name:'Crafting Hut',     guildLvl:12, maxLevel:5  },
+  { id:'wall',         name:'Guild Wall',       guildLvl:13, maxLevel:5  },
+  { id:'flour_mill',   name:'Flour Mill',       guildLvl:14, maxLevel:1  },
+  { id:'sugar_ref',    name:'Sugar Refinery',   guildLvl:14, maxLevel:1  },
+  { id:'greenhouse_g', name:'Guild Greenhouse', guildLvl:15, maxLevel:11 },
+  { id:'blackjack',    name:'Blackjack Table',  guildLvl:16, maxLevel:1  },
+  { id:'well',         name:'Guild Well',       guildLvl:17, maxLevel:5  },
+  { id:'forest',       name:'Guild Forest',     guildLvl:18, maxLevel:9  },
+  { id:'billboard',    name:'Billboard',        guildLvl:19, maxLevel:2  },
+  { id:'fertilizer',   name:'Fertilizer Hut',  guildLvl:20, maxLevel:1  },
+];
 
 // ============================================================
 //  SPELLS
@@ -728,9 +843,10 @@ const CONSUMABLE_EFFECTS = {
   'Plum Preserves':          { type:'heal_hp', amount:35 },
   'Molasses Cookie':         { type:'heal_hp', amount:50 },
   'Cooked Barracuda':        { type:'heal_hp', amount:65 },
-  'Parsnip Mashed Potatoes': { type:'heal_hp', amount:60 },
+  'Parsnip Mashed Potatoes': { type:'sawmill_boost',      amount:1, duration:1200 }, // -1 sawmill time 20min
+  'Fried Steak':             { type:'construction_boost', amount:2, duration:1500 }, // -2 construction time 25min
+  'Pepper Steak':            { type:'construction_boost', amount:3, duration:1200 }, // -3 construction time 20min
   'Barracuda Stew':          { type:'heal_hp', amount:80 },
-  'Pepper Steak':            { type:'heal_hp', amount:80 },
   'Roasted Vegetables':      { type:'heal_hp', amount:70 },
   // MP healers
   'Magic Fishstick':         { type:'heal_mp', amount:25 },
@@ -1520,6 +1636,22 @@ const LOCATIONS = {
     shop:[],
     connects:['harrowfen'],
   },
+  ferboi: {
+    id:'ferboi', name:'Ferboi', pos:[4,3],
+    desc:'A bustling port town on the southern coast. The shipyard here builds everything from skiffs to leviathans.',
+    shipyard:true,
+    actions:{ woodcutting:['wc_pine','wc_oak'], construction:['cn_fence','cn_wall'] },
+    shop:[],
+    connects:['embervale','harrowfen'],
+  },
+  ravel: {
+    id:'ravel', name:'Ravel', pos:[4,1],
+    desc:'A fortified military town. The Siegeworks here crafts the most fearsome war machines on the continent.',
+    siegeworks:true,
+    actions:{ woodcutting:['wc_oak','wc_birch'], construction:['cn_wall','cn_tower'] },
+    shop:[],
+    connects:['coldrun','ironpeak'],
+  },
   greenhouse:  {
     id:'greenhouse', name:'Public Greenhouse', pos:[1,1],
     desc:'A large communal greenhouse maintained by the farmers\' guild. Crops rotate every four hours — check back often.',
@@ -1609,17 +1741,19 @@ function getPathTravelMs(path) {
 // ============================================================
 //  ACTION TIMER  (base 60s, -1s per odd level, gear for woodcutting)
 // ============================================================
-function getActionMs(skillId) {
+function getActionMs(skillId, isSawmill) {
   const lv = skillLevel(skillId);
   const levelReduction = Math.floor((lv - 1) / 2);
   let gearReduction = 0;
-  if (skillId === 'woodcutting') {
-    for (const gearId of Object.values(state.equipment)) {
-      if (gearId && GEAR[gearId] && GEAR[gearId].skill === 'woodcutting') {
-        gearReduction += GEAR[gearId].reduceTime || 0;
-      }
-    }
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (!g) continue;
+    if (skillId === 'woodcutting' && g.skill === 'woodcutting') gearReduction += g.reduceTime || 0;
+    if (isSawmill)                                               gearReduction += g.reduceSawmill || 0;
+    if (skillId === 'construction')                              gearReduction += g.reduceConstruction || 0;
   }
+  if (isSawmill     && state.activeBuffs.sawmill_boost)      gearReduction += state.activeBuffs.sawmill_boost.amount || 0;
+  if (skillId === 'construction' && state.activeBuffs.construction_boost) gearReduction += state.activeBuffs.construction_boost.amount || 0;
   return Math.max(15, 60 - levelReduction - gearReduction) * 1000;
 }
 function getActionSec(skillId) { return getActionMs(skillId) / 1000; }
@@ -1673,6 +1807,7 @@ function onLoggedIn() {
   updateSkillDetail(selectedSkill);
   updateEquipmentUI();
   updateInventoryUI();
+  updateBuildingsUI();
   document.getElementById('stat-gold').textContent = state.gold;
   updateHpMpUI();
   updateCarryUI();
@@ -1732,13 +1867,17 @@ function resetState() {
   state.charXp          = 0;
   state.guildXp         = 0;
   state.lastDamageTaken = 0;
+  state.houseProject    = null;
+  state.houses          = [];
+  state.boats           = [];
+  state.catapults       = [];
   state.activeBuffs     = {};
 }
 
 function skillLevel(id) { return (state.skills[id] || {level:1}).level; }
 
 function getStateData() {
-  return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment, hp:state.hp, mp:state.mp, charXp:state.charXp, guildXp:state.guildXp, lastDamageTaken:state.lastDamageTaken||0 };
+  return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment, hp:state.hp, mp:state.mp, charXp:state.charXp, guildXp:state.guildXp, lastDamageTaken:state.lastDamageTaken||0, houseProject:state.houseProject||null, houses:state.houses||[], boats:state.boats||[], catapults:state.catapults||[] };
 }
 
 function getMpMax()    { return skillLevel('magic') + getCharLevel() + 3; } // magic_lv + char_lv + 3
@@ -1803,9 +1942,13 @@ function applyServerData(d) {
   state.equipment  = Object.assign(defaultEquip, d.equipment || {});
   state.hp         = d.hp        || { current:getHpMax(), max:getHpMax() };
   state.mp         = d.mp        || { current:getMpMax(), max:getMpMax() };
-  state.charXp          = d.charXp           || 0;
-  state.guildXp         = d.guildXp          || 0;
-  state.lastDamageTaken = d.lastDamageTaken  || 0;
+  state.charXp          = d.charXp          || 0;
+  state.guildXp         = d.guildXp         || 0;
+  state.lastDamageTaken = d.lastDamageTaken || 0;
+  state.houseProject    = d.houseProject    || null;
+  state.houses          = d.houses          || [];
+  state.boats           = d.boats           || [];
+  state.catapults       = d.catapults       || [];
   state.activeBuffs     = {};
   if (state.location === 'greenhouse') { ghState = null; fetchGhState(); }
 }
@@ -2143,6 +2286,42 @@ function updateInventoryUI() {
     row.innerHTML = `<span>${name}</span><span style="display:flex;gap:4px;align-items:center">${wStr}<span style="color:#c8a96e">${count}</span>${useBtn}</span>`;
     div.appendChild(row);
   }
+}
+
+// ============================================================
+//  BUILDINGS UI
+// ============================================================
+function updateBuildingsUI() {
+  const div = document.getElementById('buildings-list');
+  if (!div) return;
+  const rows = [];
+  // In-progress house
+  if (state.houseProject) {
+    const h = HOUSE_TYPES.find(x=>x.id===state.houseProject.typeId);
+    const pct = Math.floor(state.houseProject.lumberAdded/state.houseProject.lumberRequired*100);
+    rows.push(`<div class="inv-row"><span>🚧 ${getHouseName(h)} (${pct}%)</span></div>`);
+  }
+  // Completed houses
+  for (const house of (state.houses||[])) {
+    const h = HOUSE_TYPES.find(x=>x.id===house.typeId);
+    if (!h) continue;
+    const sh = SHELF_TYPES[house.typeId];
+    const cap = h.stones + (house.shelves||0) * (sh ? sh.capPerShelf : 0);
+    rows.push(`<div class="inv-row"><span>🏠 ${getHouseName(h)}</span><span style="color:#a89070;font-size:10px">${(house.shelves||0)} shelves / ${cap.toLocaleString()} cap</span></div>`);
+  }
+  // Boats
+  for (const b of (state.boats||[])) {
+    const bt = BOAT_TYPES.find(x=>x.id===b.boatId);
+    if (!bt) continue;
+    rows.push(`<div class="inv-row"><span>⛵ ${bt.name}</span><span style="color:#a89070;font-size:10px">Spd:${bt.speed} Cap:${bt.capacity}</span></div>`);
+  }
+  // Catapults
+  for (const c of (state.catapults||[])) {
+    const ct = CATAPULT_TYPES.find(x=>x.id===c.catId);
+    if (!ct) continue;
+    rows.push(`<div class="inv-row"><span>⚙ ${ct.name}</span></div>`);
+  }
+  div.innerHTML = rows.length ? rows.join('') : '<div style="color:#555;font-size:11px;">None</div>';
 }
 
 // ============================================================
@@ -2579,6 +2758,174 @@ function updateActionSection() {
     sec.appendChild(wrap);
   }
 
+  // House Building (at any construction location)
+  if (loc.actions && loc.actions.construction) {
+    const conLv = skillLevel('construction');
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__houses'];
+    const projPct = state.houseProject ? Math.floor(state.houseProject.lumberAdded/state.houseProject.lumberRequired*100) : 0;
+    const hdrLabel = state.houseProject ? `🏠 House Building (${projPct}%)` : `🏠 House Building`;
+    hdr.innerHTML = `<span>${hdrLabel}</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__houses');
+    sec.appendChild(hdr);
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__houses';
+    wrap.style.display = open ? 'block' : 'none';
+
+    if (state.houseProject) {
+      const prog = state.houseProject;
+      const hType = HOUSE_TYPES.find(x=>x.id===prog.typeId);
+      const needed = prog.lumberRequired - prog.lumberAdded;
+      const avail  = countLumber();
+      const pDiv = document.createElement('div');
+      pDiv.style.cssText = 'font-size:10px;color:#a89070;padding:3px 0;';
+      pDiv.textContent = `${getHouseName(hType)}: ${prog.lumberAdded}/${prog.lumberRequired} lumber`;
+      wrap.appendChild(pDiv);
+      for (const [label, amt] of [['Add 1',1],['Add 10',10],['Add 100',100],['Add All',needed]]) {
+        const add = Math.min(amt, avail, needed);
+        const btn = document.createElement('button');
+        btn.className = 'action-btn';
+        btn.textContent = `${label} lumber (${add} available)`;
+        btn.disabled = add <= 0 || !!state.action || !!state.travel;
+        btn.onclick = ()=>startAddLumber(add);
+        wrap.appendChild(btn);
+      }
+      // Shelving for completed houses
+      state.houses.forEach((house, idx) => {
+        const sh = SHELF_TYPES[house.typeId];
+        if (!sh) return;
+        const ht = HOUSE_TYPES.find(x=>x.id===house.typeId);
+        const currentCap = ht.stones + (house.shelves||0) * sh.capPerShelf;
+        if (currentCap >= sh.maxCap || conLv < sh.levelReq) return;
+        const btn2 = document.createElement('button');
+        btn2.className = 'action-btn';
+        btn2.textContent = `Add shelf to ${getHouseName(ht)} (${house.shelves||0} shelves, ${sh.lumberPerShelf} lumber)`;
+        btn2.disabled = countLumber() < sh.lumberPerShelf || !!state.action || !!state.travel;
+        btn2.onclick = ()=>startAddShelf(idx);
+        wrap.appendChild(btn2);
+      });
+    } else {
+      // Start new project
+      for (const h of HOUSE_TYPES) {
+        if (h.levelReq > 10 && conLv <= 10 && conLv < h.levelReq) continue;
+        const canBuild = conLv >= h.levelReq;
+        const btn = document.createElement('button');
+        btn.className = 'action-btn';
+        if (!canBuild) {
+          btn.textContent = `${getHouseName(h)} — Construction Lv${h.levelReq} req.`;
+          btn.disabled = true;
+        } else {
+          btn.textContent = `Build ${getHouseName(h)} — ${h.lumber} lumber + ${h.costGold}g`;
+          btn.disabled = !!state.action || !!state.travel || state.gold < h.costGold;
+          btn.onclick = ()=>startHouseProject(h.id);
+        }
+        wrap.appendChild(btn);
+      }
+      // Shelving for existing houses
+      state.houses.forEach((house, idx) => {
+        const sh = SHELF_TYPES[house.typeId];
+        if (!sh) return;
+        const ht = HOUSE_TYPES.find(x=>x.id===house.typeId);
+        const currentCap = ht.stones + (house.shelves||0) * sh.capPerShelf;
+        if (currentCap >= sh.maxCap || conLv < sh.levelReq) return;
+        const btn2 = document.createElement('button');
+        btn2.className = 'action-btn';
+        btn2.textContent = `Shelve ${getHouseName(ht)} (${house.shelves||0} shelves, ${sh.lumberPerShelf} lumber, Lv${sh.levelReq})`;
+        btn2.disabled = countLumber() < sh.lumberPerShelf || !!state.action || !!state.travel;
+        btn2.onclick = ()=>startAddShelf(idx);
+        wrap.appendChild(btn2);
+      });
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Shipyard (Ferboi / Kimdar)
+  if (loc.shipyard) {
+    const conLv = skillLevel('construction');
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__shipyard'];
+    hdr.innerHTML = `<span>⚓ Shipyard</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__shipyard');
+    sec.appendChild(hdr);
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__shipyard';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const b of BOAT_TYPES) {
+      if (b.levelReq > 10 && conLv < b.levelReq) continue;
+      const canBuild = conLv >= b.levelReq;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!canBuild) {
+        btn.textContent = `${b.name} — Construction Lv${b.levelReq} req.`;
+        btn.disabled = true;
+      } else {
+        btn.textContent = `Build ${b.name} — ${b.lumber} lumber + 100g (Spd:${b.speed}, Cap:${b.capacity})`;
+        btn.disabled = !!state.action || !!state.travel || countLumber() < b.lumber || state.gold < 100;
+        btn.onclick = ()=>startBoatBuild(b.id);
+      }
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Siegeworks (Ravel)
+  if (loc.siegeworks) {
+    const conLv = skillLevel('construction');
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__siegeworks'];
+    hdr.innerHTML = `<span>⚙ Siegeworks</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__siegeworks');
+    sec.appendChild(hdr);
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__siegeworks';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const c of CATAPULT_TYPES) {
+      const canBuild = conLv >= c.levelReq;
+      const hasReq = !c.requires || (state.inventory[c.requires] > 0);
+      const hasLumber = countLumber() >= c.lumber;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!canBuild) {
+        btn.textContent = `${c.name} — Construction Lv${c.levelReq} req.`;
+        btn.disabled = true;
+      } else {
+        const reqStr = c.requires ? ` + 1x ${c.requires}` : '';
+        btn.textContent = `Craft ${c.name} — ${c.lumber} lumber${reqStr}`;
+        btn.disabled = !!state.action || !!state.travel || !hasLumber || !hasReq;
+        btn.onclick = ()=>startCatapultBuild(c.id);
+      }
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Guild Buildings (info only — requires guild system)
+  if (loc.actions && loc.actions.construction) {
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__guild_buildings'];
+    hdr.innerHTML = `<span>🏛 Guild Buildings</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__guild_buildings');
+    sec.appendChild(hdr);
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__guild_buildings';
+    wrap.style.display = open ? 'block' : 'none';
+    const note = document.createElement('div');
+    note.style.cssText = 'font-size:10px;color:#a89070;padding:4px 2px;';
+    note.textContent = 'Guild buildings require a guild compound. Guild system coming soon.';
+    wrap.appendChild(note);
+    for (const gb of GUILD_BUILDING_TYPES) {
+      const li = document.createElement('div');
+      li.style.cssText = 'font-size:10px;color:#666;padding:2px 0;border-bottom:1px solid #1a1a2e;';
+      li.textContent = `${gb.name} (guild lv ${gb.guildLvl} req, max lv ${gb.maxLevel})`;
+      wrap.appendChild(li);
+    }
+    sec.appendChild(wrap);
+  }
+
   // Spells
   if (loc.spells) {
     const hdr = document.createElement('div');
@@ -2750,13 +3097,17 @@ function startSawmill(recipeId) {
   state.inventory[r.input]--;
   updateInventoryUI();
   const now = Date.now();
-  state.action = { type:'sawmill', recipeId, skillId:r.skill, startTime:now, endTime:now + r.time*1000 };
+  let sawReduction = 0;
+  for (const gearId of Object.values(state.equipment)) { const g = gearId && GEAR[gearId]; if (g) sawReduction += g.reduceSawmill || 0; }
+  if (state.activeBuffs.sawmill_boost) sawReduction += state.activeBuffs.sawmill_boost.amount || 0;
+  const sawTime = Math.max(5, r.time - sawReduction);
+  state.action = { type:'sawmill', recipeId, skillId:r.skill, startTime:now, endTime:now + sawTime*1000 };
   botCheck.lastCheck = now;
   document.getElementById('action-label').textContent = `Sawing ${r.input}...`;
   document.getElementById('action-timer-div').style.display = 'block';
   document.getElementById('stat-status').textContent = `Sawing ${r.input}`;
   updateActionSection(); updateTravelSection();
-  addLog(`You begin sawing ${r.input}. (${r.time}s)`);
+  addLog(`You begin sawing ${r.input}. (${sawTime}s)`);
 }
 
 function completeSawmill(recipeId) {
@@ -2874,6 +3225,14 @@ function consumeItem(itemName) {
     const endsAt = Date.now() + effect.duration * 1000;
     state.activeBuffs.excite = { endsAt, amount: effect.amount };
     addLog(`You use the ${itemName}: +${effect.amount} Speed for ${effect.duration}s!`, 'success');
+  } else if (effect.type === 'sawmill_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.sawmill_boost = { endsAt, amount: effect.amount };
+    addLog(`You eat the ${itemName}: -${effect.amount}s Sawmill time for ${effect.duration/60}min!`, 'success');
+  } else if (effect.type === 'construction_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.construction_boost = { endsAt, amount: effect.amount };
+    addLog(`You eat the ${itemName}: -${effect.amount}s Construction time for ${effect.duration/60}min!`, 'success');
   }
   saveGame();
 }
@@ -2898,6 +3257,129 @@ function startGreenhouseHarvest() {
   document.getElementById('stat-status').textContent = r.name;
   updateActionSection(); updateTravelSection();
   addLog(`You begin harvesting ${r.name}. (${ms/1000}s)`);
+}
+
+// ============================================================
+//  CONSTRUCTION HELPER — count all lumber in inventory
+// ============================================================
+function countLumber() {
+  return ['Pine Lumber','Oak Lumber','Birch Lumber','Yew Lumber'].reduce((t,n)=>t+(state.inventory[n]||0),0);
+}
+function spendLumber(amount) {
+  let remaining = amount;
+  for (const name of ['Pine Lumber','Oak Lumber','Birch Lumber','Yew Lumber']) {
+    if (remaining <= 0) break;
+    const take = Math.min(remaining, state.inventory[name]||0);
+    state.inventory[name] = (state.inventory[name]||0) - take;
+    remaining -= take;
+  }
+  updateInventoryUI(); updateCarryUI();
+}
+
+// ============================================================
+//  HOUSE BUILDING
+// ============================================================
+function startHouseProject(typeId) {
+  const h = HOUSE_TYPES.find(x=>x.id===typeId);
+  if (!h) return;
+  if (skillLevel('construction') < h.levelReq) { addLog(`Requires Construction Lv${h.levelReq}.`,'error'); return; }
+  if (state.gold < h.costGold) { addLog(`Need ${h.costGold} gold to buy the land.`,'error'); return; }
+  if (state.houseProject) { addLog('You already have a house under construction.','error'); return; }
+  state.gold -= h.costGold;
+  document.getElementById('stat-gold').textContent = state.gold;
+  state.houseProject = { typeId, lumberAdded:0, lumberRequired:h.lumber };
+  addLog(`Land purchased for ${getHouseName(h)}! (${h.lumber} lumber needed)`, 'success');
+  saveGame(); updateActionSection();
+}
+
+function startAddLumber(amount) {
+  if (state.action || state.travel) return;
+  if (!state.houseProject) { addLog('No house project started.','error'); return; }
+  const avail = countLumber();
+  const needed = state.houseProject.lumberRequired - state.houseProject.lumberAdded;
+  const adding = Math.min(amount, avail, needed);
+  if (adding <= 0) { addLog('No lumber to add (carry some lumber or project is complete).','error'); return; }
+  spendLumber(adding);
+  const ms = Math.max(15, Math.floor(adding * 0.4)) * 1000;
+  const xp  = adding * 0.2;
+  const now = Date.now();
+  state.action = { type:'houseConstruction', adding, xp, skillId:'construction', startTime:now, endTime:now+ms };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Building house... (+${adding} lumber)`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = 'Building';
+  updateActionSection(); updateTravelSection();
+  addLog(`Adding ${adding} lumber to house. (${ms/1000}s, +${xp.toFixed(1)} Construction xp)`);
+}
+
+function startAddShelf(houseIdx) {
+  if (state.action || state.travel) return;
+  const house = state.houses[houseIdx];
+  if (!house) return;
+  const sh = SHELF_TYPES[house.typeId];
+  if (!sh) { addLog('This house cannot be shelved.','error'); return; }
+  if (skillLevel('construction') < sh.levelReq) { addLog(`Requires Construction Lv${sh.levelReq} to shelve this house.`,'error'); return; }
+  const hType = HOUSE_TYPES.find(x=>x.id===house.typeId);
+  const currentCap = hType.stones + (house.shelves||0) * sh.capPerShelf;
+  if (currentCap >= sh.maxCap) { addLog('This house is fully shelved.','error'); return; }
+  if (countLumber() < sh.lumberPerShelf) { addLog(`Need ${sh.lumberPerShelf} lumber to add a shelf.`,'error'); return; }
+  spendLumber(sh.lumberPerShelf);
+  const ms = Math.max(30000, sh.lumberPerShelf * 400);
+  const now = Date.now();
+  state.action = { type:'houseShelf', houseIdx, xp:sh.skillXp, charXp:sh.charXp, skillId:'construction', startTime:now, endTime:now+ms };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Adding shelf to house...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = 'Shelving';
+  updateActionSection(); updateTravelSection();
+  addLog(`Adding shelf to ${getHouseName(hType)}. (${ms/1000}s, +${sh.skillXp} Construction xp)`);
+}
+
+// ============================================================
+//  BOAT BUILDING
+// ============================================================
+function startBoatBuild(boatId) {
+  if (state.action || state.travel) return;
+  const b = BOAT_TYPES.find(x=>x.id===boatId);
+  if (!b) return;
+  if (skillLevel('construction') < b.levelReq) { addLog(`Requires Construction Lv${b.levelReq}.`,'error'); return; }
+  if (state.gold < 100) { addLog('Need 100 gold for the licensing fee.','error'); return; }
+  if (countLumber() < b.lumber) { addLog(`Need ${b.lumber} lumber to build this boat.`,'error'); return; }
+  state.gold -= 100;
+  document.getElementById('stat-gold').textContent = state.gold;
+  spendLumber(b.lumber);
+  const ms = Math.max(15, Math.floor(b.lumber * 0.4)) * 1000;
+  const xp  = b.lumber * 0.2;
+  const now = Date.now();
+  state.action = { type:'boatConstruction', boatId, xp, skillId:'construction', startTime:now, endTime:now+ms };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Building ${b.name}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Building ${b.name}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`Building ${b.name}. (${ms/1000}s, +${xp.toFixed(1)} Construction xp)`);
+}
+
+// ============================================================
+//  CATAPULT BUILDING
+// ============================================================
+function startCatapultBuild(catId) {
+  if (state.action || state.travel) return;
+  const c = CATAPULT_TYPES.find(x=>x.id===catId);
+  if (!c) return;
+  if (skillLevel('construction') < c.levelReq) { addLog(`Requires Construction Lv${c.levelReq}.`,'error'); return; }
+  if (countLumber() < c.lumber) { addLog(`Need ${c.lumber} lumber.`,'error'); return; }
+  if (c.requires && !(state.inventory[c.requires] > 0)) { addLog(`Requires a ${c.requires} in your inventory.`,'error'); return; }
+  spendLumber(c.lumber);
+  const ms = Math.max(15, Math.floor(c.lumber * 0.4)) * 1000;
+  const now = Date.now();
+  state.action = { type:'catapultConstruction', catId, skillId:'construction', startTime:now, endTime:now+ms };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Crafting ${c.name}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Crafting ${c.name}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`Crafting ${c.name}. (${ms/1000}s)`);
 }
 
 function startBait(recipeId) {
@@ -3164,7 +3646,15 @@ function tick() {
   // Expire active buffs
   if (state.activeBuffs.excite && now >= state.activeBuffs.excite.endsAt) {
     delete state.activeBuffs.excite;
-    addLog('Excite buff has worn off.', 'travel');
+    addLog('Speed boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.sawmill_boost && now >= state.activeBuffs.sawmill_boost.endsAt) {
+    delete state.activeBuffs.sawmill_boost;
+    addLog('Sawmill time boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.construction_boost && now >= state.activeBuffs.construction_boost.endsAt) {
+    delete state.activeBuffs.construction_boost;
+    addLog('Construction time boost has worn off.', 'travel');
   }
 
   tickBotCheck(now);
@@ -3230,6 +3720,66 @@ function tick() {
           document.getElementById('stat-status').textContent = 'Idle';
           updateActionSection(); updateTravelSection();
         }
+      } else if (state.action.type === 'houseConstruction') {
+        const { adding, xp } = state.action;
+        grantXP('construction', xp);
+        state.houseProject.lumberAdded += adding;
+        const prog = state.houseProject;
+        const hType = HOUSE_TYPES.find(x=>x.id===prog.typeId);
+        if (prog.lumberAdded >= prog.lumberRequired) {
+          state.houses.push({ typeId:prog.typeId, shelves:0 });
+          state.houseProject = null;
+          addLog(`${getHouseName(hType)} complete! (${state.houses.length} house${state.houses.length>1?'s':''} owned)`, 'success');
+        } else {
+          addLog(`House progress: ${prog.lumberAdded}/${prog.lumberRequired} lumber. (+${xp.toFixed(1)} Construction xp)`, 'success');
+        }
+        saveGame();
+        state.action = null;
+        document.getElementById('action-timer-div').style.display = 'none';
+        document.getElementById('stat-status').textContent = 'Idle';
+        updateActionSection(); updateTravelSection();
+      } else if (state.action.type === 'houseShelf') {
+        const { houseIdx, xp, charXp } = state.action;
+        grantXP('construction', xp);
+        state.charXp += charXp;
+        state.houses[houseIdx].shelves = (state.houses[houseIdx].shelves || 0) + 1;
+        const hType = HOUSE_TYPES.find(x=>x.id===state.houses[houseIdx].typeId);
+        addLog(`Shelf added to ${getHouseName(hType)}! (${state.houses[houseIdx].shelves} shelves)`, 'success');
+        saveGame();
+        state.action = null;
+        document.getElementById('action-timer-div').style.display = 'none';
+        document.getElementById('stat-status').textContent = 'Idle';
+        updateActionSection(); updateTravelSection();
+      } else if (state.action.type === 'boatConstruction') {
+        const { boatId, xp } = state.action;
+        grantXP('construction', xp);
+        state.boats.push({ boatId });
+        const b = BOAT_TYPES.find(x=>x.id===boatId);
+        addLog(`${b.name} built! (Spd:${b.speed}, Cap:${b.capacity} stones)`, 'success');
+        saveGame();
+        state.action = null;
+        document.getElementById('action-timer-div').style.display = 'none';
+        document.getElementById('stat-status').textContent = 'Idle';
+        updateActionSection(); updateTravelSection();
+      } else if (state.action.type === 'catapultConstruction') {
+        const { catId } = state.action;
+        const c = CATAPULT_TYPES.find(x=>x.id===catId);
+        const success = Math.random() < 0.7; // 70% success
+        if (success) {
+          grantXP('construction', c.xpSuccess);
+          state.catapults.push({ catId });
+          if (c.requires) { state.inventory[c.requires] = (state.inventory[c.requires]||1) - 1; updateInventoryUI(); }
+          addItem(c.name);
+          addLog(`${c.name} crafted! (+${c.xpSuccess} Construction xp)`, 'success');
+        } else {
+          grantXP('construction', c.xpFail);
+          addLog(`${c.name} construction failed! (+${c.xpFail} Construction xp)`, 'error');
+        }
+        saveGame();
+        state.action = null;
+        document.getElementById('action-timer-div').style.display = 'none';
+        document.getElementById('stat-status').textContent = 'Idle';
+        updateActionSection(); updateTravelSection();
       } else if (state.action.type === 'cooking') {
         const {recipeId} = state.action;
         const cookOk = completeCooking(recipeId);
