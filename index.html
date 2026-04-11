@@ -325,9 +325,13 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
       <div class="stat-row"><span class="stat-label">Neck</span><span class="stat-value" id="equip-neck">None</span></div>
       <div class="stat-row"><span class="stat-label">Upper Body</span><span class="stat-value" id="equip-upper_body">None</span></div>
       <div class="stat-row"><span class="stat-label">Lower Body</span><span class="stat-value" id="equip-lower_body">None</span></div>
+      <div class="stat-row"><span class="stat-label">Feet</span><span class="stat-value" id="equip-feet">None</span></div>
       <div class="stat-row"><span class="stat-label">Gloves</span><span class="stat-value" id="equip-gloves">None</span></div>
       <div class="stat-row"><span class="stat-label">Left Hand</span><span class="stat-value" id="equip-left_hand">None</span></div>
+      <div class="stat-row"><span class="stat-label">Right Hand</span><span class="stat-value" id="equip-right_hand">None</span></div>
       <div class="stat-row"><span class="stat-label">Ring</span><span class="stat-value" id="equip-ring">None</span></div>
+      <div class="stat-row"><span class="stat-label">Face</span><span class="stat-value" id="equip-face">None</span></div>
+      <div class="stat-row"><span class="stat-label">Accessory</span><span class="stat-value" id="equip-accessory">None</span></div>
       <div class="stat-row"><span class="stat-label">Chop time</span><span class="stat-value"><span id="equip-choptime">60</span>s</span></div>
       <div class="stat-row"><span class="stat-label">Combat Speed</span><span class="stat-value"><span id="equip-combat-speed">27.0</span>s</span></div>
     </div>
@@ -403,29 +407,29 @@ const RESOURCES = {
   fi_amberjack: {skill:'fishing', name:'Amberjack',      levelReq:48, xp:74, charXp:33, guildXp:37, product:'Amberjack',      needsRod:true, consumesItem:'Bait' },
   fi_barracuda: {skill:'fishing', name:'Barracuda',      levelReq:50, xp:75, charXp:33, guildXp:33, product:'Barracuda',      needsRod:true, consumesItem:'Bait' },
   // Harvesting (greenhouse only — weighted rotating crop)
-  hv_wheat:        { skill:'harvesting', name:'Wheat',              levelReq:0,  xp:5,   product:'Bundle of Wheat'   },
-  hv_tomato:       { skill:'harvesting', name:'Tomato Plant',       levelReq:0,  xp:5,   product:'Tomato'            },
-  hv_apple:        { skill:'harvesting', name:'Apple Tree',         levelReq:0,  xp:5,   product:'Apple'             },
-  hv_peach:        { skill:'harvesting', name:'Peach Tree',         levelReq:0,  xp:5,   product:'Peach'             },
-  hv_pear:         { skill:'harvesting', name:'Pear Tree',          levelReq:0,  xp:5,   product:'Pear'              },
-  hv_plum:         { skill:'harvesting', name:'Plum Tree',          levelReq:0,  xp:5,   product:'Plum'              },
-  hv_parsnip:      { skill:'harvesting', name:'Parsnip',            levelReq:0,  xp:5,   product:'Parsnip'           },
-  hv_turnip:       { skill:'harvesting', name:'Turnip',             levelReq:0,  xp:5,   product:'Turnip'            },
-  hv_jalapeno:     { skill:'harvesting', name:'Jalapeno Pepper',    levelReq:2,  xp:8,   product:'Jalapeno Pepper'   },
-  hv_mushroom:     { skill:'harvesting', name:'Mushroom',           levelReq:3,  xp:10,  product:'Mushroom'          },
-  hv_green_pepper: { skill:'harvesting', name:'Green Pepper',       levelReq:5,  xp:14,  product:'Green Pepper'      },
-  hv_parsley:      { skill:'harvesting', name:'Bunch of Parsley',   levelReq:8,  xp:20,  product:'Bunch of Parsley'  },
-  hv_cilantro:     { skill:'harvesting', name:'Bunch of Cilantro',  levelReq:10, xp:25,  product:'Bunch of Cilantro' },
-  hv_blueberry:    { skill:'harvesting', name:'Blue Berry Bush',    levelReq:15, xp:35,  product:'Blue Berry'        },
-  hv_redberry:     { skill:'harvesting', name:'Red Berry Bush',     levelReq:15, xp:35,  product:'Red Berry'         },
-  hv_grapes:       { skill:'harvesting', name:'Bunch of Grapes',    levelReq:20, xp:50,  product:'Bunch of Grapes'   },
-  hv_bamboo:       { skill:'harvesting', name:'Bamboo',             levelReq:25, xp:60,  product:'Bamboo'            },
-  hv_potato:       { skill:'harvesting', name:'Potato',             levelReq:25, xp:60,  product:'Potato'            },
-  hv_sugarcane:    { skill:'harvesting', name:'Sugarcane',          levelReq:27, xp:65,  product:'Sugarcane'         },
-  hv_spinach:      { skill:'harvesting', name:'Bunch of Spinach',   levelReq:30, xp:75,  product:'Bunch of Spinach'  },
-  hv_garlic:       { skill:'harvesting', name:'Garlic',             levelReq:35, xp:85,  product:'Garlic'            },
-  hv_blackpepper:  { skill:'harvesting', name:'Black Pepper',       levelReq:40, xp:95,  product:'Black Pepper'      },
-  hv_sage:         { skill:'harvesting', name:'Sage',               levelReq:45, xp:110, product:'Sage'              },
+  hv_wheat:        { skill:'harvesting', name:'Wheat',              levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Bundle of Wheat'   },
+  hv_tomato:       { skill:'harvesting', name:'Tomato Plant',       levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Tomato'            },
+  hv_apple:        { skill:'harvesting', name:'Apple Tree',         levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Apple'             },
+  hv_peach:        { skill:'harvesting', name:'Peach Tree',         levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Peach'             },
+  hv_pear:         { skill:'harvesting', name:'Pear Tree',          levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Pear'              },
+  hv_plum:         { skill:'harvesting', name:'Plum Tree',          levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Plum'              },
+  hv_parsnip:      { skill:'harvesting', name:'Parsnip',            levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Parsnip'           },
+  hv_turnip:       { skill:'harvesting', name:'Turnip',             levelReq:0,  xp:10, charXp:5, guildXp:5,  product:'Turnip'            },
+  hv_jalapeno:     { skill:'harvesting', name:'Jalapeno Pepper',    levelReq:2,  xp:10, charXp:5, guildXp:5,  product:'Jalapeno Pepper'   },
+  hv_mushroom:     { skill:'harvesting', name:'Mushroom',           levelReq:3,  xp:10, charXp:5, guildXp:5,  product:'Mushroom'          },
+  hv_green_pepper: { skill:'harvesting', name:'Green Pepper',       levelReq:5,  xp:10, charXp:5, guildXp:5,  product:'Green Pepper'      },
+  hv_parsley:      { skill:'harvesting', name:'Bunch of Parsley',   levelReq:8,  xp:10, charXp:5, guildXp:5,  product:'Bunch of Parsley'  },
+  hv_cilantro:     { skill:'harvesting', name:'Bunch of Cilantro',  levelReq:10, xp:10, charXp:5, guildXp:5,  product:'Bunch of Cilantro' },
+  hv_blueberry:    { skill:'harvesting', name:'Blue Berry Bush',    levelReq:15, xp:15, charXp:5, guildXp:7,  product:'Blue Berry'        },
+  hv_redberry:     { skill:'harvesting', name:'Red Berry Bush',     levelReq:15, xp:15, charXp:5, guildXp:7,  product:'Red Berry'         },
+  hv_grapes:       { skill:'harvesting', name:'Bunch of Grapes',    levelReq:20, xp:15, charXp:5, guildXp:7,  product:'Bunch of Grapes'   },
+  hv_bamboo:       { skill:'harvesting', name:'Bamboo',             levelReq:25, xp:17, charXp:5, guildXp:8,  product:'Bamboo'            },
+  hv_potato:       { skill:'harvesting', name:'Potato',             levelReq:25, xp:17, charXp:5, guildXp:8,  product:'Potato'            },
+  hv_sugarcane:    { skill:'harvesting', name:'Sugarcane',          levelReq:27, xp:18, charXp:5, guildXp:9,  product:'Sugarcane'         },
+  hv_spinach:      { skill:'harvesting', name:'Bunch of Spinach',   levelReq:30, xp:20, charXp:5, guildXp:10, product:'Bunch of Spinach'  },
+  hv_garlic:       { skill:'harvesting', name:'Garlic',             levelReq:35, xp:22, charXp:5, guildXp:0,  product:'Garlic'            },
+  hv_blackpepper:  { skill:'harvesting', name:'Black Pepper',       levelReq:40, xp:23, charXp:5, guildXp:0,  product:'Black Pepper'      },
+  hv_sage:         { skill:'harvesting', name:'Sage',               levelReq:45, xp:24, charXp:5, guildXp:14, product:'Sage'              },
   // Cooking
   co_bread:   {skill:'cooking',      name:'Bake Bread',     levelReq:1,  xp:15,  product:'Bread'        },
   co_fish:    {skill:'cooking',      name:'Cook Fish',      levelReq:10, xp:45,  product:'Cooked Fish'  },
@@ -503,6 +507,29 @@ const GEAR = {
   amber_ring:          {id:'amber_ring',          name:'Amber Ring',            slot:'ring',       skill:'fishing',     levelReq:55, reduceTime:2, magicFishFinding:0, defense:0, cost:2000, weight:0,  fishingSet:true },
   small_fishing_net:   {id:'small_fishing_net',   name:'Small Fishing Net',     slot:'left_hand',  skill:'fishing',     levelReq:60, reduceTime:2, magicFishFinding:0, defense:2, cost:2500, weight:3  },
   fishing_gloves:      {id:'fishing_gloves',      name:'Fishing Gloves',        slot:'gloves',     skill:'fishing',     levelReq:65, reduceTime:1, magicFishFinding:1, defense:3, cost:3000, weight:1,  fishingSet:true },
+  // ── Harvesting equipment ──────────────────────────────────
+  tough_gloves:          {id:'tough_gloves',          name:'Tough Gloves',          slot:'gloves',      skill:'harvesting', levelReq:10, reduceTime:1, reducePlanting:0, defense:1, attack:0, cost:120,  weight:1, angryBirdsSet:true },
+  death_scythe:          {id:'death_scythe',          name:'Death Scythe',          slot:'right_hand',  skill:'harvesting', levelReq:0,  reduceTime:2, reducePlanting:0, defense:3, attack:8, cost:500,  weight:6, combatLvlReq:15 },
+  harvesting_ring:       {id:'harvesting_ring',       name:'Harvesting Ring',       slot:'ring',        skill:'harvesting', levelReq:20, reduceTime:1, reducePlanting:0, defense:0, attack:0, cost:250,  weight:0, angryBirdsSet:true },
+  gardening_trowel:      {id:'gardening_trowel',      name:'Gardening Trowel',      slot:'right_hand',  skill:'harvesting', levelReq:20, reduceTime:0, reducePlanting:2, defense:1, attack:0, cost:300,  weight:2 },
+  knee_pads:             {id:'knee_pads',             name:'Knee Pads',             slot:'lower_body',  skill:'harvesting', levelReq:25, reduceTime:0, reducePlanting:1, defense:1, attack:0, cost:350,  weight:2 },
+  harvesting_figurine:   {id:'harvesting_figurine',   name:'Harvesting Figurine',   slot:'neck',        skill:'harvesting', levelReq:25, reduceTime:1, reducePlanting:0, defense:0, attack:0, cost:400,  weight:1, angryBirdsSet:true },
+  root_bracelet:         {id:'root_bracelet',         name:'Root Bracelet',         slot:'left_hand',   skill:'harvesting', levelReq:30, reduceTime:3, reducePlanting:2, defense:2, attack:0, cost:600,  weight:2, charLvlReq:30 },
+  wellington_boots:      {id:'wellington_boots',      name:'Wellington Boots',      slot:'feet',        skill:'harvesting', levelReq:30, reduceTime:1, reducePlanting:1, defense:1, attack:0, cost:500,  weight:3 },
+  sparkling_crown:       {id:'sparkling_crown',       name:'Sparkling Crown',       slot:'head',        skill:'harvesting', levelReq:35, reduceTime:1, reducePlanting:1, defense:2, attack:0, cost:800,  weight:2, charLvlReq:30, mudCrabSet:true },
+  aliki_spade:           {id:'aliki_spade',           name:'Aliki Spade',           slot:'right_hand',  skill:'harvesting', levelReq:40, reduceTime:0, reducePlanting:4, defense:2, attack:4, cost:1200, weight:4 },
+  prismatic_ring:        {id:'prismatic_ring',        name:'Prismatic Ring',        slot:'ring',        skill:'harvesting', levelReq:50, reduceTime:0, reducePlanting:1, defense:0, attack:0, cost:1500, weight:0 },
+  prismatic_necklace:    {id:'prismatic_necklace',    name:'Prismatic Necklace',    slot:'neck',        skill:'harvesting', levelReq:60, reduceTime:0, reducePlanting:2, defense:0, attack:0, cost:2000, weight:1 },
+  large_prismatic_ring:  {id:'large_prismatic_ring',  name:'Large Prismatic Ring',  slot:'ring',        skill:'harvesting', levelReq:60, reduceTime:2, reducePlanting:0, defense:0, attack:0, cost:2000, weight:0 },
+  golden_flute:          {id:'golden_flute',          name:'Golden Flute',          slot:'accessory',   skill:'harvesting', levelReq:0,  reduceTime:2, reducePlanting:1, defense:0, attack:0, cost:5000, weight:1, cookingLvlReq:70 },
+  // ── Costume / Set items ────────────────────────────────────
+  costume_mask:          {id:'costume_mask',          name:'Costume Mask',          slot:'face',        skill:'harvesting', levelReq:0,  reduceTime:0, reducePlanting:0, defense:1, attack:0, speed:1,  cost:0,    weight:1, angryBirdsSet:true },
+  backpack:              {id:'backpack',              name:'Backpack',              slot:'upper_body',  skill:'harvesting', levelReq:0,  reduceTime:0, reducePlanting:0, defense:-1,attack:-1,carry:250,cost:0,    weight:3, angryBirdsSet:true, mudCrabSet:true },
+  pocketknife:           {id:'pocketknife',           name:'Pocketknife',           slot:'tool',        skill:'harvesting', levelReq:0,  reduceTime:0, reducePlanting:0, defense:0, attack:1, cost:5,    weight:0, angryBirdsSet:true },
+  bug_horn_necklace:     {id:'bug_horn_necklace',     name:'Bug Horn Necklace',     slot:'neck',        skill:'combat',     levelReq:0,  reduceTime:0, reducePlanting:0, defense:-2,attack:3, mp:3, cost:0, weight:1, combatLvlReq:15, mudCrabSet:true },
+  leather_gloves:        {id:'leather_gloves',        name:'Leather Gloves',        slot:'gloves',      skill:'cooking',    levelReq:0,  reduceTime:1, reducePlanting:0, defense:1, attack:0, cost:15,   weight:1, mudCrabSet:true },
+  ring_of_speed:         {id:'ring_of_speed',         name:'Ring of Speed',         slot:'ring',        skill:'combat',     levelReq:0,  reduceTime:0, reducePlanting:0, defense:0, attack:0, speed:1,  cost:50,   weight:0, mudCrabSet:true },
+  nagaromi_pickaxe:      {id:'nagaromi_pickaxe',      name:'Nagaromi Pickaxe',      slot:'tool',        skill:'mining',     levelReq:5,  reduceTime:0, reducePlanting:0, defense:1, attack:0, cost:50,   weight:2, mudCrabSet:true },
   // ── Tools (hatchets) ───────────────────────────────────────
   bronze_hatchet:      {id:'bronze_hatchet',      name:'Bronze Hatchet',        slot:'tool',       skill:'woodcutting', levelReq:0,  reduceTime:0, attack:1,  defense:0,  cost:10,   weight:2  },
   nagaromi_hatchet:    {id:'nagaromi_hatchet',     name:'Nagaromi Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:5,  reduceTime:0, attack:2,  defense:0,  cost:50,   weight:3  },
@@ -604,6 +631,14 @@ const ITEM_WEIGHTS = {
   'Small Fishing Net':3, 'Fishing Gloves':1,
   // Fishing foods
   'Seafood Stirfry':1, 'Tuna Salad':1, 'Spicy Burger':1,
+  // Harvesting gear
+  'Tough Gloves':1, 'Death Scythe':6, 'Harvesting Ring':0, 'Gardening Trowel':2,
+  'Knee Pads':2, 'Harvesting Figurine':1, 'Root Bracelet':2, 'Wellington Boots':3,
+  'Sparkling Crown':2, 'Aliki Spade':4, 'Prismatic Ring':0, 'Prismatic Necklace':1,
+  'Large Prismatic Ring':0, 'Golden Flute':1,
+  // Costume / set items
+  'Costume Mask':1, 'Backpack':3, 'Pocketknife':0,
+  'Bug Horn Necklace':1, 'Leather Gloves':1, 'Ring of Speed':0, 'Nagaromi Pickaxe':2,
   // Trade
   'Contract':1, 'Deed':1, 'Guild Seal':1,
   // Gear in inventory (matches GEAR weight below)
@@ -849,16 +884,16 @@ const CONSUMABLE_EFFECTS = {
   'Tuna Casserole':          { type:'heal_hp', amount:35 },
   'Meat Pie':                { type:'heal_hp', amount:40 },
   'Shark Squibs':            { type:'heal_hp', amount:35 },
-  'Fish Kabob':              { type:'heal_hp', amount:40 },
+  'Fish Kabob':              { type:'planting_boost', amount:3, duration:1800 },           // -3 planting time 30min
   'Seafood Stir Fry':        { type:'heal_hp', amount:45 },
   'Quiche':                  { type:'heal_hp', amount:50 },
   'Cooked Swordfish':        { type:'heal_hp', amount:55 },
   'Riewe Schales':           { type:'heal_hp', amount:50 },
   'Glazed Swordfish':        { type:'heal_hp', amount:60 },
-  'Spinach Salad':           { type:'heal_hp', amount:40 },
+  'Spinach Salad':           { type:'harvesting_boost', amount:2, duration:2400 },         // -2 harvesting time 40min
   'Peach Cobbler':           { type:'heal_hp', amount:60 },
   'Apple Pie':               { type:'heal_hp', amount:30 },
-  'Fruit Salad':             { type:'heal_hp', amount:32 },
+  'Fruit Salad':             { type:'harvesting_boost', amount:3, duration:1800 },         // -3 harvesting time 30min
   'Stuffed Pepper':          { type:'heal_hp', amount:38 },
   'Scalloped Oysters':       { type:'heal_hp', amount:45 },
   'Fruitcake':               { type:'heal_hp', amount:45 },
@@ -882,7 +917,7 @@ const CONSUMABLE_EFFECTS = {
   // Speed boosts
   'Bottle of Juice':  { type:'speed_boost', amount:3, duration:60  },
   'Berry Cordial':    { type:'speed_boost', amount:3, duration:90  },
-  'Peach Brandy':     { type:'speed_boost', amount:5, duration:120 },
+  'Peach Brandy':     { type:'planting_boost', amount:3, duration:1500, plantingFailurePenalty:2, plantingFailureDuration:1800 }, // -3 planting 25min, +2 fail 30min
   'Bottle of Beer':   { type:'speed_boost', amount:2, duration:60  },
   'Bottle of Wine':   { type:'speed_boost', amount:4, duration:90  },
   'Fine Whiskey':     { type:'fishing_boost', amount:3, duration:1500, magicFishPenalty:3, magicFishPenaltyDuration:1800 }, // -3 fishing 25min, -3 mff 30min
@@ -1967,6 +2002,37 @@ function getFishingSetBonus() {
   }
   return FISHING_SET_BONUSES.filter(b => b.pieces <= count).pop() || { reduceTime:0, magicFishFinding:0 };
 }
+// ── Angry Birds Harvesting Set ────────────────────────────
+// Pieces: Costume Mask, Harvesting Figurine, Backpack, Tough Gloves, Harvesting Ring, Pocketknife
+const ANGRY_BIRDS_SET_BONUSES = [
+  { pieces:4, reduceTime:1 },
+  { pieces:5, reduceTime:2 },
+  { pieces:6, reduceTime:3 },
+];
+function getAngryBirdsSetBonus() {
+  let count = 0;
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (g && g.angryBirdsSet) count++;
+  }
+  return ANGRY_BIRDS_SET_BONUSES.filter(b => b.pieces <= count).pop() || { reduceTime:0 };
+}
+// ── Mud Crab Planting Set ────────────────────────────────
+// Pieces: Sparkling Crown, Bug Horn Necklace, Backpack, Leather Gloves, Ring of Speed, Nagaromi Pickaxe
+const MUD_CRAB_SET_BONUSES = [
+  { pieces:4, reducePlanting:1 },
+  { pieces:5, reducePlanting:2 },
+  { pieces:6, reducePlanting:3 },
+];
+function getMudCrabSetBonus() {
+  let count = 0;
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (g && g.mudCrabSet) count++;
+  }
+  return MUD_CRAB_SET_BONUSES.filter(b => b.pieces <= count).pop() || { reducePlanting:0 };
+}
+
 function getTotalMagicFishFinding() {
   let mff = 0;
   for (const gearId of Object.values(state.equipment)) {
@@ -1989,8 +2055,10 @@ function getActionMs(skillId, isSawmill) {
   for (const gearId of Object.values(state.equipment)) {
     const g = gearId && GEAR[gearId];
     if (!g) continue;
-    if (skillId === 'woodcutting' && g.skill === 'woodcutting') gearReduction += g.reduceTime || 0;
-    if (skillId === 'fishing'     && g.skill === 'fishing')     gearReduction += g.reduceTime || 0;
+    if (skillId === 'woodcutting'  && g.skill === 'woodcutting')  gearReduction += g.reduceTime || 0;
+    if (skillId === 'fishing'      && g.skill === 'fishing')      gearReduction += g.reduceTime || 0;
+    if (skillId === 'harvesting'   && g.skill === 'harvesting')   gearReduction += g.reduceTime || 0;
+    if (skillId === 'cooking'      && g.skill === 'cooking')      gearReduction += g.reduceTime || 0;
     if (isSawmill)                                               gearReduction += g.reduceSawmill || 0;
     if (skillId === 'construction')                              gearReduction += g.reduceConstruction || 0;
   }
@@ -1999,6 +2067,10 @@ function getActionMs(skillId, isSawmill) {
   if (skillId === 'fishing') {
     gearReduction += getFishingSetBonus().reduceTime;
     if (state.activeBuffs.fishing_boost) gearReduction += state.activeBuffs.fishing_boost.amount || 0;
+  }
+  if (skillId === 'harvesting') {
+    gearReduction += getAngryBirdsSetBonus().reduceTime;
+    if (state.activeBuffs.harvesting_boost) gearReduction += state.activeBuffs.harvesting_boost.amount || 0;
   }
   return Math.max(15, 60 - levelReduction - gearReduction) * 1000;
 }
@@ -2090,7 +2162,7 @@ let state = {
   skills:    defaultSkills(),
   inventory: {},
   gold:      0,
-  equipment: {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, left_hand:null, head:null, ring:null},
+  equipment: {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, feet:null, left_hand:null, right_hand:null, head:null, ring:null, face:null, accessory:null},
   action:    null,
   travel:    null,
   hp:        { current:100, max:100 },
@@ -2105,7 +2177,7 @@ function resetState() {
   state.skills     = defaultSkills();
   state.inventory  = {};
   state.gold       = 0;
-  state.equipment  = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, left_hand:null, head:null, ring:null};
+  state.equipment  = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, feet:null, left_hand:null, right_hand:null, head:null, ring:null, face:null, accessory:null};
   state.action     = null;
   state.travel     = null;
   state.hp              = { current:getHpMax(), max:getHpMax() };
@@ -2184,7 +2256,7 @@ function applyServerData(d) {
   state.skills     = Object.assign(defaultSkills(), d.skills || {});
   state.inventory  = d.inventory || {};
   state.gold       = d.gold      || 0;
-  const defaultEquip = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, left_hand:null, head:null, ring:null};
+  const defaultEquip = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, lower_body:null, feet:null, left_hand:null, right_hand:null, head:null, ring:null, face:null, accessory:null};
   state.equipment  = Object.assign(defaultEquip, d.equipment || {});
   state.hp         = d.hp        || { current:getHpMax(), max:getHpMax() };
   state.mp         = d.mp        || { current:getMpMax(), max:getMpMax() };
@@ -2790,7 +2862,7 @@ function updateSkillDetail(id) {
 //  EQUIPMENT UI
 // ============================================================
 function updateEquipmentUI() {
-  const slots = ['tool','rod','neck','gloves','upper_body','lower_body','left_hand','head','ring'];
+  const slots = ['tool','rod','neck','gloves','upper_body','lower_body','feet','left_hand','right_hand','head','ring','face','accessory'];
   for (const slot of slots) {
     const gearId = state.equipment[slot];
     const el = document.getElementById('equip-' + slot);
@@ -3788,6 +3860,17 @@ function consumeItem(itemName) {
     const endsAt = Date.now() + effect.duration * 1000;
     state.activeBuffs.bait_boost = { endsAt, amount: effect.amount };
     addLog(`You eat the ${itemName}: -${effect.amount}s Bait-making time for ${Math.floor(effect.duration/60)}min!`, 'success');
+  } else if (effect.type === 'harvesting_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.harvesting_boost = { endsAt, amount: effect.amount };
+    addLog(`You eat the ${itemName}: -${effect.amount}s Harvesting time for ${Math.floor(effect.duration/60)}min!`, 'success');
+  } else if (effect.type === 'planting_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.planting_boost = { endsAt, amount: effect.amount };
+    if (effect.plantingFailurePenalty) {
+      state.activeBuffs.planting_failure = { endsAt: Date.now() + effect.plantingFailureDuration * 1000, amount: effect.plantingFailurePenalty };
+    }
+    addLog(`You eat the ${itemName}: -${effect.amount}s Planting time for ${Math.floor(effect.duration/60)}min!`, 'success');
   }
   saveGame();
 }
@@ -4226,6 +4309,17 @@ function tick() {
   if (state.activeBuffs.bait_boost && now >= state.activeBuffs.bait_boost.endsAt) {
     delete state.activeBuffs.bait_boost;
     addLog('Bait-making boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.harvesting_boost && now >= state.activeBuffs.harvesting_boost.endsAt) {
+    delete state.activeBuffs.harvesting_boost;
+    addLog('Harvesting time boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.planting_boost && now >= state.activeBuffs.planting_boost.endsAt) {
+    delete state.activeBuffs.planting_boost;
+    addLog('Planting time boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.planting_failure && now >= state.activeBuffs.planting_failure.endsAt) {
+    delete state.activeBuffs.planting_failure;
   }
 
   tickBotCheck(now);
