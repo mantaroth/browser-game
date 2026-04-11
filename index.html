@@ -2457,28 +2457,87 @@ function buildMap() {
   const islandStyle = {fill:'url(#fm-land)', stroke:'#8ab870', 'stroke-width':1.5, opacity:0.9};
   const islandCoast = {fill:'none', stroke:'#c8e890', 'stroke-width':0.5, opacity:0.4};
 
-  // Island 1 — Orin (northwest, rows 0-4, cols 0-4)
-  const orinPath = 'M 5,205 C -15,195 -20,160 -18,120 C -20,80 -18,40 5,8 C 25,-10 80,-18 130,-14 C 178,-18 225,-18 240,5 C 252,22 248,68 248,108 C 248,148 252,185 238,208 C 220,226 170,224 120,222 C 70,224 20,222 5,205 Z';
+  // Orin — large western landmass (towns x:15-215, y:15-187)
+  // Organic shape: bumpy west coast, straight ocean-facing east coast
+  const orinPath = [
+    'M 4,212',
+    'C -8,202 -16,182 -16,155',
+    'C -16,125 -10,95 -12,65',
+    'C -14,35 -6,8 10,-6',
+    'C 28,-16 65,-20 105,-17',
+    'C 142,-18 180,-16 210,-8',
+    'C 232,-2 245,14 247,40',
+    'C 249,65 246,97 246,130',
+    'C 247,162 244,186 231,200',
+    'C 215,212 182,215 145,214',
+    'C 105,215 62,215 26,213',
+    'C 13,213 4,212 4,212 Z'
+  ].join(' ');
   el('path',{d:orinPath, ...islandStyle},world);
   el('path',{d:orinPath, ...islandCoast},world);
 
-  // Island 2 — Gardan (northeast, rows 0-4, cols 5-9)
-  const gardanPath = 'M 262,205 C 255,190 252,155 254,115 C 254,75 252,36 262,8 C 272,-10 315,-18 365,-14 C 415,-18 460,-16 492,5 C 508,22 510,68 508,108 C 508,148 510,183 496,208 C 478,226 435,224 390,222 C 345,224 298,226 268,215 C 263,212 262,208 262,205 Z';
+  // Gardan — large eastern landmass (towns x:265-465, y:15-187)
+  // Irregular north coast, NE extension for danycia/uzlea/ashgate
+  const gardanPath = [
+    'M 258,212',
+    'C 252,200 250,178 253,150',
+    'C 253,120 250,88 255,58',
+    'C 258,30 268,4 285,-8',
+    'C 302,-18 335,-20 368,-16',
+    'C 400,-16 432,-10 460,2',
+    'C 485,12 500,35 502,65',
+    'C 504,95 502,125 500,155',
+    'C 500,182 498,200 485,210',
+    'C 468,220 440,220 405,218',
+    'C 368,218 325,218 292,218',
+    'C 272,218 260,215 258,212 Z'
+  ].join(' ');
   el('path',{d:gardanPath, ...islandStyle},world);
   el('path',{d:gardanPath, ...islandCoast},world);
 
-  // Island 3 — Jiru (southwest, rows 5-6)
-  const jiruPath = 'M 42,220 C 28,232 25,260 32,283 C 40,306 65,318 100,320 C 140,322 178,320 210,316 C 232,312 250,300 252,282 C 256,262 252,240 242,226 C 232,215 210,215 185,214 C 155,213 115,213 85,215 C 65,218 50,218 42,220 Z';
+  // Jiru — SW island (towns x:65-215, y:230-273)
+  // Rounded tropical island; sits in the sea south-west
+  const jiruPath = [
+    'M 46,265',
+    'C 38,280 40,300 52,314',
+    'C 65,328 90,335 122,334',
+    'C 155,336 185,332 210,320',
+    'C 232,308 238,288 236,268',
+    'C 234,248 222,234 202,228',
+    'C 180,222 150,220 118,220',
+    'C 85,220 62,228 50,244',
+    'C 44,252 45,260 46,265 Z'
+  ].join(' ');
   el('path',{d:jiruPath, ...islandStyle},world);
   el('path',{d:jiruPath, ...islandCoast},world);
 
-  // Island 4 — Marros (southeast, rows 5-6)
-  const marrosPath = 'M 258,222 C 250,234 248,260 255,285 C 262,308 285,320 318,322 C 355,324 395,322 425,316 C 445,308 454,292 455,273 C 458,252 452,234 440,222 C 428,213 400,212 370,211 C 335,210 295,212 270,218 C 263,220 258,222 258,222 Z';
+  // Marros — SE island (towns x:265-415, y:230-273)
+  // Across the sea from Gardan; slightly elongated
+  const marrosPath = [
+    'M 250,265',
+    'C 244,280 247,300 260,314',
+    'C 272,326 295,333 325,334',
+    'C 358,336 390,330 415,318',
+    'C 438,306 450,288 448,268',
+    'C 446,248 432,232 408,226',
+    'C 382,220 350,218 318,218',
+    'C 285,218 258,228 250,248',
+    'C 246,256 249,262 250,265 Z'
+  ].join(' ');
   el('path',{d:marrosPath, ...islandStyle},world);
   el('path',{d:marrosPath, ...islandCoast},world);
 
-  // Island 5 — South Isles (row 8)
-  const southPath = 'M 2,342 C -12,355 -15,375 -5,395 C 5,408 45,414 95,414 C 140,414 185,410 222,400 C 248,392 258,376 254,355 C 250,340 232,332 200,330 C 165,328 115,330 65,334 C 35,337 10,340 2,342 Z';
+  // South Isles — bottom island chain (towns x:15-215, y:359)
+  const southPath = [
+    'M 4,350',
+    'C -8,360 -12,378 -3,394',
+    'C 8,410 42,418 88,416',
+    'C 130,418 175,414 215,402',
+    'C 240,394 252,378 249,360',
+    'C 246,344 228,337 196,335',
+    'C 160,333 115,334 72,340',
+    'C 38,344 12,348 4,350 Z'
+  ].join(' ');
   el('path',{d:southPath, ...islandStyle},world);
   el('path',{d:southPath, ...islandCoast},world);
 
