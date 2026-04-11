@@ -224,7 +224,7 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 <div id="top-section">
   <div id="mini-map-box">
     <h3>World Map</h3>
-    <svg id="fantasy-map" viewBox="0 0 120 100"></svg>
+    <svg id="fantasy-map" viewBox="0 0 400 333"></svg>
   </div>
   <div id="chat-panel">
     <div class="chat-tabs">
@@ -2398,7 +2398,7 @@ let _lastMapLoc = null;
 
 function buildMap() {
   const svg = document.getElementById('fantasy-map');
-  svg.setAttribute('viewBox', '0 0 120 100');
+  svg.setAttribute('viewBox', '0 0 400 333');
   const ns  = 'http://www.w3.org/2000/svg';
   const cur       = state.location;
   const adj       = new Set(LOCATIONS[cur].connects);
@@ -2615,35 +2615,33 @@ function buildMap() {
 
     // Glow ring
     if (isCur) {
-      el('circle',{cx:0,cy:0,r:16,fill:'#74c69d',opacity:0.22,class:'fmap-ring'},g);
-      el('circle',{cx:0,cy:0,r:13,fill:'none',stroke:'#74c69d','stroke-width':1.5,opacity:0.6},g);
+      el('circle',{cx:0,cy:0,r:22,fill:'#74c69d',opacity:0.18,class:'fmap-ring'},g);
+      el('circle',{cx:0,cy:0,r:18,fill:'none',stroke:'#74c69d','stroke-width':2,opacity:0.55},g);
     } else if (isAdj) {
-      el('circle',{cx:0,cy:0,r:13,fill:'#4a8a6a',opacity:0.15,class:'fmap-ring'},g);
-      el('circle',{cx:0,cy:0,r:10,fill:'none',stroke:'#4a8a6a','stroke-width':1,opacity:0.5},g);
+      el('circle',{cx:0,cy:0,r:18,fill:'#4a8a6a',opacity:0.12,class:'fmap-ring'},g);
+      el('circle',{cx:0,cy:0,r:14,fill:'none',stroke:'#4a8a6a','stroke-width':1.5,opacity:0.45},g);
     } else if (isFar) {
-      el('circle',{cx:0,cy:0,r:13,fill:'#8a6a20',opacity:0.15,class:'fmap-ring'},g);
-      el('circle',{cx:0,cy:0,r:10,fill:'none',stroke:'#c8a050','stroke-width':1,'stroke-dasharray':'3 2',opacity:0.6},g);
+      el('circle',{cx:0,cy:0,r:18,fill:'#8a6a20',opacity:0.12,class:'fmap-ring'},g);
+      el('circle',{cx:0,cy:0,r:14,fill:'none',stroke:'#c8a050','stroke-width':1.5,'stroke-dasharray':'4 3',opacity:0.5},g);
     }
 
-    el('ellipse',{cx:1,cy:4,rx:9,ry:4,fill:'rgba(0,10,0,0.3)'},g);
-    const bc = isCur?'#1a4a30':isAdj?'#1a3a28':isFar?'#3a2a08':'#2a1a0a';
-    const sc = isCur?'#74c69d':isAdj?'#4a8a6a':isFar?'#c8a050':'#7a5030';
-    el('rect',{x:-7,y:-8,width:14,height:10,fill:bc,stroke:sc,'stroke-width':1,rx:0.5},g);
-    for (const tx of [-7,-2,5]) el('rect',{x:tx,y:-12,width:4,height:5,fill:bc,stroke:sc,'stroke-width':1},g);
-    el('rect',{x:-2,y:-4,width:4,height:4,fill:'rgba(0,0,0,0.4)',rx:1},g);
+    // Black dot
+    const dr = isCur ? 6 : 5;
+    const ds = isCur?'#74c69d':isAdj?'#4a8a6a':isFar?'#c8a050':'#555';
+    el('circle',{cx:0,cy:0,r:dr,fill:'#111',stroke:ds,'stroke-width':1.5},g);
 
     const fc = isCur?'#e8fff4':isAdj?'#c8e8d0':isFar?'#e8d880':'#c8d0a0';
     const fw = isCur?'bold':'normal';
     const t = el('text',{
-      x:0, y:16, 'text-anchor':'middle', fill:fc,
-      'font-size':isCur?8.5:7.5, 'font-family':'serif', 'font-weight':fw,
-      'stroke':'rgba(0,10,0,0.8)', 'stroke-width':2, 'paint-order':'stroke'
+      x:0, y:20, 'text-anchor':'middle', fill:fc,
+      'font-size':isCur?14:12, 'font-family':'serif', 'font-weight':fw,
+      'stroke':'rgba(0,10,0,0.9)', 'stroke-width':3, 'paint-order':'stroke'
     },g);
     t.textContent = loc.name;
   }
 
   // ── Compass rose (fixed in viewport via separate group) ───
-  const cr = el('g',{transform:'translate(248,14)'},svg);
+  const cr = el('g',{transform:'translate(378,18)'},svg);
   el('circle',{cx:0,cy:0,r:11,fill:'rgba(180,140,80,0.35)',stroke:'#6a5030','stroke-width':0.8},cr);
   for(const [lbl,px,py] of [['N',0,-9],['S',0,9],['E',9,0],['W',-9,0]])
     el('text',{x:px,y:py+3,'text-anchor':'middle',fill:'#4a3010','font-size':5,'font-family':'serif','font-weight':'bold'},cr).textContent=lbl;
@@ -2653,12 +2651,12 @@ function buildMap() {
 
   // ── Pan to current location ────────────────────────────────
   const curPos = LOC_POS[cur] || {x:130, y:107};
-  const tx = 60 - curPos.x;
-  const ty = 50 - curPos.y;
+  const tx = 200 - curPos.x;
+  const ty = 166 - curPos.y;
 
   if (_lastMapLoc && _lastMapLoc !== cur && LOC_POS[_lastMapLoc]) {
     const prev = LOC_POS[_lastMapLoc];
-    world.style.transform = `translate(${60-prev.x}px, ${50-prev.y}px)`;
+    world.style.transform = `translate(${200-prev.x}px, ${166-prev.y}px)`;
     requestAnimationFrame(() => requestAnimationFrame(() => {
       world.style.transition = 'transform 0.85s cubic-bezier(0.4, 0, 0.2, 1)';
       world.style.transform = `translate(${tx}px, ${ty}px)`;
