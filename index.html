@@ -1741,7 +1741,7 @@ function getStateData() {
   return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment, hp:state.hp, mp:state.mp, charXp:state.charXp, guildXp:state.guildXp, lastDamageTaken:state.lastDamageTaken||0 };
 }
 
-function getMpMax()    { return 10 + skillLevel('magic') * 2; }
+function getMpMax()    { return skillLevel('magic') + getCharLevel() + 3; } // magic_lv + char_lv + 3
 function getHpMax()    { return skillLevel('combat') + getCharLevel(); } // +1 per combat lv, +1 per char lv
 function getCarryMax() { return 1000 + skillLevel('trading') * 50; }
 
@@ -3140,8 +3140,8 @@ let _lastHpRegen = Date.now();
 function tick() {
   const now = Date.now();
 
-  // MP regen: 1 MP per 20s
-  if (now - _lastMpRegen >= 20000) {
+  // MP regen: 1 MP per 300s (5 min), regardless of combat
+  if (now - _lastMpRegen >= 300000) {
     const mpMax = getMpMax();
     if (state.mp.current < mpMax) {
       state.mp.current = Math.min(mpMax, state.mp.current + 1);
