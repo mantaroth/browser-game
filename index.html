@@ -449,9 +449,9 @@ const RESOURCES = {
 //  STONEHAVEN DYNAMIC COMBAT MOBS
 // ============================================================
 const STONEHAVEN_MOBS = [
-  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, weight:50, drops:['Rat Tail','Raw Meat','Animal Skin'] },
-  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, weight:30, drops:['Raw Meat','Animal Skin'] },
-  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, weight:20, drops:['Raw Meat','Animal Skin'] },
+  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, weight:50, drops:[{name:'Rat Tail',chance:0.75},{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, weight:30, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, weight:20, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
 ];
 
 function rollMob() {
@@ -3255,8 +3255,8 @@ function tick() {
         state.charXp += mob.charXp;
         const dropMsgs = [];
         if (mob.drops) {
-          for (const item of mob.drops) {
-            if (canCarry(item)) { addItem(item); dropMsgs.push(item); }
+          for (const drop of mob.drops) {
+            if (Math.random() < drop.chance && canCarry(drop.name)) { addItem(drop.name); dropMsgs.push(drop.name); }
           }
         }
         const dropStr = dropMsgs.length ? ` → ${dropMsgs.join(', ')}` : '';
