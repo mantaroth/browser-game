@@ -455,9 +455,9 @@ const RESOURCES = {
 //  STONEHAVEN DYNAMIC COMBAT MOBS
 // ============================================================
 const STONEHAVEN_MOBS = [
-  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, attack:3, defense:1, weight:50, drops:[{name:'Rat Tail',chance:0.75},{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
-  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, attack:5, defense:2, weight:30, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
-  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, attack:8, defense:3, weight:20, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5,  attack:2, defense:2, speed:20, agility:7,  weight:50, drops:[{name:'Rat Tail',chance:0.75},{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7,  attack:1, defense:2, speed:15, agility:5,  weight:30, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9,  attack:4, defense:3, speed:13, agility:10, weight:20, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
 ];
 
 function rollMob() {
@@ -3285,12 +3285,14 @@ function tick() {
       } else if (state.action.type === 'dynamicCombat') {
         const { mob } = state.action;
         // --- mob deals damage to player ---
-        const agility  = getAgility();
-        const dodgeChance = Math.min(50, agility); // 1 agility = 1% dodge, cap 50%
-        const dodged = Math.random() * 100 < dodgeChance;
+        // hit chance: mob agility vs player agility (mob agility 5-10 vs player starting ~1)
+        const playerAgility = getAgility();
+        const mobAgility    = mob.agility || 5;
+        const hitChance     = mobAgility / (mobAgility + playerAgility) * 100; // e.g. 7/(7+1)*100 = 87.5%
+        const hit = Math.random() * 100 < hitChance;
         let dmgTaken = 0;
-        if (!dodged) {
-          const variance = Math.floor(Math.random() * 3); // 0-2 extra damage
+        if (hit) {
+          const variance = Math.floor(Math.random() * 5); // 0-4 extra damage
           dmgTaken = Math.max(1, mob.attack - getDefense() + variance);
           state.hp.current = Math.max(0, state.hp.current - dmgTaken);
           updateHpMpUI();
@@ -3316,7 +3318,7 @@ function tick() {
             }
           }
           const dropStr = dropMsgs.length ? ` → ${dropMsgs.join(', ')}` : '';
-          const dmgStr  = dodged ? ' (dodged!)' : ` (-${dmgTaken} HP)`;
+          const dmgStr  = !hit ? ' (dodged!)' : ` (-${dmgTaken} HP)`;
           addLog(`You defeat the ${mob.name}!${dmgStr} (+${mob.xp} Combat xp, +${mob.charXp} Char xp)${dropStr}`, 'success');
           updateCombatStatsUI();
           saveGame();
