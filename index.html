@@ -10,7 +10,7 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 
 #header { background:#16213e; border-bottom:2px solid #4a3728; padding:8px 16px; display:flex; align-items:center; gap:16px; }
 #header h1 { color:#c8a96e; font-size:20px; letter-spacing:2px; }
-#layout { display:grid; grid-template-columns:220px 1fr 220px; gap:8px; padding:8px; max-width:1100px; margin:0 auto; }
+#layout { display:grid; grid-template-columns:190px 1fr 210px; gap:8px; padding:8px; max-width:1200px; margin:0 auto; }
 
 .panel { background:#16213e; border:1px solid #4a3728; border-radius:4px; padding:10px; margin-bottom:8px; }
 .panel h3 { color:#c8a96e; border-bottom:1px solid #4a3728; padding-bottom:4px; margin-bottom:8px; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
@@ -48,23 +48,16 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 .xp-bar  { width:100%; height:7px; background:#0a0a1a; border:1px solid #333; border-radius:2px; overflow:hidden; margin-top:4px; }
 .xp-fill { height:100%; background:linear-gradient(90deg,#1e3a8a,#60a5fa); transition:width 0.3s ease; }
 
-/* HP / MP bars */
-.hp-bar  { width:100%; height:8px; background:#0a0a1a; border:1px solid #333; border-radius:2px; overflow:hidden; margin-top:2px; }
-.hp-fill { height:100%; background:linear-gradient(90deg,#4a1a1a,#c04040); transition:width 0.3s ease; }
-.mp-bar  { width:100%; height:8px; background:#0a0a1a; border:1px solid #333; border-radius:2px; overflow:hidden; margin-top:2px; }
-.mp-fill { height:100%; background:linear-gradient(90deg,#1a1a6a,#8060d0); transition:width 0.3s ease; }
-.regen-label { display:flex; justify-content:space-between; font-size:10px; color:#a89070; margin-top:5px; margin-bottom:2px; }
-
 /* Stats */
 .stat-row   { display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid #1e1e30; font-size:12px; }
 .stat-label { color:#a89070; }
 .stat-value { color:#e0d8c8; }
 
 /* Skills grid */
-.skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:3px; }
-.skill-cell  { background:#0a0a1a; border:1px solid #2a2a3e; border-radius:2px; padding:4px 5px; cursor:pointer; font-size:10px; display:flex; justify-content:space-between; align-items:center; transition:all 0.1s; }
-.skill-cell:hover      { border-color:#c8a96e; }
-.skill-cell.sel-skill  { border-color:#74c69d; background:#1a3a2a; }
+.skills-grid { display:grid; grid-template-columns:1fr; gap:2px; }
+.skill-cell  { background:transparent; border:none; border-bottom:1px solid #1a1a2e; padding:3px 2px; cursor:pointer; font-size:11px; display:flex; justify-content:space-between; align-items:center; transition:all 0.1s; }
+.skill-cell:hover      { color:#c8a96e; }
+.skill-cell.sel-skill  { color:#74c69d; }
 #skill-detail { margin-top:6px; padding:6px; background:#0a0a1a; border:1px solid #2a2a3e; border-radius:2px; font-size:11px; }
 #skill-detail .sd-name { color:#c8a96e; margin-bottom:3px; }
 #skill-detail .sd-xp   { color:#a89070; font-size:10px; }
@@ -111,6 +104,64 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 .login-submit { width:100%; padding:10px; background:#4a3728; border:1px solid #c8a96e; color:#c8a96e; font-family:'Courier New',monospace; font-size:13px; cursor:pointer; border-radius:3px; letter-spacing:1px; transition:all 0.15s; margin-top:4px; }
 .login-submit:hover { background:#6a5040; }
 #login-error { color:#e07070; font-size:11px; margin-top:10px; min-height:16px; }
+
+/* Top section: mini-map + chat */
+#top-section { display:flex; gap:0; border-bottom:2px solid #4a3728; }
+#mini-map-box { width:300px; min-width:300px; background:#16213e; padding:8px; border-right:1px solid #4a3728; }
+#mini-map-box h3 { color:#c8a96e; font-size:10px; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid #4a3728; padding-bottom:3px; margin-bottom:6px; }
+#fantasy-map { display:block; width:100%; border-radius:3px; border:1px solid #8b6914; cursor:default; }
+.fmap-town {
+  cursor:pointer;
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:transform 0.15s ease;
+}
+.fmap-town:hover { transform:scale(3); }
+.fmap-town:hover .fmap-ring { opacity:0.5; }
+.fmap-town-far {
+  cursor:default;
+  opacity:0.75;
+  transform-box:fill-box;
+  transform-origin:center;
+  transition:transform 0.15s ease, opacity 0.15s ease;
+}
+.fmap-town-far:hover { transform:scale(3); opacity:1; }
+
+/* Chat */
+#chat-panel { flex:1; background:#16213e; padding:6px 12px; display:none; }
+.chat-tabs { display:flex; gap:4px; margin-bottom:5px; }
+.chat-tab { padding:3px 12px; background:#0a0a1a; border:1px solid #2a2a3e; color:#a89070; font-family:'Courier New',monospace; font-size:11px; cursor:pointer; border-radius:3px 3px 0 0; transition:all 0.1s; }
+.chat-tab:hover { color:#c8a96e; border-color:#4a3728; }
+.chat-tab.active { background:#16213e; border-color:#c8a96e; color:#c8a96e; border-bottom-color:#16213e; }
+#chat-messages { height:110px; overflow-y:auto; background:#0a0a1a; border:1px solid #2a2a3e; padding:6px; font-size:11px; line-height:1.6; margin-bottom:5px; }
+.chat-line         { color:#a89070; }
+.chat-line .chat-who { color:#c8a96e; font-weight:bold; }
+.chat-line.system  { color:#555; font-style:italic; }
+.chat-line.own .chat-who { color:#74c69d; }
+#chat-input-row { display:flex; gap:6px; }
+#chat-input { flex:1; padding:5px 8px; background:#0a0a1a; border:1px solid #4a3728; color:#e0d8c8; font-family:'Courier New',monospace; font-size:12px; border-radius:3px; outline:none; }
+#chat-input:focus { border-color:#c8a96e; }
+#chat-send { padding:5px 14px; background:#0f3460; border:1px solid #4a3728; color:#e0d8c8; font-family:'Courier New',monospace; font-size:12px; cursor:pointer; border-radius:3px; transition:all 0.15s; }
+#chat-send:hover { background:#1a4a80; border-color:#c8a96e; }
+
+/* Carry weight bar */
+.carry-bar  { width:100%; height:6px; background:#0a0a1a; border:1px solid #3a2a1a; border-radius:2px; overflow:hidden; margin:2px 0 5px; }
+.carry-fill { height:100%; background:linear-gradient(90deg,#6a4a20,#c8a050); transition:width 0.3s ease; }
+.carry-fill.overweight { background:linear-gradient(90deg,#8a2020,#e05050); }
+
+/* HP / MP bars */
+.hp-bar  { width:100%; height:6px; background:#0a0a1a; border:1px solid #5a1a1a; border-radius:2px; overflow:hidden; margin:2px 0 5px; }
+.hp-fill { height:100%; background:linear-gradient(90deg,#8a2020,#e05050); transition:width 0.3s ease; }
+.mp-bar  { width:100%; height:6px; background:#0a0a1a; border:1px solid #1a1a5a; border-radius:2px; overflow:hidden; margin:2px 0 5px; }
+.mp-fill { height:100%; background:linear-gradient(90deg,#1a1a8a,#5060e0); transition:width 0.3s ease; }
+
+/* Big center timer */
+#big-timer-panel { text-align:center; padding:20px 10px; }
+#big-timer-label { color:#a89070; font-size:11px; text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+#big-timer-num { color:#c8a96e; font-size:76px; font-weight:bold; line-height:1; font-variant-numeric:tabular-nums; min-height:82px; }
+#big-timer-num.is-travel { color:#c8a96e; }
+#big-timer-bar { margin-top:10px; height:10px; display:none; }
+#big-timer-cancel { margin-top:10px; display:none; flex-direction:column; gap:4px; }
 
 /* Bot check */
 #botcheck-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; align-items:center; justify-content:center; }
@@ -168,25 +219,48 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
   </span>
 </div>
 
+<!-- Top section: mini-map + chat -->
+<div id="top-section">
+  <div id="mini-map-box">
+    <h3>World Map</h3>
+    <svg id="fantasy-map" viewBox="0 0 520 430"></svg>
+  </div>
+  <div id="chat-panel">
+    <div class="chat-tabs">
+      <button class="chat-tab active" id="tab-world"  onclick="switchChannel('world')">World</button>
+      <button class="chat-tab"        id="tab-trade"  onclick="switchChannel('trade')">Trade</button>
+      <button class="chat-tab"        id="tab-help"   onclick="switchChannel('help')">Help</button>
+      <button class="chat-tab"        id="tab-guild"  onclick="switchChannel('guild')">Guild</button>
+    </div>
+    <div id="chat-messages"></div>
+    <div id="chat-input-row">
+      <input id="chat-input" type="text" placeholder="Say something..." maxlength="200" autocomplete="off"/>
+      <button id="chat-send" onclick="chatSend()">Send</button>
+    </div>
+  </div>
+</div>
+
 <div id="layout">
-  <!-- LEFT -->
+  <!-- LEFT: character + skills + actions -->
   <div>
     <div class="panel">
       <h3>Character</h3>
+      <div class="stat-row"><span class="stat-label">Name</span><span class="stat-value" id="header-username-side">-</span></div>
       <div class="stat-row"><span class="stat-label">Location</span><span class="stat-value" id="stat-location">-</span></div>
       <div class="stat-row"><span class="stat-label">Status</span><span class="stat-value" id="stat-status">Idle</span></div>
-      <div class="stat-row"><span class="stat-label">Gold</span><span class="stat-value">&#x1F4B0; <span id="stat-gold">100</span></span></div>
-      <div class="stat-row"><span class="stat-label">Char Level</span><span class="stat-value" id="stat-charlevel">1</span></div>
-      <div class="regen-label"><span>&#10084; HP</span><span><span id="stat-hp">5</span> / <span id="stat-maxhp">5</span></span></div>
+      <div class="stat-row"><span class="stat-label">Gold</span><span class="stat-value">&#x1F4B0; <span id="stat-gold">0</span></span></div>
+      <div class="stat-row"><span class="stat-label">Carry</span><span class="stat-value"><span id="stat-carry">0</span> / <span id="stat-carry-max">1000</span> lbs</span></div>
+      <div class="carry-bar"><div class="carry-fill" id="carry-fill" style="width:0%"></div></div>
+      <div class="stat-row"><span class="stat-label">HP</span><span class="stat-value"><span id="stat-hp">100</span> / <span id="stat-hp-max">100</span></span></div>
       <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
-      <div class="regen-label"><span>&#10022; MP</span><span><span id="stat-mp">1</span> / <span id="stat-maxmp">5</span></span></div>
-      <div class="mp-bar"><div class="mp-fill" id="mp-fill" style="width:20%"></div></div>
+      <div class="stat-row"><span class="stat-label">MP</span><span class="stat-value"><span id="stat-mp">20</span> / <span id="stat-mp-max">20</span></span></div>
+      <div class="mp-bar"><div class="mp-fill" id="mp-fill" style="width:100%"></div></div>
     </div>
 
     <div class="panel">
       <h3>Skills <span style="color:#555;font-size:9px;font-weight:normal">(click for details)</span></h3>
       <div class="skills-grid" id="skills-grid"></div>
-      <div id="skill-detail">
+      <div id="skill-detail" style="margin-top:6px">
         <div class="sd-name" id="sd-name">-</div>
         <div class="sd-xp"  id="sd-xp">-</div>
         <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
@@ -194,32 +268,30 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
     </div>
 
     <div class="panel">
-      <h3>Equipment</h3>
-      <div class="stat-row"><span class="stat-label">Tool</span><span class="stat-value" id="equip-tool-name">None</span></div>
-      <div class="stat-row"><span class="stat-label">Accessory</span><span class="stat-value" id="equip-acc-name">None</span></div>
-      <div class="stat-row"><span class="stat-label">Chop time</span><span class="stat-value"><span id="equip-choptime">60</span>s</span></div>
-    </div>
-
-    <div class="panel">
-      <h3>Inventory</h3>
-      <div id="inventory"><div style="color:#555;font-size:11px;">Empty</div></div>
+      <h3>Actions</h3>
+      <div id="action-section"></div>
+      <div id="action-timer-div" style="display:none" class="timer-container">
+        <div class="timer-label"><span id="action-label">Working...</span><span id="action-time-label">0s</span></div>
+        <div class="timer-bar"><div class="timer-fill action" id="action-fill"></div></div>
+        <button class="cancel-btn" onclick="cancelAction()">Cancel Action</button>
+      </div>
     </div>
   </div>
 
-  <!-- CENTER -->
+  <!-- CENTER: location + big timer + log -->
   <div>
-    <div class="panel">
-      <h3>World Map</h3>
-      <div id="map-grid"></div>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#2d6a4f;border-color:#74c69d"></div> Here</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#1a3a2a;border-color:#4a8a6a"></div> Adjacent</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#0f3460;border-color:#4a3728"></div> Far</div>
-      </div>
-    </div>
     <div class="panel">
       <div id="location-name">-</div>
       <div id="location-desc">-</div>
+    </div>
+    <div class="panel" id="big-timer-panel">
+      <div id="big-timer-label">Idle</div>
+      <div id="big-timer-num">--</div>
+      <div class="timer-bar" id="big-timer-bar"><div class="timer-fill action" id="big-timer-fill"></div></div>
+      <div id="big-timer-cancel">
+        <button class="cancel-btn" id="big-cancel-action" onclick="cancelAction()">Cancel Action</button>
+        <button class="cancel-btn" id="big-cancel-travel" onclick="cancelTravel()">Cancel Travel</button>
+      </div>
     </div>
     <div class="panel">
       <h3>Activity Log</h3>
@@ -227,7 +299,7 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
     </div>
   </div>
 
-  <!-- RIGHT -->
+  <!-- RIGHT: travel + equipment + inventory -->
   <div>
     <div class="panel">
       <h3>Travel</h3>
@@ -239,13 +311,19 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
       </div>
     </div>
     <div class="panel">
-      <h3>Actions</h3>
-      <div id="action-section"></div>
-      <div id="action-timer-div" style="display:none" class="timer-container">
-        <div class="timer-label"><span id="action-label">Working...</span><span id="action-time-label">0s</span></div>
-        <div class="timer-bar"><div class="timer-fill action" id="action-fill"></div></div>
-        <button class="cancel-btn" onclick="cancelAction()">Cancel Action</button>
-      </div>
+      <h3>Equipment</h3>
+      <div class="stat-row"><span class="stat-label">Tool</span><span class="stat-value" id="equip-tool">None</span></div>
+      <div class="stat-row"><span class="stat-label">Rod</span><span class="stat-value" id="equip-rod">None</span></div>
+      <div class="stat-row"><span class="stat-label">Head</span><span class="stat-value" id="equip-head">None</span></div>
+      <div class="stat-row"><span class="stat-label">Neck</span><span class="stat-value" id="equip-neck">None</span></div>
+      <div class="stat-row"><span class="stat-label">Upper Body</span><span class="stat-value" id="equip-upper_body">None</span></div>
+      <div class="stat-row"><span class="stat-label">Gloves</span><span class="stat-value" id="equip-gloves">None</span></div>
+      <div class="stat-row"><span class="stat-label">Left Hand</span><span class="stat-value" id="equip-left_hand">None</span></div>
+      <div class="stat-row"><span class="stat-label">Chop time</span><span class="stat-value"><span id="equip-choptime">60</span>s</span></div>
+    </div>
+    <div class="panel">
+      <h3>Inventory</h3>
+      <div id="inventory"><div style="color:#555;font-size:11px;">Empty</div></div>
     </div>
   </div>
 </div>
@@ -289,20 +367,51 @@ const RESOURCES = {
   wc_birch:   {skill:'woodcutting',  name:'Birch Tree',     levelReq:10, xp:90,  product:'Birch Log'    },
   wc_yew:     {skill:'woodcutting',  name:'Yew Tree',       levelReq:20, xp:150, product:'Yew Log'      },
   // Mining
-  mn_copper:  {skill:'mining',       name:'Copper Rock',    levelReq:1,  xp:15,  product:'Copper Ore'   },
-  mn_iron:    {skill:'mining',       name:'Iron Rock',      levelReq:10, xp:35,  product:'Iron Ore'     },
-  mn_silver:  {skill:'mining',       name:'Silver Rock',    levelReq:20, xp:65,  product:'Silver Ore'   },
-  mn_gold:    {skill:'mining',       name:'Gold Rock',      levelReq:30, xp:110, product:'Gold Ore'     },
+  mn_copper:   {skill:'mining',      name:'Copper Rock',    levelReq:1,  xp:15,  product:'Copper Ore'   },
+  mn_iron:     {skill:'mining',      name:'Iron Rock',      levelReq:10, xp:35,  product:'Iron Ore'     },
+  mn_silver:   {skill:'mining',      name:'Silver Rock',    levelReq:20, xp:65,  product:'Silver Ore'   },
+  mn_gold:     {skill:'mining',      name:'Gold Rock',      levelReq:30, xp:110, product:'Gold Ore'     },
+  mn_asterite: {skill:'mining',      name:'Asterite Rock',  levelReq:40, xp:150, product:'Asterite Ore' },
+  mn_arcanium: {skill:'mining',      name:'Arcanium Rock',  levelReq:50, xp:200, product:'Arcanium Ore' },
   // Fishing
-  fi_shrimp:  {skill:'fishing',      name:'Shrimp Spot',    levelReq:1,  xp:10,  product:'Raw Shrimp'   },
-  fi_trout:   {skill:'fishing',      name:'Trout Spot',     levelReq:10, xp:40,  product:'Raw Trout'    },
-  fi_salmon:  {skill:'fishing',      name:'Salmon Spot',    levelReq:20, xp:75,  product:'Raw Salmon'   },
-  fi_lobster: {skill:'fishing',      name:'Lobster Pot',    levelReq:30, xp:125, product:'Raw Lobster'  },
-  // Harvesting
-  hv_wheat:   {skill:'harvesting',   name:'Wheat Field',    levelReq:1,  xp:8,   product:'Wheat'        },
-  hv_herbs:   {skill:'harvesting',   name:'Herb Patch',     levelReq:10, xp:30,  product:'Herbs'        },
-  hv_flax:    {skill:'harvesting',   name:'Flax Field',     levelReq:20, xp:55,  product:'Flax'         },
-  hv_magic:   {skill:'harvesting',   name:'Magic Plant',    levelReq:30, xp:95,  product:'Magic Herb'   },
+  fi_mackerel:  {skill:'fishing', name:'Mackerel',      levelReq:1,  xp:10, charXp:7,  guildXp:5,  product:'Mackerel',       needsRod:true },
+  fi_salmon:    {skill:'fishing', name:'Salmon',         levelReq:1,  xp:20, charXp:10, guildXp:8,  product:'Salmon'          },
+  fi_bass:      {skill:'fishing', name:'Bass',           levelReq:5,  xp:12, charXp:8,  guildXp:6,  product:'Bass',           needsRod:true },
+  fi_flounder:  {skill:'fishing', name:'Flounder',       levelReq:10, xp:15, charXp:10, guildXp:7,  product:'Flounder',       needsRod:true },
+  fi_haddock:   {skill:'fishing', name:'Haddock',        levelReq:15, xp:18, charXp:10, guildXp:9,  product:'Haddock',        needsRod:true },
+  fi_tuna:      {skill:'fishing', name:'Tuna',           levelReq:20, xp:28, charXp:15, guildXp:14, product:'Tuna',           needsRod:true, needsItem:'Tuna Lure' },
+  fi_shark:     {skill:'fishing', name:'Sandbar Shark',  levelReq:25, xp:30, charXp:16, guildXp:15, product:'Sandbar Shark',  needsRod:true, needsItem:'Shark Lure' },
+  fi_oyster:    {skill:'fishing', name:'Oyster',         levelReq:30, xp:45, charXp:20, guildXp:22, product:'Oyster'          },
+  fi_pike:      {skill:'fishing', name:'Pike',           levelReq:33, xp:50, charXp:20, guildXp:25, product:'Pike',           needsRod:true, consumesItem:'Bait' },
+  fi_lobster:   {skill:'fishing', name:'Lobster',        levelReq:35, xp:61, charXp:23, guildXp:22, product:'Lobster',        needsRod:true, needsItem:'Lobster Trap', consumesItem:'Bait' },
+  fi_marlin:    {skill:'fishing', name:'Striped Marlin', levelReq:40, xp:66, charXp:45, guildXp:0,  product:'Striped Marlin'  },
+  fi_swordfish: {skill:'fishing', name:'Swordfish',      levelReq:45, xp:70, charXp:32, guildXp:33, product:'Swordfish',      needsRod:true, consumesItem:'Bait' },
+  fi_amberjack: {skill:'fishing', name:'Amberjack',      levelReq:48, xp:74, charXp:33, guildXp:37, product:'Amberjack',      needsRod:true, consumesItem:'Bait' },
+  fi_barracuda: {skill:'fishing', name:'Barracuda',      levelReq:50, xp:75, charXp:33, guildXp:33, product:'Barracuda',      needsRod:true, consumesItem:'Bait' },
+  // Harvesting (greenhouse only — weighted rotating crop)
+  hv_wheat:        { skill:'harvesting', name:'Wheat',              levelReq:0,  xp:5,   product:'Bundle of Wheat'   },
+  hv_tomato:       { skill:'harvesting', name:'Tomato Plant',       levelReq:0,  xp:5,   product:'Tomato'            },
+  hv_apple:        { skill:'harvesting', name:'Apple Tree',         levelReq:0,  xp:5,   product:'Apple'             },
+  hv_peach:        { skill:'harvesting', name:'Peach Tree',         levelReq:0,  xp:5,   product:'Peach'             },
+  hv_pear:         { skill:'harvesting', name:'Pear Tree',          levelReq:0,  xp:5,   product:'Pear'              },
+  hv_plum:         { skill:'harvesting', name:'Plum Tree',          levelReq:0,  xp:5,   product:'Plum'              },
+  hv_parsnip:      { skill:'harvesting', name:'Parsnip',            levelReq:0,  xp:5,   product:'Parsnip'           },
+  hv_turnip:       { skill:'harvesting', name:'Turnip',             levelReq:0,  xp:5,   product:'Turnip'            },
+  hv_jalapeno:     { skill:'harvesting', name:'Jalapeno Pepper',    levelReq:2,  xp:8,   product:'Jalapeno Pepper'   },
+  hv_mushroom:     { skill:'harvesting', name:'Mushroom',           levelReq:3,  xp:10,  product:'Mushroom'          },
+  hv_green_pepper: { skill:'harvesting', name:'Green Pepper',       levelReq:5,  xp:14,  product:'Green Pepper'      },
+  hv_parsley:      { skill:'harvesting', name:'Bunch of Parsley',   levelReq:8,  xp:20,  product:'Bunch of Parsley'  },
+  hv_cilantro:     { skill:'harvesting', name:'Bunch of Cilantro',  levelReq:10, xp:25,  product:'Bunch of Cilantro' },
+  hv_blueberry:    { skill:'harvesting', name:'Blue Berry Bush',    levelReq:15, xp:35,  product:'Blue Berry'        },
+  hv_redberry:     { skill:'harvesting', name:'Red Berry Bush',     levelReq:15, xp:35,  product:'Red Berry'         },
+  hv_grapes:       { skill:'harvesting', name:'Bunch of Grapes',    levelReq:20, xp:50,  product:'Bunch of Grapes'   },
+  hv_bamboo:       { skill:'harvesting', name:'Bamboo',             levelReq:25, xp:60,  product:'Bamboo'            },
+  hv_potato:       { skill:'harvesting', name:'Potato',             levelReq:25, xp:60,  product:'Potato'            },
+  hv_sugarcane:    { skill:'harvesting', name:'Sugarcane',          levelReq:27, xp:65,  product:'Sugarcane'         },
+  hv_spinach:      { skill:'harvesting', name:'Bunch of Spinach',   levelReq:30, xp:75,  product:'Bunch of Spinach'  },
+  hv_garlic:       { skill:'harvesting', name:'Garlic',             levelReq:35, xp:85,  product:'Garlic'            },
+  hv_blackpepper:  { skill:'harvesting', name:'Black Pepper',       levelReq:40, xp:95,  product:'Black Pepper'      },
+  hv_sage:         { skill:'harvesting', name:'Sage',               levelReq:45, xp:110, product:'Sage'              },
   // Cooking
   co_bread:   {skill:'cooking',      name:'Bake Bread',     levelReq:1,  xp:15,  product:'Bread'        },
   co_fish:    {skill:'cooking',      name:'Cook Fish',      levelReq:10, xp:45,  product:'Cooked Fish'  },
@@ -328,21 +437,12 @@ const RESOURCES = {
   cb_wolf:    {skill:'combat',       name:'Fight Wolf',     levelReq:10, xp:45,  product:'Wolf Pelt'    },
   cb_troll:   {skill:'combat',       name:'Fight Troll',    levelReq:20, xp:85,  product:'Troll Hide'   },
   cb_dragon:  {skill:'combat',       name:'Fight Dragon',   levelReq:30, xp:150, product:'Dragon Scale' },
-  // Magic
-  mg_study:   {skill:'magic',        name:'Study Runes',    levelReq:1,  xp:12,  product:'Rune Shard'   },
-  mg_flame:   {skill:'magic',        name:'Cast Flame',     levelReq:10, xp:40,  product:'Ember Stone'  },
-  mg_ice:     {skill:'magic',        name:'Cast Ice',       levelReq:20, xp:72,  product:'Frost Crystal'},
-  mg_arcane:  {skill:'magic',        name:'Cast Arcane',    levelReq:30, xp:125, product:'Arcane Dust'  },
   // Trading
-  tr_barter:  {skill:'trading',      name:'Barter Goods',   levelReq:1,  xp:10,  product:'Trade Token'  },
+  tr_barter:  {skill:'trading',      name:'Barter Goods',   levelReq:1,  xp:10,  product:null           },
   tr_contract:{skill:'trading',      name:'Trade Contract', levelReq:10, xp:35,  product:'Contract'     },
   tr_merchant:{skill:'trading',      name:'Merchant Deal',  levelReq:20, xp:65,  product:'Deed'         },
   tr_grand:   {skill:'trading',      name:'Grand Exchange', levelReq:30, xp:100, product:'Guild Seal'   },
   // Speed (also gained passively from travel)
-  sp_sprint:  {skill:'speed',        name:'Sprint Drills',  levelReq:1,  xp:8,   product:null           },
-  sp_dash:    {skill:'speed',        name:'Dash Training',  levelReq:10, xp:28,  product:null           },
-  sp_surge:   {skill:'speed',        name:'Speed Surge',    levelReq:20, xp:52,  product:null           },
-  sp_swift:   {skill:'speed',        name:'Swift Feet',     levelReq:30, xp:85,  product:null           },
 };
 
 // ============================================================
@@ -362,42 +462,950 @@ function rollMob() {
 }
 
 // ============================================================
-//  ITEM PRICES  (base sell value in gold)
+//  GEAR  (slot: tool | neck | gloves | upper_body | left_hand | head)
+//        reduceTime = seconds off woodcutting timer
+//        attack/defense = stat modifiers (display only for now)
 // ============================================================
-const ITEM_PRICES = {
-  // Woodcutting
-  'Pine Log':2,      'Oak Log':4,       'Birch Log':7,     'Yew Log':12,
-  // Mining
-  'Copper Ore':3,    'Iron Ore':6,      'Silver Ore':10,   'Gold Ore':18,
-  // Fishing
-  'Raw Shrimp':2,    'Raw Trout':5,     'Raw Salmon':9,    'Raw Lobster':15,
-  // Harvesting
-  'Wheat':2,         'Herbs':5,         'Flax':8,          'Magic Herb':14,
-  // Cooking
-  'Bread':6,         'Cooked Fish':12,  'Stew':20,         'Feast Platter':35,
-  // Crafting
-  'Rope':5,          'Leather':12,      'Fine Cloth':22,   'Silk':38,
-  // Smithing
-  'Copper Bar':8,    'Iron Bar':15,     'Silver Bar':25,   'Gold Bar':40,
-  // Construction
-  'Fence Post':4,    'Stone Block':8,   'Tower Stone':15,  'Gate Stone':25,
-  // Combat drops
-  'Rat Tail':3,      'Wolf Pelt':10,    'Troll Hide':20,   'Dragon Scale':50,
-  // Magic
-  'Rune Shard':6,    'Ember Stone':14,  'Frost Crystal':25,'Arcane Dust':45,
-  // Trading products
-  'Trade Token':5,   'Contract':12,     'Deed':22,         'Guild Seal':40,
+const GEAR = {
+  // ── Fishing Rod ────────────────────────────────────────────
+  fishing_rod:         {id:'fishing_rod',         name:'Fishing Rod',           slot:'rod',        skill:'fishing',     levelReq:1,  reduceTime:0, attack:0,  defense:0,  cost:25,   weight:2  },
+  // ── Tools (hatchets) ───────────────────────────────────────
+  bronze_hatchet:      {id:'bronze_hatchet',      name:'Bronze Hatchet',        slot:'tool',       skill:'woodcutting', levelReq:0,  reduceTime:0, attack:1,  defense:0,  cost:10,   weight:2  },
+  nagaromi_hatchet:    {id:'nagaromi_hatchet',     name:'Nagaromi Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:5,  reduceTime:0, attack:2,  defense:0,  cost:50,   weight:3  },
+  iron_hatchet:        {id:'iron_hatchet',         name:'Iron Hatchet',          slot:'tool',       skill:'woodcutting', levelReq:10, reduceTime:1, attack:1,  defense:0,  cost:100,  weight:4  },
+  steel_hatchet:       {id:'steel_hatchet',        name:'Steel Hatchet',         slot:'tool',       skill:'woodcutting', levelReq:20, reduceTime:2, attack:1,  defense:0,  cost:300,  weight:5  },
+  titanium_hatchet:    {id:'titanium_hatchet',     name:'Titanium Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:30, reduceTime:3, attack:1,  defense:0,  cost:600,  weight:6  },
+  dwarven_hatchet:     {id:'dwarven_hatchet',      name:'Dwarven Hatchet',       slot:'tool',       skill:'woodcutting', levelReq:30, reduceTime:3, attack:1,  defense:0,  cost:650,  weight:7  },
+  elven_hatchet:       {id:'elven_hatchet',        name:'Elven Hatchet',         slot:'tool',       skill:'woodcutting', levelReq:35, reduceTime:4, attack:1,  defense:0,  cost:800,  weight:4  },
+  diamond_hatchet:     {id:'diamond_hatchet',      name:'Diamond-Tipped Hatchet',slot:'tool',       skill:'woodcutting', levelReq:35, reduceTime:4, attack:2,  defense:0,  cost:900,  weight:5  },
+  asterite_hatchet:    {id:'asterite_hatchet',     name:'Asterite Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:45, reduceTime:5, attack:2,  defense:0,  cost:0,    weight:6  },
+  polathurn_hatchet:   {id:'polathurn_hatchet',    name:'Polathurn Hatchet',     slot:'tool',       skill:'woodcutting', levelReq:55, reduceTime:6, attack:0,  defense:3,  cost:0,    weight:8  },
+  arcanium_hatchet:    {id:'arcanium_hatchet',     name:'Arcanium Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:55, reduceTime:6, attack:3,  defense:0,  cost:0,    weight:7  },
+  // ── Neck ───────────────────────────────────────────────────
+  wc_talisman:         {id:'wc_talisman',          name:'Woodcutting Talisman',  slot:'neck',       skill:'woodcutting', levelReq:0,  reduceTime:2, attack:0,  defense:0,  cost:15,   weight:1  },
+  wc_necklace:         {id:'wc_necklace',          name:'Woodcutting Necklace',  slot:'neck',       skill:'woodcutting', levelReq:15, reduceTime:3, attack:0,  defense:0,  cost:200,  weight:1  },
+  necklace_of_woods:   {id:'necklace_of_woods',    name:'Necklace of the Woods', slot:'neck',       skill:'woodcutting', levelReq:60, reduceTime:4, attack:0,  defense:0,  cost:2000, weight:1  },
+  // ── Gloves ─────────────────────────────────────────────────
+  woodcutters_gloves:  {id:'woodcutters_gloves',   name:'Woodcutters Gloves',    slot:'gloves',     skill:'woodcutting', levelReq:5,  reduceTime:1, attack:0,  defense:1,  cost:40,   weight:1  },
+  heavy_gloves:        {id:'heavy_gloves',         name:'Heavy Gloves',          slot:'gloves',     skill:'woodcutting', levelReq:5,  reduceTime:1, attack:-5, defense:-5, cost:25,   weight:2  },
+  knuckle_guards:      {id:'knuckle_guards',       name:'Knuckle Guards',        slot:'gloves',     skill:'woodcutting', levelReq:30, reduceTime:2, attack:0,  defense:0,  cost:400,  weight:2  },
+  // ── Upper Body ─────────────────────────────────────────────
+  chipwood_jerkin:     {id:'chipwood_jerkin',      name:'Chipwood Jerkin',       slot:'upper_body', skill:'woodcutting', levelReq:25, reduceTime:3, attack:0,  defense:0,  cost:350,  weight:3  },
+  heavy_cloak:         {id:'heavy_cloak',          name:'Heavy Cloak',           slot:'upper_body', skill:'woodcutting', levelReq:65, reduceTime:4, attack:0,  defense:1,  cost:2500, weight:5  },
+  // ── Left Hand ──────────────────────────────────────────────
+  vine_bracelet:       {id:'vine_bracelet',        name:'Vine Bracelet',         slot:'left_hand',  skill:'woodcutting', levelReq:40, reduceTime:1, attack:0,  defense:2,  cost:700,  weight:1  },
+  fancy_bark_bracelet: {id:'fancy_bark_bracelet',  name:'Fancy Bark Bracelet',   slot:'left_hand',  skill:'woodcutting', levelReq:70, reduceTime:2, attack:0,  defense:0,  cost:3000, weight:1  },
+  // ── Cooking Fuel ────────────────────────────────────────────
+  lighter:             {id:'lighter',              name:'Lighter',               slot:'left_hand',  skill:'cooking',     levelReq:0,  reduceTime:0, attack:0,  defense:0,  cost:5,    weight:0  },
+  tinderbox:           {id:'tinderbox',            name:'Tinderbox',             slot:'left_hand',  skill:'cooking',     levelReq:0,  reduceTime:0, attack:0,  defense:0,  cost:8,    weight:1  },
+  // ── Head ───────────────────────────────────────────────────
+  wooden_crown:        {id:'wooden_crown',         name:'Wooden Crown',          slot:'head',       skill:'woodcutting', levelReq:45, reduceTime:1, attack:0,  defense:2,  cost:900,  weight:2  },
 };
 
 // ============================================================
-//  GEAR
+//  ITEM WEIGHTS  (lbs per unit in inventory)
 // ============================================================
-const GEAR = {
-  basic_hatchet:   {id:'basic_hatchet',   name:'Basic Hatchet',    slot:'tool',      reduce:3,  cost:15 },
-  iron_hatchet:    {id:'iron_hatchet',    name:'Iron Hatchet',     slot:'tool',      reduce:7,  cost:60 },
-  steel_hatchet:   {id:'steel_hatchet',   name:'Steel Hatchet',    slot:'tool',      reduce:12, cost:200},
-  forester_gloves: {id:'forester_gloves', name:"Forester's Gloves",slot:'accessory', reduce:3,  cost:30 },
-  lucky_charm:     {id:'lucky_charm',     name:'Lucky Charm',      slot:'accessory', reduce:5,  cost:120},
+const ITEM_WEIGHTS = {
+  // Logs (3, 5, 7, 9)
+  'Pine Log':3, 'Oak Log':5, 'Birch Log':7, 'Yew Log':9,
+  // Lumber — slightly lighter than raw logs (2, 4, 6, 8)
+  'Pine Lumber':2, 'Oak Lumber':4, 'Birch Lumber':6, 'Yew Lumber':8,
+  // Ores (3, 5, 7, 9, 11, 13)
+  'Copper Ore':3, 'Iron Ore':5, 'Silver Ore':7, 'Gold Ore':9, 'Asterite Ore':11, 'Arcanium Ore':13,
+  // Bars — denser than ore (5, 7, 9, 11)
+  'Copper Bar':5, 'Iron Bar':7, 'Silver Bar':9, 'Gold Bar':11,
+  // Fish (1, 3, 5, 7)
+  'Raw Shrimp':1, 'Raw Trout':3, 'Raw Salmon':5, 'Raw Lobster':7,
+  // Harvested — lightweight
+  'Apple':1, 'Bundle of Wheat':1, 'Parsnip':1, 'Peach':1, 'Pear':1, 'Plum':1,
+  'Tomato':1, 'Turnip':1, 'Jalapeno Pepper':1, 'Mushroom':1, 'Green Pepper':1,
+  'Bunch of Parsley':1, 'Bunch of Cilantro':1, 'Blue Berry':1, 'Red Berry':1,
+  'Bunch of Grapes':1, 'Bamboo':2, 'Potato':1, 'Sugarcane':2,
+  'Bunch of Spinach':1, 'Garlic':1, 'Black Pepper':1, 'Sage':1,
+  // Cooked (old placeholders)
+  'Bread':1, 'Cooked Fish':2, 'Feast Platter':5,
+  // Cooked fish
+  'Cooked Mackerel':1, 'Cooked Meat':1, 'Cooked Bass':1, 'Cooked Flounder':1,
+  'Cooked Haddock':1, 'Cooked Salmon':1, 'Cooked Swordfish':1, 'Cooked Barracuda':1, 'Cooked Pike':1,
+  // Cooking intermediates
+  'Dough':1, 'Ground Meat':1, 'Tomato Sauce':1, 'Bunch of Raisins':1,
+  'Green Sauce':1, 'Spice Mix':0, 'Oyster Meat':1, 'Plum Preserves':1,
+  // Cooked meals
+  'Meatloaf':2, 'Tuna Steak':1, 'Magic Fishstick':1, 'Shark Steak':2,
+  'Stew':1, 'Pizza':2, 'Spaghetti Platter':2, 'Seafood Platter':2,
+  'Bottle of Juice':1, 'Bottle of Soup':1, 'Bottle of Poison':1,
+  'Herbal Tea':1, 'Mint Tea':1, 'Bottle of Beer':1, 'Bottle of Wine':1,
+  'Peach Brandy':1, 'Berry Cordial':1, 'Fine Whiskey':1,
+  'Flatbread':1, 'Muffin':1, 'Beetle Goulash':1, 'Tuna Casserole':1,
+  'Meat Pie':1, 'Shark Squibs':1, 'Fish Kabob':1, 'Seafood Stir Fry':1,
+  'Quiche':1, 'Riewe Schales':1, 'Glazed Swordfish':1, 'Spinach Salad':1, 'Peach Cobbler':1,
+  'Apple Pie':1, 'Fruit Salad':1, 'Stuffed Pepper':1, 'Scalloped Oysters':1,
+  'Fruitcake':2, 'Oyster Casserole':1, 'Raisin Bread':1,
+  'Molasses Cookie':1, 'Parsnip Mashed Potatoes':1, 'Barracuda Stew':1,
+  'Pepper Steak':1, 'Roasted Vegetables':1,
+  // Cooking fuel (in inventory)
+  'Lighter':0, 'Tinderbox':1,
+  // Crafting (1, 2, 2, 1)
+  'Rope':1, 'Leather':2, 'Fine Cloth':2, 'Silk':1,
+  // Construction (3, 5, 7, 9)
+  'Fence Post':3, 'Stone Block':5, 'Tower Stone':7, 'Gate Stone':9,
+  // Fish
+  'Mackerel':1, 'Salmon':2, 'Bass':2, 'Flounder':2, 'Haddock':3,
+  'Tuna':5, 'Sandbar Shark':7, 'Oyster':1, 'Pike':4,
+  'Lobster':5, 'Striped Marlin':9, 'Swordfish':7, 'Amberjack':6, 'Barracuda':6,
+  // Fishing tackle (in inventory)
+  'Fishing Rod':2, 'Tuna Lure':1, 'Shark Lure':1, 'Lobster Trap':3, 'Bait':1,
+  // Trade
+  'Contract':1, 'Deed':1, 'Guild Seal':1,
+  // Gear in inventory (matches GEAR weight below)
+  'Bronze Hatchet':2, 'Nagaromi Hatchet':3, 'Iron Hatchet':4, 'Steel Hatchet':5,
+  'Titanium Hatchet':6, 'Dwarven Hatchet':7, 'Elven Hatchet':4, 'Diamond-Tipped Hatchet':5,
+  'Asterite Hatchet':6, 'Polathurn Hatchet':8, 'Arcanium Hatchet':7,
+  'Woodcutting Talisman':1, 'Woodcutting Necklace':1, 'Necklace of the Woods':1,
+  'Woodcutters Gloves':1, 'Heavy Gloves':2, 'Knuckle Guards':2,
+  'Chipwood Jerkin':3, 'Heavy Cloak':5,
+  'Vine Bracelet':1, 'Fancy Bark Bracelet':1, 'Wooden Crown':2,
+};
+
+// ============================================================
+//  FORGE RECIPES  (smithing-crafted hatchets)
+// ============================================================
+const RECIPES = {
+  iron_hatchet:     { id:'iron_hatchet',     name:'Iron Hatchet',     produces:'iron_hatchet',     skill:'smithing', levelReq:10, time:30, xp:75,  materials:{'Iron Bar':3} },
+  steel_hatchet:    { id:'steel_hatchet',    name:'Steel Hatchet',    produces:'steel_hatchet',    skill:'smithing', levelReq:20, time:45, xp:150, materials:{'Iron Bar':5, 'Silver Bar':1} },
+  asterite_hatchet: { id:'asterite_hatchet', name:'Asterite Hatchet', produces:'asterite_hatchet', skill:'smithing', levelReq:45, time:60, xp:300, materials:{'Asterite Ore':5} },
+  arcanium_hatchet: { id:'arcanium_hatchet', name:'Arcanium Hatchet', produces:'arcanium_hatchet', skill:'smithing', levelReq:55, time:75, xp:400, materials:{'Arcanium Ore':5} },
+};
+
+// ============================================================
+//  SPELLS
+// ============================================================
+const SPELLS = {
+  meditate: { id:'meditate', name:'Meditate', levelReq:1,  type:'non-combat', mpCost:5,  castTime:10, magicXp:15, charXp:10, guildXp:7,  effect:'heal_self',   power:(lv)=>4+lv,          desc:'Heals your HP (4 + Magic level).' },
+  shock:    { id:'shock',    name:'Shock',    levelReq:3,  type:'combat',     mpCost:8,  castTime:12, magicXp:24, charXp:16, guildXp:12, effect:'damage',      minDmg:(lv)=>5+lv, maxDmg:(lv)=>7+lv*2, desc:'Damages an enemy (5+lv to 7+lv×2).' },
+  restore:  { id:'restore',  name:'Restore',  levelReq:5,  type:'anytime',    mpCost:8,  castTime:5,  magicXp:24, charXp:16, guildXp:12, effect:'heal_self',   power:(lv)=>4+lv,          desc:'Heals HP (4 + Magic level).' },
+  heal:     { id:'heal',     name:'Heal',     levelReq:7,  type:'non-combat', mpCost:5,  castTime:5,  magicXp:15, charXp:10, guildXp:7,  effect:'heal_self',   power:(lv)=>3+lv,          desc:'Heals HP (3 + Magic level).' },
+  excite:   { id:'excite',   name:'Excite',   levelReq:9,  type:'non-combat', mpCost:10, castTime:8,  magicXp:30, charXp:20, guildXp:15, effect:'speed_boost', power:5, duration:60,      desc:'Grants +5 Speed for 60 seconds.' },
+};
+
+// ============================================================
+//  BAIT RECIPES  (make bait from fish)
+// ============================================================
+const BAIT_RECIPES = {
+  bait_mackerel: { id:'bait_mackerel', name:'Make Bait (Mackerel)', input:'Mackerel', output:'Bait', qty:3, skill:'fishing', levelReq:20, time:5, xp:15, charXp:7, guildXp:5 },
+  bait_bass:     { id:'bait_bass',     name:'Make Bait (Bass)',     input:'Bass',     output:'Bait', qty:3, skill:'fishing', levelReq:20, time:5, xp:15, charXp:7, guildXp:5 },
+};
+
+// ============================================================
+//  COOKING RECIPES
+//  ingredients: { itemName: qty, ... }
+//  successRate: 0-100 (roll must be < successRate)
+//  yieldMin/Max: random qty on success (0 = possible nothing)
+//  guildKitchenReq: 0 = public kitchen, >0 = guild outpost required
+// ============================================================
+const COOKING_RECIPES = {
+  // ── Universal ───────────────────────────────────────────────
+  cook_mackerel:         { id:'cook_mackerel',         name:'Cook Mackerel',          output:'Cooked Mackerel',          ingredients:{'Mackerel':1},                                        levelReq:1,  time:20, xp:20,  charXp:5,  guildXp:3,  successRate:90,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_meat:             { id:'cook_meat',             name:'Cook Meat',              output:'Cooked Meat',              ingredients:{'Raw Meat':1},                                        levelReq:1,  time:20, xp:20,  charXp:5,  guildXp:3,  successRate:90,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_bass:             { id:'cook_bass',             name:'Cook Bass',              output:'Cooked Bass',              ingredients:{'Bass':1},                                            levelReq:3,  time:22, xp:30,  charXp:7,  guildXp:4,  successRate:85,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_flounder:         { id:'cook_flounder',         name:'Cook Flounder',          output:'Cooked Flounder',          ingredients:{'Flounder':1},                                        levelReq:8,  time:25, xp:40,  charXp:8,  guildXp:5,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_dough:            { id:'cook_dough',            name:'Make Dough',             output:'Dough',                    ingredients:{'Bundle of Wheat':2},                                 levelReq:10, time:15, xp:30,  charXp:5,  guildXp:3,  successRate:100, alwaysSuccess:true,  yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_meatloaf:         { id:'cook_meatloaf',         name:'Cook Meatloaf',          output:'Meatloaf',                 ingredients:{'Ground Meat':2},                                     levelReq:12, time:30, xp:65,  charXp:12, guildXp:8,  successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_haddock:          { id:'cook_haddock',          name:'Cook Haddock',           output:'Cooked Haddock',           ingredients:{'Haddock':1},                                         levelReq:15, time:28, xp:55,  charXp:10, guildXp:6,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_ground_meat:      { id:'cook_ground_meat',      name:'Grind Meat',             output:'Ground Meat',              ingredients:{'Raw Meat':1},                                        levelReq:18, time:18, xp:40,  charXp:6,  guildXp:4,  successRate:100, alwaysSuccess:true,  yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_tomato_sauce:     { id:'cook_tomato_sauce',     name:'Make Tomato Sauce',      output:'Tomato Sauce',             ingredients:{'Tomato':2,'Garlic':1},                               levelReq:20, time:20, xp:55,  charXp:8,  guildXp:5,  successRate:100, alwaysSuccess:true,  yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_tuna_steak:       { id:'cook_tuna_steak',       name:'Cook Tuna Steak',        output:'Tuna Steak',               ingredients:{'Tuna':1},                                            levelReq:20, time:30, xp:80,  charXp:15, guildXp:10, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:2, guildKitchenReq:0 },
+  cook_salmon:           { id:'cook_salmon',           name:'Cook Salmon',            output:'Cooked Salmon',            ingredients:{'Salmon':1},                                          levelReq:22, time:30, xp:70,  charXp:12, guildXp:8,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_magic_fish:       { id:'cook_magic_fish',       name:'Cook Magic Fish',        output:'Magic Fishstick',          ingredients:{'Magic Fish':1},                                      levelReq:25, time:30, xp:250, charXp:30, guildXp:20, successRate:85,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_shark_steak:      { id:'cook_shark_steak',      name:'Cook Shark Steak',       output:'Shark Steak',              ingredients:{'Sandbar Shark':1},                                   levelReq:28, time:35, xp:90,  charXp:16, guildXp:10, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:2, guildKitchenReq:0 },
+  cook_juice:            { id:'cook_juice',            name:'Make Juice',             output:'Bottle of Juice',          ingredients:{'Bunch of Grapes':2},                                 levelReq:30, time:25, xp:80,  charXp:10, guildXp:7,  successRate:90,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_soup:             { id:'cook_soup',             name:'Make Soup',              output:'Bottle of Soup',           ingredients:{'Potato':2,'Garlic':1},                               levelReq:32, time:30, xp:90,  charXp:12, guildXp:8,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_seafood_platter:  { id:'cook_seafood_platter',  name:'Make Seafood Platter',   output:'Seafood Platter',          ingredients:{'Tuna':1,'Salmon':1,'Oyster Meat':1},                 levelReq:35, time:45, xp:120, charXp:20, guildXp:14, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_poison:           { id:'cook_poison',           name:'Brew Poison',            output:'Bottle of Poison',         ingredients:{'Mushroom':1,'Garlic':1},                             levelReq:38, time:35, xp:100, charXp:10, guildXp:7,  successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_stew:             { id:'cook_stew',             name:'Cook Stew',              output:'Stew',                     ingredients:{'Potato':2,'Raw Meat':1,'Turnip':1},                  levelReq:40, time:45, xp:130, charXp:18, guildXp:12, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_pizza:            { id:'cook_pizza',            name:'Bake Pizza',             output:'Pizza',                    ingredients:{'Dough':1,'Tomato Sauce':1,'Mushroom':1},             levelReq:42, time:45, xp:150, charXp:20, guildXp:14, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_spaghetti:        { id:'cook_spaghetti',        name:'Cook Spaghetti',         output:'Spaghetti Platter',        ingredients:{'Dough':1,'Tomato Sauce':1,'Ground Meat':1},          levelReq:45, time:50, xp:170, charXp:22, guildXp:16, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_raisins:          { id:'cook_raisins',          name:'Dry Raisins',            output:'Bunch of Raisins',         ingredients:{'Bunch of Grapes':2},                                 levelReq:48, time:20, xp:60,  charXp:6,  guildXp:4,  successRate:100, alwaysSuccess:true,  yieldMin:0, yieldMax:3, guildKitchenReq:0 },
+  cook_herbal_tea:       { id:'cook_herbal_tea',       name:'Brew Herbal Tea',        output:'Herbal Tea',               ingredients:{'Sage':1,'Bunch of Cilantro':1},                      levelReq:50, time:30, xp:150, charXp:18, guildXp:12, successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_mint_tea:         { id:'cook_mint_tea',         name:'Brew Mint Tea',          output:'Mint Tea',                 ingredients:{'Bunch of Parsley':1,'Bunch of Cilantro':1},          levelReq:52, time:30, xp:160, charXp:18, guildXp:12, successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_beer:             { id:'cook_beer',             name:'Brew Beer',              output:'Bottle of Beer',           ingredients:{'Bundle of Wheat':2,'Sugarcane':1},                   levelReq:54, time:40, xp:175, charXp:20, guildXp:14, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_green_sauce:      { id:'cook_green_sauce',      name:'Make Green Sauce',       output:'Green Sauce',              ingredients:{'Bunch of Parsley':1,'Garlic':1,'Jalapeno Pepper':1}, levelReq:57, time:30, xp:185, charXp:20, guildXp:14, successRate:100, alwaysSuccess:true,  yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_spice_mix:        { id:'cook_spice_mix',        name:'Mix Spices',             output:'Spice Mix',                ingredients:{'Black Pepper':1,'Sage':1,'Bunch of Cilantro':1},    levelReq:60, time:20, xp:80,  charXp:8,  guildXp:5,  successRate:100, alwaysSuccess:true,  yieldMin:0, yieldMax:3, guildKitchenReq:0 },
+  // ── Erfdarian ───────────────────────────────────────────────
+  cook_flatbread:        { id:'cook_flatbread',        name:'Bake Flatbread',         output:'Flatbread',                ingredients:{'Dough':1},                                           levelReq:19, time:20, xp:55,  charXp:9,  guildXp:6,  successRate:85,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_erfd_pike:        { id:'cook_erfd_pike',        name:'Cook Pike',              output:'Cooked Pike',              ingredients:{'Pike':1,'Garlic':1},                                 levelReq:22, time:28, xp:65,  charXp:11, guildXp:7,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_muffin:           { id:'cook_muffin',           name:'Bake Muffin',            output:'Muffin',                   ingredients:{'Dough':1,'Blue Berry':1},                            levelReq:25, time:25, xp:75,  charXp:12, guildXp:8,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_beetle_goulash:   { id:'cook_beetle_goulash',   name:'Cook Beetle Goulash',    output:'Beetle Goulash',           ingredients:{'Beetle Meat':1,'Mushroom':1},                        levelReq:28, time:32, xp:85,  charXp:14, guildXp:9,  successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_tuna_casserole:   { id:'cook_tuna_casserole',   name:'Cook Tuna Casserole',    output:'Tuna Casserole',           ingredients:{'Tuna':1,'Mushroom':1,'Tomato':1},                    levelReq:32, time:40, xp:100, charXp:16, guildXp:11, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_meat_pie:         { id:'cook_meat_pie',         name:'Bake Meat Pie',          output:'Meat Pie',                 ingredients:{'Dough':1,'Ground Meat':2},                           levelReq:35, time:40, xp:115, charXp:18, guildXp:12, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_shark_squibs:     { id:'cook_shark_squibs',     name:'Cook Shark Squibs',      output:'Shark Squibs',             ingredients:{'Sandbar Shark':1,'Garlic':1,'Jalapeno Pepper':1},    levelReq:38, time:42, xp:125, charXp:18, guildXp:13, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_fish_kabob:       { id:'cook_fish_kabob',       name:'Make Fish Kabob',        output:'Fish Kabob',               ingredients:{'Pike':1,'Green Pepper':1,'Tomato':1},                levelReq:40, time:40, xp:135, charXp:20, guildXp:14, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_berry_cordial:    { id:'cook_berry_cordial',    name:'Brew Berry Cordial',     output:'Berry Cordial',            ingredients:{'Blue Berry':2,'Red Berry':2},                        levelReq:42, time:35, xp:130, charXp:18, guildXp:12, successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_seafood_stir_fry: { id:'cook_seafood_stir_fry', name:'Cook Seafood Stir Fry',  output:'Seafood Stir Fry',         ingredients:{'Oyster':1,'Mushroom':1,'Green Pepper':1},            levelReq:44, time:45, xp:155, charXp:22, guildXp:15, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_peach_brandy:     { id:'cook_peach_brandy',     name:'Brew Peach Brandy',      output:'Peach Brandy',             ingredients:{'Peach':2,'Sugarcane':1},                             levelReq:46, time:40, xp:165, charXp:22, guildXp:15, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_quiche:           { id:'cook_quiche',           name:'Bake Quiche',            output:'Quiche',                   ingredients:{'Dough':1,'Mushroom':1,'Bunch of Spinach':1},         levelReq:48, time:48, xp:175, charXp:24, guildXp:16, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_swordfish:        { id:'cook_swordfish',        name:'Cook Swordfish',         output:'Cooked Swordfish',         ingredients:{'Swordfish':1},                                       levelReq:50, time:50, xp:185, charXp:26, guildXp:18, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_riewe_schales:    { id:'cook_riewe_schales',    name:'Cook Riewe Schales',     output:'Riewe Schales',            ingredients:{'Turnip':1,'Potato':2},                               levelReq:51, time:50, xp:190, charXp:26, guildXp:18, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_glazed_swordfish: { id:'cook_glazed_swordfish', name:'Cook Glazed Swordfish',  output:'Glazed Swordfish',         ingredients:{'Swordfish':1,'Bunch of Grapes':1,'Garlic':1},        levelReq:53, time:52, xp:200, charXp:28, guildXp:20, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_spinach_salad:    { id:'cook_spinach_salad',    name:'Make Spinach Salad',     output:'Spinach Salad',            ingredients:{'Bunch of Spinach':1,'Garlic':1,'Tomato':1},          levelReq:53, time:42, xp:185, charXp:24, guildXp:16, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_peach_cobbler:    { id:'cook_peach_cobbler',    name:'Bake Peach Cobbler',     output:'Peach Cobbler',            ingredients:{'Peach':2,'Dough':1},                                 levelReq:55, time:50, xp:210, charXp:28, guildXp:20, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  // ── Faldorian ───────────────────────────────────────────────
+  cook_apple_pie:        { id:'cook_apple_pie',        name:'Bake Apple Pie',         output:'Apple Pie',                ingredients:{'Apple':2,'Dough':1},                                 levelReq:25, time:35, xp:80,  charXp:13, guildXp:9,  successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_oyster_meat:      { id:'cook_oyster_meat',      name:'Prepare Oyster Meat',    output:'Oyster Meat',              ingredients:{'Oyster':1},                                          levelReq:30, time:20, xp:85,  charXp:10, guildXp:7,  successRate:100, alwaysSuccess:true,  yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_fruit_salad:      { id:'cook_fruit_salad',      name:'Make Fruit Salad',       output:'Fruit Salad',              ingredients:{'Apple':1,'Peach':1,'Pear':1},                        levelReq:33, time:30, xp:100, charXp:15, guildXp:10, successRate:85,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_stuffed_pepper:   { id:'cook_stuffed_pepper',   name:'Cook Stuffed Pepper',    output:'Stuffed Pepper',           ingredients:{'Green Pepper':1,'Ground Meat':1,'Tomato Sauce':1},  levelReq:36, time:40, xp:120, charXp:18, guildXp:12, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_scalloped_oysters:{ id:'cook_scalloped_oysters',name:'Cook Scalloped Oysters', output:'Scalloped Oysters',        ingredients:{'Oyster Meat':2,'Garlic':1,'Bunch of Parsley':1},    levelReq:40, time:42, xp:140, charXp:20, guildXp:14, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_fruitcake:        { id:'cook_fruitcake',        name:'Bake Fruitcake',         output:'Fruitcake',                ingredients:{'Dough':1,'Bunch of Raisins':1,'Blue Berry':1,'Red Berry':1}, levelReq:43, time:45, xp:150, charXp:22, guildXp:15, successRate:70, alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_oyster_casserole: { id:'cook_oyster_casserole', name:'Cook Oyster Casserole',  output:'Oyster Casserole',         ingredients:{'Oyster Meat':2,'Mushroom':1,'Garlic':1},             levelReq:45, time:48, xp:165, charXp:24, guildXp:16, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_raisin_bread:     { id:'cook_raisin_bread',     name:'Bake Raisin Bread',      output:'Raisin Bread',             ingredients:{'Dough':1,'Bunch of Raisins':1},                      levelReq:47, time:45, xp:170, charXp:23, guildXp:16, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_wine:             { id:'cook_wine',             name:'Brew Wine',              output:'Bottle of Wine',           ingredients:{'Bunch of Grapes':2,'Sugarcane':1},                   levelReq:49, time:40, xp:180, charXp:24, guildXp:16, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_plum_preserves:   { id:'cook_plum_preserves',   name:'Make Plum Preserves',    output:'Plum Preserves',           ingredients:{'Plum':2,'Sugarcane':1},                              levelReq:51, time:40, xp:185, charXp:24, guildXp:16, successRate:80,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_fine_whiskey:     { id:'cook_fine_whiskey',     name:'Distill Fine Whiskey',   output:'Fine Whiskey',             ingredients:{'Sugarcane':2,'Black Pepper':1,'Plum Preserves':1},  levelReq:53, time:45, xp:200, charXp:28, guildXp:20, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_molasses_cookie:  { id:'cook_molasses_cookie',  name:'Bake Molasses Cookie',   output:'Molasses Cookie',          ingredients:{'Dough':1,'Molasses':1},                              levelReq:55, time:45, xp:210, charXp:28, guildXp:20, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_barracuda:        { id:'cook_barracuda',        name:'Cook Barracuda',         output:'Cooked Barracuda',         ingredients:{'Barracuda':1},                                       levelReq:57, time:52, xp:220, charXp:30, guildXp:22, successRate:75,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  cook_parsnip_mashed:   { id:'cook_parsnip_mashed',   name:'Make Parsnip Mash',      output:'Parsnip Mashed Potatoes',  ingredients:{'Parsnip':2,'Potato':2,'Garlic':1},                   levelReq:59, time:52, xp:230, charXp:32, guildXp:22, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:0 },
+  // ── Guild Kitchen only ──────────────────────────────────────
+  cook_barracuda_stew:   { id:'cook_barracuda_stew',   name:'Cook Barracuda Stew',    output:'Barracuda Stew',           ingredients:{'Barracuda':1,'Potato':2,'Garlic':1},                 levelReq:60, time:60, xp:250, charXp:35, guildXp:25, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:4 },
+  cook_pepper_steak:     { id:'cook_pepper_steak',     name:'Cook Pepper Steak',      output:'Pepper Steak',             ingredients:{'Raw Meat':2,'Black Pepper':1,'Spice Mix':1},         levelReq:60, time:60, xp:260, charXp:35, guildXp:25, successRate:70,  alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:5 },
+  cook_roasted_veg:      { id:'cook_roasted_veg',      name:'Roast Vegetables',       output:'Roasted Vegetables',       ingredients:{'Bunch of Spinach':1,'Mushroom':1,'Green Pepper':1,'Garlic':1}, levelReq:60, time:55, xp:270, charXp:35, guildXp:25, successRate:75, alwaysSuccess:false, yieldMin:1, yieldMax:1, guildKitchenReq:7 },
+};
+
+// ============================================================
+//  CONSUMABLE EFFECTS  (items that do something when used)
+// ============================================================
+const CONSUMABLE_EFFECTS = {
+  // HP healers
+  'Cooked Mackerel':         { type:'heal_hp', amount:10 },
+  'Cooked Meat':             { type:'heal_hp', amount:15 },
+  'Cooked Bass':             { type:'heal_hp', amount:12 },
+  'Cooked Flounder':         { type:'heal_hp', amount:15 },
+  'Meatloaf':                { type:'heal_hp', amount:35 },
+  'Cooked Haddock':          { type:'heal_hp', amount:18 },
+  'Tuna Steak':              { type:'heal_hp', amount:25 },
+  'Cooked Salmon':           { type:'heal_hp', amount:20 },
+  'Shark Steak':             { type:'heal_hp', amount:30 },
+  'Bottle of Soup':          { type:'heal_hp', amount:25 },
+  'Seafood Platter':         { type:'heal_hp', amount:50 },
+  'Stew':                    { type:'heal_hp', amount:40 },
+  'Pizza':                   { type:'heal_hp', amount:45 },
+  'Spaghetti Platter':       { type:'heal_hp', amount:55 },
+  'Mint Tea':                { type:'heal_hp', amount:20 },
+  'Flatbread':               { type:'heal_hp', amount:15 },
+  'Cooked Pike':             { type:'heal_hp', amount:22 },
+  'Muffin':                  { type:'heal_hp', amount:22 },
+  'Beetle Goulash':          { type:'heal_hp', amount:30 },
+  'Tuna Casserole':          { type:'heal_hp', amount:35 },
+  'Meat Pie':                { type:'heal_hp', amount:40 },
+  'Shark Squibs':            { type:'heal_hp', amount:35 },
+  'Fish Kabob':              { type:'heal_hp', amount:40 },
+  'Seafood Stir Fry':        { type:'heal_hp', amount:45 },
+  'Quiche':                  { type:'heal_hp', amount:50 },
+  'Cooked Swordfish':        { type:'heal_hp', amount:55 },
+  'Riewe Schales':           { type:'heal_hp', amount:50 },
+  'Glazed Swordfish':        { type:'heal_hp', amount:60 },
+  'Spinach Salad':           { type:'heal_hp', amount:40 },
+  'Peach Cobbler':           { type:'heal_hp', amount:60 },
+  'Apple Pie':               { type:'heal_hp', amount:30 },
+  'Fruit Salad':             { type:'heal_hp', amount:32 },
+  'Stuffed Pepper':          { type:'heal_hp', amount:38 },
+  'Scalloped Oysters':       { type:'heal_hp', amount:45 },
+  'Fruitcake':               { type:'heal_hp', amount:45 },
+  'Oyster Casserole':        { type:'heal_hp', amount:50 },
+  'Raisin Bread':            { type:'heal_hp', amount:40 },
+  'Plum Preserves':          { type:'heal_hp', amount:35 },
+  'Molasses Cookie':         { type:'heal_hp', amount:50 },
+  'Cooked Barracuda':        { type:'heal_hp', amount:65 },
+  'Parsnip Mashed Potatoes': { type:'heal_hp', amount:60 },
+  'Barracuda Stew':          { type:'heal_hp', amount:80 },
+  'Pepper Steak':            { type:'heal_hp', amount:80 },
+  'Roasted Vegetables':      { type:'heal_hp', amount:70 },
+  // MP healers
+  'Magic Fishstick':         { type:'heal_mp', amount:25 },
+  'Herbal Tea':              { type:'heal_mp', amount:15 },
+  // Speed boosts
+  'Bottle of Juice':  { type:'speed_boost', amount:3, duration:60  },
+  'Berry Cordial':    { type:'speed_boost', amount:3, duration:90  },
+  'Peach Brandy':     { type:'speed_boost', amount:5, duration:120 },
+  'Bottle of Beer':   { type:'speed_boost', amount:2, duration:60  },
+  'Bottle of Wine':   { type:'speed_boost', amount:4, duration:90  },
+  'Fine Whiskey':     { type:'speed_boost', amount:8, duration:60  },
+};
+
+// ============================================================
+//  SAWMILL RECIPES  (1 log in, qty lumber out)
+// ============================================================
+const SAWMILL_RECIPES = {
+  saw_pine:  { id:'saw_pine',  name:'Saw Pine Logs',  input:'Pine Log',  output:'Pine Lumber',  qty:1, skill:'woodcutting', levelReq:1,  time:8,  xp:5  },
+  saw_oak:   { id:'saw_oak',   name:'Saw Oak Logs',   input:'Oak Log',   output:'Oak Lumber',   qty:2, skill:'woodcutting', levelReq:5,  time:12, xp:25 },
+  saw_birch: { id:'saw_birch', name:'Saw Birch Logs', input:'Birch Log', output:'Birch Lumber', qty:3, skill:'woodcutting', levelReq:10, time:16, xp:45 },
+  saw_yew:   { id:'saw_yew',   name:'Saw Yew Logs',   input:'Yew Log',   output:'Yew Lumber',   qty:4, skill:'woodcutting', levelReq:20, time:22, xp:75 },
+};
+
+// ============================================================
+//  ITEM CATALOGS  (defined for future use — not wired in yet)
+//  Each entry: { type, subtype, weight }
+// ============================================================
+
+const CONSUMABLES = {
+  // ── Potions ──────────────────────────────────────────────
+  'Antidote':                   { type:'potion',     weight:1 },
+  'Bottle of Poison':           { type:'potion',     weight:1 },
+  'Memory Restoration Potion':  { type:'potion',     weight:1 },
+  // ── Drinks ───────────────────────────────────────────────
+  'Berry Cordial':   { type:'drink', weight:1 },
+  'Bottle of Beer':  { type:'drink', weight:1 },
+  'Bottle of Berry': { type:'drink', weight:1 },
+  'Bottle of Juice': { type:'drink', weight:1 },
+  'Bottle of Rum':   { type:'drink', weight:1 },
+  'Bottle of Soup':  { type:'drink', weight:1 },
+  'Bottle of Vodka': { type:'drink', weight:1 },
+  'Bottle of Water': { type:'drink', weight:1 },
+  'Bottle of Wine':  { type:'drink', weight:1 },
+  'Fine Whiskey':    { type:'drink', weight:1 },
+  'Hard Cider':      { type:'drink', weight:1 },
+  'Herbal Tea':      { type:'drink', weight:1 },
+  'Mint Tea':        { type:'drink', weight:1 },
+  'Peach Brandy':    { type:'drink', weight:1 },
+  'Shark Smoothie':  { type:'drink', weight:1 },
+  // ── Ingredients ──────────────────────────────────────────
+  'Blue Berry':          { type:'ingredient', weight:1 },
+  'Bunch of Cilantro':   { type:'ingredient', weight:1 },
+  'Bunch of Grapes':     { type:'ingredient', weight:1 },
+  'Bunch of Parsley':    { type:'ingredient', weight:1 },
+  'Bunch of Raisins':    { type:'ingredient', weight:1 },
+  'Garlic':              { type:'ingredient', weight:1 },
+  'Green Pepper':        { type:'ingredient', weight:1 },
+  'Green Sauce':         { type:'ingredient', weight:1 },
+  'Jalapeno Pepper':     { type:'ingredient', weight:1 },
+  'Mushroom':            { type:'ingredient', weight:1 },
+  'Oyster Meat':         { type:'ingredient', weight:1 },
+  'Parsnip':             { type:'ingredient', weight:1 },
+  'Peach':               { type:'ingredient', weight:1 },
+  'Pear':                { type:'ingredient', weight:1 },
+  'Plum':                { type:'ingredient', weight:1 },
+  'Plum Preserves':      { type:'ingredient', weight:1 },
+  'Red Berry':           { type:'ingredient', weight:1 },
+  'Sage':                { type:'ingredient', weight:1 },
+  'Salsa':               { type:'ingredient', weight:1 },
+  'Spice Mix':           { type:'ingredient', weight:1 },
+  'Tomato':              { type:'ingredient', weight:1 },
+  'Tomato Sauce':        { type:'ingredient', weight:1 },
+  'Turnip':              { type:'ingredient', weight:1 },
+  // ── Cooked Fish ──────────────────────────────────────────
+  'Cooked Amberjack':  { type:'cooked_fish', weight:1 },
+  'Cooked Barracuda':  { type:'cooked_fish', weight:1 },
+  'Cooked Bass':       { type:'cooked_fish', weight:1 },
+  'Cooked Flounder':   { type:'cooked_fish', weight:1 },
+  'Cooked Haddock':    { type:'cooked_fish', weight:1 },
+  'Cooked Mackerel':   { type:'cooked_fish', weight:1 },
+  'Cooked Meat':       { type:'cooked_fish', weight:1 },
+  'Cooked Salmon':     { type:'cooked_fish', weight:1 },
+  'Cooked Swordfish':  { type:'cooked_fish', weight:1 },
+  // ── Meals ────────────────────────────────────────────────
+  'Amberjack Verde':          { type:'meal', weight:1 },
+  'Apple':                    { type:'meal', weight:1 },
+  'Apple Pie':                { type:'meal', weight:1 },
+  'Barracuda Stew':           { type:'meal', weight:1 },
+  'Beetle Goulash':           { type:'meal', weight:1 },
+  'Birthday Cake':            { type:'meal', weight:2 },
+  'Chili':                    { type:'meal', weight:1 },
+  'Deviled Eggs':             { type:'meal', weight:1 },
+  'Fish and Chips':           { type:'meal', weight:1 },
+  'Fish Kabob':               { type:'meal', weight:1 },
+  'Fish Taco':                { type:'meal', weight:1 },
+  'Flatbread':                { type:'meal', weight:1 },
+  'Fried Steak':              { type:'meal', weight:1 },
+  'Fruit Salad':              { type:'meal', weight:1 },
+  'Fruitcake':                { type:'meal', weight:2 },
+  'Glazed Swordfish':         { type:'meal', weight:1 },
+  'Holiday Soup':             { type:'meal', weight:1 },
+  'Lobster Gazpacho':         { type:'meal', weight:1 },
+  'Lobster Roll':             { type:'meal', weight:1 },
+  'Magic Fishstick':          { type:'meal', weight:1 },
+  'Meat Pie':                 { type:'meal', weight:1 },
+  'Meatloaf':                 { type:'meal', weight:2 },
+  'Muffin':                   { type:'meal', weight:1 },
+  'Oyster Casserole':         { type:'meal', weight:1 },
+  'Parsnip Mashed Potatoes':  { type:'meal', weight:1 },
+  'Peach Cobbler':            { type:'meal', weight:1 },
+  'Pepper Steak':             { type:'meal', weight:1 },
+  'Pizza':                    { type:'meal', weight:2 },
+  'Potatoes Au Gratin':       { type:'meal', weight:1 },
+  'Quiche':                   { type:'meal', weight:1 },
+  'Raisin Bread':             { type:'meal', weight:1 },
+  'Rhizard Stew':             { type:'meal', weight:1 },
+  'Riewe Schales':            { type:'meal', weight:1 },
+  'Roasted Vegetables':       { type:'meal', weight:1 },
+  'Scalloped Oysters':        { type:'meal', weight:1 },
+  'Seafood Platter':          { type:'meal', weight:2 },
+  'Seafood Stir Fry':         { type:'meal', weight:1 },
+  'Shark Squibs':             { type:'meal', weight:1 },
+  'Shark Steak':              { type:'meal', weight:1 },
+  'Spaghetti Platter':        { type:'meal', weight:2 },
+  'Spicy Burger':             { type:'meal', weight:1 },
+  'Spinach Salad':            { type:'meal', weight:1 },
+  'Stew':                     { type:'meal', weight:1 },
+  'Stone Soup':               { type:'meal', weight:1 },
+  'Stuffed Pepper':           { type:'meal', weight:1 },
+  'Summer Sausage':           { type:'meal', weight:1 },
+  'Taco':                     { type:'meal', weight:1 },
+  'Tuna Casserole':           { type:'meal', weight:1 },
+  'Tuna Salad':               { type:'meal', weight:1 },
+  'Tuna Steak':               { type:'meal', weight:1 },
+  'Vegetable Mush':           { type:'meal', weight:1 },
+  // ── Snacks ───────────────────────────────────────────────
+  'Candy':           { type:'snack', weight:1 },
+  'Candy Cane':      { type:'snack', weight:1 },
+  'Chocolate Bunny': { type:'snack', weight:1 },
+  'Easter Egg':      { type:'snack', weight:1 },
+  'Molasses Cookie': { type:'snack', weight:1 },
+};
+
+const EQUIPMENT_CATALOG = {
+  // ── Swords ───────────────────────────────────────────────
+  'Adamantite 2-Handed Sword': { type:'weapon', subtype:'sword',  weight:15 },
+  'Adamantite Longsword':      { type:'weapon', subtype:'sword',  weight:10 },
+  'Adamantite Short Sword':    { type:'weapon', subtype:'sword',  weight:7  },
+  'Elite Katana':              { type:'weapon', subtype:'sword',  weight:8  },
+  'Glowing Sword':             { type:'weapon', subtype:'sword',  weight:10 },
+  'Iron 2-Handed Sword':       { type:'weapon', subtype:'sword',  weight:15 },
+  'Iron Longsword':            { type:'weapon', subtype:'sword',  weight:10 },
+  'Iron Scimitar':             { type:'weapon', subtype:'sword',  weight:8  },
+  'Iron Short Sword':          { type:'weapon', subtype:'sword',  weight:7  },
+  'Katana':                    { type:'weapon', subtype:'sword',  weight:8  },
+  'Nagaromi Sword':            { type:'weapon', subtype:'sword',  weight:10 },
+  'Ona Sword':                 { type:'weapon', subtype:'sword',  weight:10 },
+  'Poisoned Sword':            { type:'weapon', subtype:'sword',  weight:8  },
+  'Spirit Blade':              { type:'weapon', subtype:'sword',  weight:8  },
+  'Titanium Longsword':        { type:'weapon', subtype:'sword',  weight:10 },
+  'Warriors Blade':            { type:'weapon', subtype:'sword',  weight:10 },
+  'Young Warriors Sword':      { type:'weapon', subtype:'sword',  weight:7  },
+  // ── Daggers ──────────────────────────────────────────────
+  'Adamantite Dagger':          { type:'weapon', subtype:'dagger', weight:3 },
+  'Bronze Dagger':              { type:'weapon', subtype:'dagger', weight:3 },
+  'Bronze Short Sword':         { type:'weapon', subtype:'dagger', weight:5 },
+  'Butterfly Knife':            { type:'weapon', subtype:'dagger', weight:2 },
+  'Ceremonial Dagger':          { type:'weapon', subtype:'dagger', weight:3 },
+  'Enhanced Adamantite Dagger': { type:'weapon', subtype:'dagger', weight:3 },
+  'Enhanced Bronze Dagger':     { type:'weapon', subtype:'dagger', weight:3 },
+  'Enhanced Butterfly Knife':   { type:'weapon', subtype:'dagger', weight:2 },
+  'Enhanced Iron Dagger':       { type:'weapon', subtype:'dagger', weight:3 },
+  'Enhanced Mythral Dagger':    { type:'weapon', subtype:'dagger', weight:3 },
+  'Enhanced Titanium Dagger':   { type:'weapon', subtype:'dagger', weight:3 },
+  'Iron Dagger':                { type:'weapon', subtype:'dagger', weight:3 },
+  'Pocketknife':                { type:'weapon', subtype:'dagger', weight:1 },
+  'Poisoned Dagger':            { type:'weapon', subtype:'dagger', weight:3 },
+  'Sharp Pocketknife':          { type:'weapon', subtype:'dagger', weight:1 },
+  'Thieves Dagger':             { type:'weapon', subtype:'dagger', weight:3 },
+  'Tinran Dirk':                { type:'weapon', subtype:'dagger', weight:3 },
+  'Titanium Dagger':            { type:'weapon', subtype:'dagger', weight:3 },
+  // ── Axes ─────────────────────────────────────────────────
+  'Bronze Battleaxe':   { type:'weapon', subtype:'axe', weight:12 },
+  'Titanium Battleaxe': { type:'weapon', subtype:'axe', weight:12 },
+  // ── Hammers & Maces ──────────────────────────────────────
+  'Aliki Hammer':       { type:'weapon', subtype:'hammer', weight:10 },
+  'Bronze Battle Hammer':{ type:'weapon', subtype:'hammer', weight:10},
+  'Bronze Hammer':      { type:'weapon', subtype:'hammer', weight:8  },
+  'Iron Hammer':        { type:'weapon', subtype:'hammer', weight:8  },
+  'Iron Mace':          { type:'weapon', subtype:'mace',   weight:8  },
+  'Sjirkomi Mace':      { type:'weapon', subtype:'mace',   weight:8  },
+  'Steel Hammer':       { type:'weapon', subtype:'hammer', weight:8  },
+  'Tinran Mallet':      { type:'weapon', subtype:'hammer', weight:10 },
+  'Titanium Hammer':    { type:'weapon', subtype:'hammer', weight:8  },
+  // ── Polearms ─────────────────────────────────────────────
+  'Aliki Halberd':    { type:'weapon', subtype:'polearm', weight:12 },
+  'Aliki Labry':      { type:'weapon', subtype:'polearm', weight:10 },
+  'Bronze Pike':      { type:'weapon', subtype:'polearm', weight:12 },
+  'Iron Pike':        { type:'weapon', subtype:'polearm', weight:12 },
+  'Maanvaki Spear':   { type:'weapon', subtype:'polearm', weight:8  },
+  'Maanvaki Trident': { type:'weapon', subtype:'polearm', weight:10 },
+  'Nagaromi Spear':   { type:'weapon', subtype:'polearm', weight:8  },
+  'Ona Spear':        { type:'weapon', subtype:'polearm', weight:8  },
+  'Rhaedrhothe Club': { type:'weapon', subtype:'club',    weight:8  },
+  'Rhizard Spear':    { type:'weapon', subtype:'polearm', weight:8  },
+  'Tinran Falchion':  { type:'weapon', subtype:'polearm', weight:8  },
+  'Tinran Flamberge': { type:'weapon', subtype:'polearm', weight:10 },
+  'Tinran Rapier':    { type:'weapon', subtype:'sword',   weight:5  },
+  // ── Whips ────────────────────────────────────────────────
+  'Adamantite-Tipped Whip': { type:'weapon', subtype:'whip', weight:4 },
+  'Tinran-Tipped Whip':     { type:'weapon', subtype:'whip', weight:4 },
+  // ── Other Weapons ────────────────────────────────────────
+  'Cunovashi':       { type:'weapon', subtype:'misc', weight:8  },
+  'Death Scythe':    { type:'weapon', subtype:'misc', weight:12 },
+  'Tinran Scepter':  { type:'weapon', subtype:'misc', weight:5  },
+  'Varg':            { type:'weapon', subtype:'misc', weight:8  },
+  // ── Staves ───────────────────────────────────────────────
+  'Advanced Spellbook':       { type:'weapon', subtype:'staff', weight:3 },
+  'Aluminum Quarterstaff':    { type:'weapon', subtype:'staff', weight:5 },
+  'Balanced Quarterstaff':    { type:'weapon', subtype:'staff', weight:5 },
+  'Black Staff':              { type:'weapon', subtype:'staff', weight:5 },
+  'Bloody Staff':             { type:'weapon', subtype:'staff', weight:5 },
+  'Golden Embossed Staff':    { type:'weapon', subtype:'staff', weight:6 },
+  'Golden Staff':             { type:'weapon', subtype:'staff', weight:6 },
+  'Great Staff':              { type:'weapon', subtype:'staff', weight:7 },
+  'Hobo Stick':               { type:'weapon', subtype:'staff', weight:3 },
+  'Purple-banded Staff':      { type:'weapon', subtype:'staff', weight:5 },
+  'Quarterstaff':             { type:'weapon', subtype:'staff', weight:5 },
+  'Reinforced Quarterstaff':  { type:'weapon', subtype:'staff', weight:6 },
+  'Spellbook':                { type:'weapon', subtype:'staff', weight:3 },
+  'Staff of Power':           { type:'weapon', subtype:'staff', weight:6 },
+  'Staff of the Apprentice':  { type:'weapon', subtype:'staff', weight:5 },
+  'Staff of the Archmage':    { type:'weapon', subtype:'staff', weight:6 },
+  'Stick of Mental Resolve':  { type:'weapon', subtype:'staff', weight:4 },
+  'Voodoo Staff':             { type:'weapon', subtype:'staff', weight:5 },
+  'Walking Stick':            { type:'weapon', subtype:'staff', weight:3 },
+  // ── Hatchets (Tools) ─────────────────────────────────────
+  'Aliki Hatchet':          { type:'tool', subtype:'hatchet', weight:5 },
+  'Bronze Hatchet':         { type:'tool', subtype:'hatchet', weight:5 },
+  'Diamond-Tipped Hatchet': { type:'tool', subtype:'hatchet', weight:6 },
+  'Dwarven Hatchet':        { type:'tool', subtype:'hatchet', weight:5 },
+  'Elven Hatchet':          { type:'tool', subtype:'hatchet', weight:4 },
+  'Iron Hatchet':           { type:'tool', subtype:'hatchet', weight:5 },
+  'Nagaromi Hatchet':       { type:'tool', subtype:'hatchet', weight:5 },
+  'Polathurn Hatchet':      { type:'tool', subtype:'hatchet', weight:6 },
+  'Steel Hatchet':          { type:'tool', subtype:'hatchet', weight:5 },
+  'Tinran Hatchet':         { type:'tool', subtype:'hatchet', weight:5 },
+  'Titanium Hatchet':       { type:'tool', subtype:'hatchet', weight:5 },
+  // ── Pickaxes (Tools) ─────────────────────────────────────
+  'Aliki Pickaxe':          { type:'tool', subtype:'pickaxe', weight:7 },
+  'Bronze Pickaxe':         { type:'tool', subtype:'pickaxe', weight:7 },
+  'Diamond-Tipped Pickaxe': { type:'tool', subtype:'pickaxe', weight:8 },
+  'Dwarven Pickaxe':        { type:'tool', subtype:'pickaxe', weight:7 },
+  'Elven Pickaxe':          { type:'tool', subtype:'pickaxe', weight:6 },
+  'Iron Pickaxe':           { type:'tool', subtype:'pickaxe', weight:7 },
+  'Nagaromi Pickaxe':       { type:'tool', subtype:'pickaxe', weight:7 },
+  'Polathurn Pickaxe':      { type:'tool', subtype:'pickaxe', weight:8 },
+  'Steel Pickaxe':          { type:'tool', subtype:'pickaxe', weight:7 },
+  'Tinran Pickaxe':         { type:'tool', subtype:'pickaxe', weight:7 },
+  'Titanium Pickaxe':       { type:'tool', subtype:'pickaxe', weight:7 },
+  // ── Saws ─────────────────────────────────────────────────
+  'Hardened Saw': { type:'tool', subtype:'saw', weight:5 },
+  'Iron Saw':     { type:'tool', subtype:'saw', weight:5 },
+  'Steel Saw':    { type:'tool', subtype:'saw', weight:5 },
+  // ── Fishing Rods & Nets ──────────────────────────────────
+  'Aluminum Fishing Rod': { type:'tool', subtype:'rod', weight:2 },
+  'Bamboo Fishing Rod':   { type:'tool', subtype:'rod', weight:2 },
+  'Fishing Rod':          { type:'tool', subtype:'rod', weight:2 },
+  'Heavy Fishing Rod':    { type:'tool', subtype:'rod', weight:3 },
+  'Heirloom Fishing Rod': { type:'tool', subtype:'rod', weight:2 },
+  'Small Fishing Net':    { type:'tool', subtype:'net', weight:3 },
+  // ── Other Tools ──────────────────────────────────────────
+  'Aliki Spade':      { type:'tool', subtype:'misc', weight:5 },
+  'Carving Tool':     { type:'tool', subtype:'misc', weight:2 },
+  'Crafting Kit':     { type:'tool', subtype:'misc', weight:3 },
+  'Elven Spatula':    { type:'tool', subtype:'misc', weight:2 },
+  'Furnace Tongs':    { type:'tool', subtype:'misc', weight:5 },
+  'Gardening Trowel': { type:'tool', subtype:'misc', weight:2 },
+  'Lucky Pick':       { type:'tool', subtype:'misc', weight:2 },
+  'Mixing Bowl':      { type:'tool', subtype:'misc', weight:3 },
+  'Polathurn Tongs':  { type:'tool', subtype:'misc', weight:5 },
+  'Sjirkomi Spoon':   { type:'tool', subtype:'misc', weight:1 },
+  'Super Crafting Kit':{ type:'tool', subtype:'misc', weight:3},
+  'Tinran Spatula':   { type:'tool', subtype:'misc', weight:2 },
+  // ── Helmets ──────────────────────────────────────────────
+  'Aliki Helm':          { type:'armor', subtype:'helm', weight:5 },
+  'Aluminum Helmet':     { type:'armor', subtype:'helm', weight:4 },
+  'Artifice Corona':     { type:'armor', subtype:'helm', weight:2 },
+  'Ash Circlet':         { type:'armor', subtype:'helm', weight:1 },
+  'Beggars Circlet':     { type:'armor', subtype:'helm', weight:1 },
+  'Black Soot Corona':   { type:'armor', subtype:'helm', weight:2 },
+  'Bronze Full Helm':    { type:'armor', subtype:'helm', weight:6 },
+  'Bronze Helmet':       { type:'armor', subtype:'helm', weight:5 },
+  'Carpenters Helmet':   { type:'armor', subtype:'helm', weight:3 },
+  'Dragonhide Tricorn':  { type:'armor', subtype:'helm', weight:2 },
+  'Feathered Headdress': { type:'armor', subtype:'helm', weight:1 },
+  'Flaming Tiara':       { type:'armor', subtype:'helm', weight:1 },
+  'Full Aluminum Helm':  { type:'armor', subtype:'helm', weight:6 },
+  'Headlamp':            { type:'armor', subtype:'helm', weight:2 },
+  'Heirloom Fishing Cap':{ type:'armor', subtype:'helm', weight:1 },
+  'Helm of Power':       { type:'armor', subtype:'helm', weight:6 },
+  'Horned Helm':         { type:'armor', subtype:'helm', weight:7 },
+  'Iron Full Helm':      { type:'armor', subtype:'helm', weight:6 },
+  'Iron Helmet':         { type:'armor', subtype:'helm', weight:5 },
+  'King Bear Crown':     { type:'armor', subtype:'helm', weight:3 },
+  'Messenger Cap':       { type:'armor', subtype:'helm', weight:1 },
+  'Mythral Helm':        { type:'armor', subtype:'helm', weight:5 },
+  'Polathurn Helm':      { type:'armor', subtype:'helm', weight:5 },
+  'Scaly Cap':           { type:'armor', subtype:'helm', weight:2 },
+  'Sparkling Crown':     { type:'armor', subtype:'helm', weight:2 },
+  'Steel Helm':          { type:'armor', subtype:'helm', weight:5 },
+  'Thinking Cap':        { type:'armor', subtype:'helm', weight:1 },
+  'Tiedye Bandana':      { type:'armor', subtype:'helm', weight:1 },
+  'Titanium Helm':       { type:'armor', subtype:'helm', weight:5 },
+  'Travelling Cap':      { type:'armor', subtype:'helm', weight:1 },
+  'Tribal Headdress':    { type:'armor', subtype:'helm', weight:2 },
+  'Turtle Hat':          { type:'armor', subtype:'helm', weight:3 },
+  'Wooden Crown':        { type:'armor', subtype:'helm', weight:2 },
+  // ── Body Armor ───────────────────────────────────────────
+  'Aliki Breastplate':     { type:'armor', subtype:'body', weight:20 },
+  'Aliki Hauberk':         { type:'armor', subtype:'body', weight:18 },
+  'Aluminum Plate':        { type:'armor', subtype:'body', weight:20 },
+  'Aluminum-Weave Armor':  { type:'armor', subtype:'body', weight:12 },
+  'Barktomi Armor':        { type:'armor', subtype:'body', weight:15 },
+  'Bathide Cloak':         { type:'armor', subtype:'body', weight:5  },
+  'Bronze Chainmail':      { type:'armor', subtype:'body', weight:18 },
+  'Bronze Platemail':      { type:'armor', subtype:'body', weight:25 },
+  'Chefs Apron':           { type:'armor', subtype:'body', weight:2  },
+  'Chipwood Jerkin':       { type:'armor', subtype:'body', weight:5  },
+  'Dragonskin Jacket':     { type:'armor', subtype:'body', weight:8  },
+  'Fur Coat':              { type:'armor', subtype:'body', weight:10 },
+  'Heavy Cloak':           { type:'armor', subtype:'body', weight:8  },
+  'Hooded Cloak':          { type:'armor', subtype:'body', weight:5  },
+  'Iron Chainmail':        { type:'armor', subtype:'body', weight:20 },
+  'Iron Platemail':        { type:'armor', subtype:'body', weight:28 },
+  'Leather Apron':         { type:'armor', subtype:'body', weight:5  },
+  'Leather Cloak':         { type:'armor', subtype:'body', weight:5  },
+  'Metal Vest':            { type:'armor', subtype:'body', weight:10 },
+  'Mythral Breastplate':   { type:'armor', subtype:'body', weight:18 },
+  'Mythral Full Plate':    { type:'armor', subtype:'body', weight:25 },
+  'Pirate Lord Scarf':     { type:'armor', subtype:'body', weight:2  },
+  'Pocketed Long Coat':    { type:'armor', subtype:'body', weight:5  },
+  'Pocketed Vest':         { type:'armor', subtype:'body', weight:3  },
+  'Polathurn Breastplate': { type:'armor', subtype:'body', weight:20 },
+  'Polathurn Full Plate':  { type:'armor', subtype:'body', weight:28 },
+  'Steel Platemail':       { type:'armor', subtype:'body', weight:25 },
+  'Titanium Breastplate':  { type:'armor', subtype:'body', weight:20 },
+  'Wizard Robes':          { type:'armor', subtype:'body', weight:5  },
+  // ── Leg Armor ────────────────────────────────────────────
+  'Aliki Legs':            { type:'armor', subtype:'legs', weight:12 },
+  'Aluminum Shin Guards':  { type:'armor', subtype:'legs', weight:8  },
+  'Aluminum-Weave Chaps':  { type:'armor', subtype:'legs', weight:8  },
+  'Barktomi Shinguards':   { type:'armor', subtype:'legs', weight:8  },
+  'Bronze Leg Guards':     { type:'armor', subtype:'legs', weight:12 },
+  'Fish Waders':           { type:'armor', subtype:'legs', weight:5  },
+  'Knee Pads':             { type:'armor', subtype:'legs', weight:3  },
+  'Mythral Shin Guards':   { type:'armor', subtype:'legs', weight:10 },
+  'Polathurn Shin Guards': { type:'armor', subtype:'legs', weight:12 },
+  'Scaly Leggings':        { type:'armor', subtype:'legs', weight:8  },
+  'Steel Leg Guards':      { type:'armor', subtype:'legs', weight:12 },
+  'Titanium Shin Guards':  { type:'armor', subtype:'legs', weight:12 },
+  // ── Boots ────────────────────────────────────────────────
+  'Aliki Shoes':           { type:'armor', subtype:'feet', weight:3 },
+  'Aluminum Clogs':        { type:'armor', subtype:'feet', weight:4 },
+  'Aluminum-Weave Boots':  { type:'armor', subtype:'feet', weight:3 },
+  'Bathide Boots':         { type:'armor', subtype:'feet', weight:3 },
+  'Bronze Sabatons':       { type:'armor', subtype:'feet', weight:6 },
+  'Dwarven Boots':         { type:'armor', subtype:'feet', weight:4 },
+  'Elven Boots':           { type:'armor', subtype:'feet', weight:2 },
+  'Fancy Dwarven Boots':   { type:'armor', subtype:'feet', weight:4 },
+  'Iron Sabatons':         { type:'armor', subtype:'feet', weight:6 },
+  'Leather Boots':         { type:'armor', subtype:'feet', weight:3 },
+  'Polathurn Boots':       { type:'armor', subtype:'feet', weight:5 },
+  'Polathurn Green Boots': { type:'armor', subtype:'feet', weight:5 },
+  'Scaly Shoes':           { type:'armor', subtype:'feet', weight:3 },
+  'Sjirkomi Boots':        { type:'armor', subtype:'feet', weight:3 },
+  'Steel Toed Boots':      { type:'armor', subtype:'feet', weight:5 },
+  'Titanium Boots':        { type:'armor', subtype:'feet', weight:5 },
+  'Traders Boots':         { type:'armor', subtype:'feet', weight:3 },
+  'Wellington Boots':      { type:'armor', subtype:'feet', weight:4 },
+  // ── Gloves ───────────────────────────────────────────────
+  'Aliki Gauntlets':       { type:'armor', subtype:'hands', weight:4 },
+  'Aluminum Gauntlets':    { type:'armor', subtype:'hands', weight:4 },
+  'Aluminum-Weave Gloves': { type:'armor', subtype:'hands', weight:2 },
+  'Barktomi Gloves':       { type:'armor', subtype:'hands', weight:3 },
+  'Bronze Gauntlets':      { type:'armor', subtype:'hands', weight:5 },
+  'Dragonhide Gloves':     { type:'armor', subtype:'hands', weight:2 },
+  'Fingerless Gloves':     { type:'armor', subtype:'hands', weight:1 },
+  'Fishing Gloves':        { type:'armor', subtype:'hands', weight:1 },
+  'Gloves of Ice':         { type:'armor', subtype:'hands', weight:2 },
+  'Heavy Gloves':          { type:'armor', subtype:'hands', weight:3 },
+  'Inspico Gloves':        { type:'armor', subtype:'hands', weight:2 },
+  'Iron Gauntlets':        { type:'armor', subtype:'hands', weight:5 },
+  'Knuckle Guards':        { type:'armor', subtype:'hands', weight:2 },
+  'Leather Gloves':        { type:'armor', subtype:'hands', weight:1 },
+  'Mythral Gloves':        { type:'armor', subtype:'hands', weight:4 },
+  'Polathurn Gloves':      { type:'armor', subtype:'hands', weight:4 },
+  'Rough Arms':            { type:'armor', subtype:'hands', weight:3 },
+  'Scaly Gloves':          { type:'armor', subtype:'hands', weight:2 },
+  'Steel Gauntlets':       { type:'armor', subtype:'hands', weight:5 },
+  'Titanium Gauntlets':    { type:'armor', subtype:'hands', weight:5 },
+  'Tough Gloves':          { type:'armor', subtype:'hands', weight:2 },
+  'Woodcutters Gloves':    { type:'armor', subtype:'hands', weight:2 },
+  // ── Shields ──────────────────────────────────────────────
+  'Aliki Targe':            { type:'armor', subtype:'shield', weight:8  },
+  'Bone Shield':            { type:'armor', subtype:'shield', weight:7  },
+  'Bronze Shield':          { type:'armor', subtype:'shield', weight:8  },
+  'Bronze Tower Shield':    { type:'armor', subtype:'shield', weight:15 },
+  'Dwarven Shield':         { type:'armor', subtype:'shield', weight:10 },
+  'Fancy Dwarven Shield':   { type:'armor', subtype:'shield', weight:10 },
+  'Iron Small Shield':      { type:'armor', subtype:'shield', weight:6  },
+  'Kite Shield':            { type:'armor', subtype:'shield', weight:12 },
+  'Nagaromi Shield':        { type:'armor', subtype:'shield', weight:10 },
+  'Ona Shield':             { type:'armor', subtype:'shield', weight:10 },
+  'Polathurn Mirror Shield':{ type:'armor', subtype:'shield', weight:12 },
+  'Polathurn Shield':       { type:'armor', subtype:'shield', weight:12 },
+  'Scale Rim':              { type:'armor', subtype:'shield', weight:6  },
+  'Scaly Mask':             { type:'armor', subtype:'shield', weight:3  },
+  'Spiked Shield':          { type:'armor', subtype:'shield', weight:12 },
+  'Turtle Shield':          { type:'armor', subtype:'shield', weight:8  },
+  // ── Rings ────────────────────────────────────────────────
+  'Amber Ring':          { type:'accessory', subtype:'ring', weight:0 },
+  'Golden Ring':         { type:'accessory', subtype:'ring', weight:0 },
+  'Harvesting Ring':     { type:'accessory', subtype:'ring', weight:0 },
+  'Large Prismatic Ring':{ type:'accessory', subtype:'ring', weight:0 },
+  'Marossan Ring':       { type:'accessory', subtype:'ring', weight:0 },
+  'Mining Band':         { type:'accessory', subtype:'ring', weight:0 },
+  'Mining Ring':         { type:'accessory', subtype:'ring', weight:0 },
+  'Mood Ring':           { type:'accessory', subtype:'ring', weight:0 },
+  'Prismatic Ring':      { type:'accessory', subtype:'ring', weight:0 },
+  'Ring of Balance':     { type:'accessory', subtype:'ring', weight:0 },
+  'Ring of Flexibility': { type:'accessory', subtype:'ring', weight:0 },
+  'Ring of Life':        { type:'accessory', subtype:'ring', weight:0 },
+  'Ring of Power':       { type:'accessory', subtype:'ring', weight:0 },
+  'Ring of Speed':       { type:'accessory', subtype:'ring', weight:0 },
+  'Ring of the Fish':    { type:'accessory', subtype:'ring', weight:0 },
+  'Sharp Ring':          { type:'accessory', subtype:'ring', weight:0 },
+  'Traders Ring':        { type:'accessory', subtype:'ring', weight:0 },
+  // ── Necklaces & Amulets ──────────────────────────────────
+  'Bearclaw Necklace':      { type:'accessory', subtype:'neck', weight:1 },
+  'Bug Horn Necklace':      { type:'accessory', subtype:'neck', weight:1 },
+  'Dwarven Necklace':       { type:'accessory', subtype:'neck', weight:1 },
+  'Elven Charm':            { type:'accessory', subtype:'neck', weight:0 },
+  'Elven Focus':            { type:'accessory', subtype:'neck', weight:0 },
+  'Fireproof Amulet':       { type:'accessory', subtype:'neck', weight:1 },
+  'Marossan Necklace':      { type:'accessory', subtype:'neck', weight:1 },
+  'Mining Charm':           { type:'accessory', subtype:'neck', weight:0 },
+  'Mining Talisman':        { type:'accessory', subtype:'neck', weight:0 },
+  'Necklace of Fire':       { type:'accessory', subtype:'neck', weight:1 },
+  'Necklace of Power':      { type:'accessory', subtype:'neck', weight:1 },
+  'Necklace of the Woods':  { type:'accessory', subtype:'neck', weight:1 },
+  'Ona Talisman':           { type:'accessory', subtype:'neck', weight:0 },
+  'Pearl Necklace':         { type:'accessory', subtype:'neck', weight:1 },
+  'Prismatic Necklace':     { type:'accessory', subtype:'neck', weight:1 },
+  'Silver Brooch':          { type:'accessory', subtype:'neck', weight:0 },
+  'Smithing Amulet':        { type:'accessory', subtype:'neck', weight:1 },
+  'Tooth Necklace':         { type:'accessory', subtype:'neck', weight:1 },
+  'Warriors Necklace':      { type:'accessory', subtype:'neck', weight:1 },
+  'Woodcutting Necklace':   { type:'accessory', subtype:'neck', weight:1 },
+  'Woodcutting Talisman':   { type:'accessory', subtype:'neck', weight:0 },
+  // ── Bracelets ────────────────────────────────────────────
+  'Bracelet of Stone':  { type:'accessory', subtype:'bracelet', weight:1 },
+  'Carving Wrist':      { type:'accessory', subtype:'bracelet', weight:1 },
+  'Fancy Bark Bracelet':{ type:'accessory', subtype:'bracelet', weight:1 },
+  'Root Bracelet':      { type:'accessory', subtype:'bracelet', weight:1 },
+  'Scale Bracelet':     { type:'accessory', subtype:'bracelet', weight:1 },
+  'Vine Bracelet':      { type:'accessory', subtype:'bracelet', weight:1 },
+  // ── Other Accessories ────────────────────────────────────
+  'Amber Glasses':       { type:'accessory', subtype:'misc', weight:0 },
+  'Cards Clip':          { type:'accessory', subtype:'misc', weight:0 },
+  'Devilish Brooch':     { type:'accessory', subtype:'misc', weight:0 },
+  'Gordian Knot':        { type:'accessory', subtype:'misc', weight:1 },
+  'Harvesting Figurine': { type:'accessory', subtype:'misc', weight:1 },
+  'Mining Tiara':        { type:'accessory', subtype:'misc', weight:1 },
+  'Pirate Hunter Badge': { type:'accessory', subtype:'misc', weight:0 },
+  'Rose Colored Glasses':{ type:'accessory', subtype:'misc', weight:0 },
+  'Silver Cards Clip':   { type:'accessory', subtype:'misc', weight:0 },
+  'Smithing Goggles':    { type:'accessory', subtype:'misc', weight:1 },
+  // ── Bags & Containers ────────────────────────────────────
+  'Backpack':      { type:'misc', subtype:'bag',     weight:3   },
+  'Carrying Bag':  { type:'misc', subtype:'bag',     weight:2   },
+  'Dwarven Mask':  { type:'misc', subtype:'misc',    weight:2   },
+  'Dwarven Sack':  { type:'misc', subtype:'bag',     weight:3   },
+  'Easter Basket': { type:'misc', subtype:'bag',     weight:1   },
+  'Large Backpack':{ type:'misc', subtype:'bag',     weight:5   },
+  'Messenger Bag': { type:'misc', subtype:'bag',     weight:2   },
+  // ── Vehicles ─────────────────────────────────────────────
+  'Large Wagon':   { type:'misc', subtype:'vehicle', weight:100 },
+  'Sled':          { type:'misc', subtype:'vehicle', weight:20  },
+  'Wagon':         { type:'misc', subtype:'vehicle', weight:50  },
+  // ── Instruments ──────────────────────────────────────────
+  'Banjo':       { type:'misc', subtype:'instrument', weight:3   },
+  'Bongos':      { type:'misc', subtype:'instrument', weight:5   },
+  'Golden Flute':{ type:'misc', subtype:'instrument', weight:1   },
+  'Oboe':        { type:'misc', subtype:'instrument', weight:2   },
+  'Piano':       { type:'misc', subtype:'instrument', weight:200 },
+  'Piccolo':     { type:'misc', subtype:'instrument', weight:1   },
+  'Steel Drums': { type:'misc', subtype:'instrument', weight:20  },
+  'Tuba':        { type:'misc', subtype:'instrument', weight:8   },
+  // ── Siege Engines ────────────────────────────────────────
+  'Catapult':       { type:'misc', subtype:'siege', weight:200 },
+  'Heavy Catapult': { type:'misc', subtype:'siege', weight:400 },
+  'Heavy Trebuchet':{ type:'misc', subtype:'siege', weight:500 },
+  'Super Catapult': { type:'misc', subtype:'siege', weight:300 },
+  'Trebuchet':      { type:'misc', subtype:'siege', weight:350 },
+  // ── Stands & Furniture ───────────────────────────────────
+  'Medium Stand': { type:'misc', subtype:'furniture', weight:10 },
+  'Small Stand':  { type:'misc', subtype:'furniture', weight:5  },
+  // ── Other Misc Equipment ─────────────────────────────────
+  'Chefs Hat':           { type:'misc', subtype:'misc', weight:1 },
+  'Costume Mask':        { type:'misc', subtype:'misc', weight:1 },
+  'Crystal Ball':        { type:'misc', subtype:'misc', weight:5 },
+  'Lantern':             { type:'misc', subtype:'misc', weight:2 },
+  'Lighter':             { type:'misc', subtype:'misc', weight:0 },
+  'Magnifying Glass':    { type:'misc', subtype:'misc', weight:1 },
+  'Polathurn Mask':      { type:'misc', subtype:'misc', weight:2 },
+  'Sjirkomi Mask':       { type:'misc', subtype:'misc', weight:2 },
+  'Small Explosive Device':{ type:'misc', subtype:'misc', weight:2},
+  'Spice Rack':          { type:'misc', subtype:'misc', weight:5 },
+  'Tinderbox':           { type:'misc', subtype:'misc', weight:1 },
+  'Torch':               { type:'misc', subtype:'misc', weight:2 },
+};
+
+const MATERIALS_CATALOG = {
+  // ── Ores ─────────────────────────────────────────────────
+  'Adamantite Ore': { type:'ore', weight:5 },
+  'Bauxite':        { type:'ore', weight:5 },
+  'Biridium Ore':   { type:'ore', weight:5 },
+  'Coal':           { type:'ore', weight:3 },
+  'Copper Ore':     { type:'ore', weight:5 },
+  'Duranium Ore':   { type:'ore', weight:5 },
+  'Gold Ore':       { type:'ore', weight:5 },
+  'Iron Ore':       { type:'ore', weight:5 },
+  'Mythral Ore':    { type:'ore', weight:5 },
+  'Nelgite Ore':    { type:'ore', weight:5 },
+  'Sandstone':      { type:'ore', weight:5 },
+  'Silver Ore':     { type:'ore', weight:5 },
+  'Tin Ore':        { type:'ore', weight:5 },
+  'Titanium Ore':   { type:'ore', weight:5 },
+  'Trinite Ore':    { type:'ore', weight:5 },
+  'Unixide Ore':    { type:'ore', weight:5 },
+  // ── Bars ─────────────────────────────────────────────────
+  'Adamantite Bar': { type:'bar', weight:3 },
+  'Aliki Bar':      { type:'bar', weight:3 },
+  'Aluminum Bar':   { type:'bar', weight:3 },
+  'Bronze Bar':     { type:'bar', weight:3 },
+  'Gold Bar':       { type:'bar', weight:3 },
+  'Iron Bar':       { type:'bar', weight:3 },
+  'Mythral Bar':    { type:'bar', weight:3 },
+  'Polathurn Bar':  { type:'bar', weight:3 },
+  'Silver Bar':     { type:'bar', weight:3 },
+  'Steel Bar':      { type:'bar', weight:3 },
+  'Tinran Bar':     { type:'bar', weight:3 },
+  'Titanium Bar':   { type:'bar', weight:3 },
+  // ── Fish (raw) ───────────────────────────────────────────
+  'Amberjack':        { type:'fish', weight:3 },
+  'Barracuda':        { type:'fish', weight:5 },
+  'Bass':             { type:'fish', weight:1 },
+  'Flounder':         { type:'fish', weight:3 },
+  'Haddock':          { type:'fish', weight:3 },
+  'Lobster':          { type:'fish', weight:3 },
+  'Mackerel':         { type:'fish', weight:1 },
+  'Magic Fish':       { type:'fish', weight:1 },
+  'Mutant Magic Fish':{ type:'fish', weight:2 },
+  'Octopus':          { type:'fish', weight:5 },
+  'Oyster':           { type:'fish', weight:3 },
+  'Pacu':             { type:'fish', weight:5 },
+  'Pike':             { type:'fish', weight:5 },
+  'Salmon':           { type:'fish', weight:3 },
+  'Sandbar Shark':    { type:'fish', weight:7 },
+  'Stingray':         { type:'fish', weight:5 },
+  'Striped Marlin':   { type:'fish', weight:7 },
+  'Swordfish':        { type:'fish', weight:7 },
+  'Tuna':             { type:'fish', weight:5 },
+  // ── Gems ─────────────────────────────────────────────────
+  'Amber':         { type:'gem', weight:0 },
+  'Amethyst':      { type:'gem', weight:0 },
+  'Aquamarine':    { type:'gem', weight:0 },
+  'Black Diamond': { type:'gem', weight:0 },
+  'Diamond':       { type:'gem', weight:0 },
+  'Emerald':       { type:'gem', weight:0 },
+  'Fire Diamond':  { type:'gem', weight:0 },
+  'Garnet':        { type:'gem', weight:0 },
+  'Jade':          { type:'gem', weight:0 },
+  'Opal':          { type:'gem', weight:0 },
+  'Pearl':         { type:'gem', weight:0 },
+  'Peridot':       { type:'gem', weight:0 },
+  'Ruby':          { type:'gem', weight:0 },
+  'Sapphire':      { type:'gem', weight:0 },
+  'Topaz':         { type:'gem', weight:0 },
+  'Turquoise':     { type:'gem', weight:0 },
+  // ── Hides & Leathers ─────────────────────────────────────
+  'Animal Pelt':  { type:'hide', weight:1 },
+  'Animal Skin':  { type:'hide', weight:1 },
+  'Bat Hide':     { type:'hide', weight:1 },
+  'Dragon Hide':  { type:'hide', weight:3 },
+  'Heavy Fur':    { type:'hide', weight:2 },
+  'Ivory':        { type:'hide', weight:3 },
+  'Scaly Hide':   { type:'hide', weight:2 },
+  'Snake Skin':   { type:'hide', weight:1 },
+  'Turtle Shell': { type:'hide', weight:3 },
+  // ── Creature Parts ───────────────────────────────────────
+  'Bear Claw':       { type:'resource', weight:1 },
+  'Beak':            { type:'resource', weight:0 },
+  'Beetle Carapace': { type:'resource', weight:1 },
+  'Beetle Horn':     { type:'resource', weight:0 },
+  'Beetle Meat':     { type:'resource', weight:1 },
+  'Bone':            { type:'resource', weight:1 },
+  'Claw':            { type:'resource', weight:0 },
+  'Fish Scales':     { type:'resource', weight:0 },
+  'Fox Tail':        { type:'resource', weight:0 },
+  'King Bear Head':  { type:'resource', weight:5 },
+  'Lobster Meat':    { type:'resource', weight:1 },
+  'Poisoned Fang':   { type:'resource', weight:0 },
+  'Raw Meat':        { type:'resource', weight:2 },
+  'Shark Fin':       { type:'resource', weight:2 },
+  'Sharp Tooth':     { type:'resource', weight:0 },
+  'Shell':           { type:'resource', weight:0 },
+  'Small Skull':     { type:'resource', weight:1 },
+  'Snake Meat':      { type:'resource', weight:1 },
+  // ── Plants & Herbs ───────────────────────────────────────
+  'Acorn':             { type:'resource', weight:0 },
+  'Bamboo':            { type:'resource', weight:2 },
+  'Bunch of Lavender': { type:'resource', weight:0 },
+  'Bunch of Spinach':  { type:'resource', weight:0 },
+  'Bundle of Wheat':   { type:'resource', weight:1 },
+  'Four Leaf Clover':  { type:'resource', weight:0 },
+  'Hardwood Logs':     { type:'resource', weight:9 },
+  'Logs':              { type:'resource', weight:3 },
+  'Mint Leaf':         { type:'resource', weight:0 },
+  'Nightshade Leaf':   { type:'resource', weight:0 },
+  'Plant Food':        { type:'resource', weight:1 },
+  'St. Johns Wort':    { type:'resource', weight:0 },
+  'St. Johns Wort Oil':{ type:'resource', weight:1 },
+  'Sugarcane':         { type:'resource', weight:2 },
+  // ── Cooking Ingredients ──────────────────────────────────
+  'Black Pepper': { type:'resource', weight:0 },
+  'Dough':        { type:'resource', weight:1 },
+  'Egg':          { type:'resource', weight:0 },
+  'Flour':        { type:'resource', weight:1 },
+  'Ground Meat':  { type:'resource', weight:1 },
+  'Molasses':     { type:'resource', weight:1 },
+  'Potato':       { type:'resource', weight:1 },
+  'Sugar':        { type:'resource', weight:1 },
+  // ── Crafting Materials ───────────────────────────────────
+  'Amber Bead':           { type:'resource', weight:0 },
+  'Bronze Rod':           { type:'resource', weight:2 },
+  'Chipwood':             { type:'resource', weight:2 },
+  'Flat Glowing Crystal': { type:'resource', weight:0 },
+  'Glass':                { type:'resource', weight:1 },
+  'Glass Prism':          { type:'resource', weight:1 },
+  'Lumber':               { type:'resource', weight:2 },
+  'Paper':                { type:'resource', weight:0 },
+  'Phoenix Feather':      { type:'resource', weight:0 },
+  'Rope':                 { type:'resource', weight:2 },
+  'Stone Block':          { type:'resource', weight:7 },
+  // ── Abstract Art ─────────────────────────────────────────
+  'Aluminum Abstract Art': { type:'resource', weight:2 },
+  'Bronze Abstract Art':   { type:'resource', weight:2 },
+  'Iron Abstract Art':     { type:'resource', weight:2 },
+  'Steel Abstract Art':    { type:'resource', weight:2 },
+  // ── Fishing Gear ─────────────────────────────────────────
+  'Bait':                 { type:'fishing', weight:0 },
+  'Lobster Trap':         { type:'fishing', weight:3 },
+  'Shark Lure':           { type:'fishing', weight:1 },
+  'Titanium Lobster Trap':{ type:'fishing', weight:4 },
+  'Tuna Lure':            { type:'fishing', weight:1 },
+  // ── Misc Items ───────────────────────────────────────────
+  'Blue Lottery Ticket':   { type:'misc', weight:0 },
+  'Boat Ticket':           { type:'misc', weight:0 },
+  'Certificate':           { type:'misc', weight:0 },
+  'Code Book':             { type:'misc', weight:1 },
+  'Empty Bottle':          { type:'misc', weight:1 },
+  'Feather':               { type:'misc', weight:0 },
+  'Gold Coin':             { type:'misc', weight:0 },
+  'Green Lottery Ticket':  { type:'misc', weight:0 },
+  'Hexamine':              { type:'misc', weight:0 },
+  'Large Bauble':          { type:'misc', weight:1 },
+  'Large Box':             { type:'misc', weight:5 },
+  'Locked Chest':          { type:'misc', weight:10},
+  'Medium Box':            { type:'misc', weight:3 },
+  'Nagaromi Belt Buckle':  { type:'misc', weight:0 },
+  'Paper Note':            { type:'misc', weight:0 },
+  'Quainium Coin':         { type:'misc', weight:0 },
+  'Red Lottery Ticket':    { type:'misc', weight:0 },
+  'Small Bauble':          { type:'misc', weight:0 },
+  'Small Box':             { type:'misc', weight:1 },
+  'Statue':                { type:'misc', weight:5 },
 };
 
 // ============================================================
@@ -406,9 +1414,11 @@ const GEAR = {
 const LOCATIONS = {
   isenvale:    {
     id:'isenvale',    name:'Isenvale',    pos:[0,0],
-    desc:'A quiet starter village ringed by pine forest. Good for beginners.',
-    actions:{ woodcutting:['wc_pine'], harvesting:['hv_wheat'], cooking:['co_bread'], crafting:['cr_rope'], construction:['cn_fence'], magic:['mg_study'], trading:['tr_barter'], speed:['sp_sprint'] },
-    shop:['basic_hatchet','forester_gloves'],
+    desc:'A quiet starter village ringed by pine forest. The village kitchen is open to all — bring a lighter or tinderbox.',
+    spells:true,
+    kitchen:true,
+    actions:{ woodcutting:['wc_pine'], crafting:['cr_rope'], construction:['cn_fence'], trading:['tr_barter'] },
+    shop:['bronze_hatchet','lighter','tinderbox'],
     connects:['stonehaven','thornfield'],
   },
   stonehaven:  {
@@ -416,95 +1426,171 @@ const LOCATIONS = {
     desc:'A busy market town at the foothills. Mining and trade thrive here.',
     dynamicCombat:true,
     actions:{ woodcutting:['wc_pine','wc_oak'], mining:['mn_copper'], smithing:['sm_copper'], trading:['tr_barter','tr_contract'], construction:['cn_fence','cn_wall'] },
-    shop:['basic_hatchet','iron_hatchet'],
+    forge:['iron_hatchet'],
+    shop:[],
     connects:['isenvale','brightwater','ashgate'],
   },
   brightwater: {
     id:'brightwater', name:'Brightwater', pos:[0,4],
     desc:'A riverside town. The fishing is legendary and merchants pass through daily.',
-    actions:{ fishing:['fi_shrimp','fi_trout'], cooking:['co_bread','co_fish'], trading:['tr_contract','tr_merchant'], crafting:['cr_rope','cr_leather'] },
-    shop:[],
+    actions:{ fishing:['fi_mackerel','fi_salmon','fi_bass','fi_flounder'], trading:['tr_contract','tr_merchant'], crafting:['cr_rope','cr_leather'] },
+    shop:['fishing_rod'],
+    tackleShop:[{name:'Tuna Lure',cost:50},{name:'Shark Lure',cost:100}],
     connects:['stonehaven','duskmill'],
   },
   duskmill:    {
     id:'duskmill',    name:'Duskmill',    pos:[1,4],
     desc:'An old mill town deep in birch groves. Crafters and woodcutters call it home.',
-    actions:{ woodcutting:['wc_oak','wc_birch'], crafting:['cr_leather','cr_cloth'], construction:['cn_wall'], cooking:['co_fish','co_stew'] },
-    shop:['iron_hatchet','forester_gloves'],
+    actions:{ woodcutting:['wc_oak','wc_birch'], crafting:['cr_leather','cr_cloth'], construction:['cn_wall'] },
+    shop:[],
     connects:['brightwater','ironpeak'],
   },
   ironpeak:    {
     id:'ironpeak',    name:'Ironpeak',    pos:[2,4],
     desc:'A highland fortress town. Rich ore veins and dangerous creatures abound.',
-    actions:{ mining:['mn_iron','mn_gold'], smithing:['sm_iron','sm_silver'] },
-    shop:['steel_hatchet'],
+    actions:{ mining:['mn_iron','mn_gold','mn_asterite'], smithing:['sm_iron','sm_silver'] },
+    forge:['iron_hatchet','asterite_hatchet'],
+    shop:[],
     connects:['duskmill','harrowfen'],
   },
   thornfield:  {
     id:'thornfield',  name:'Thornfield',  pos:[2,0],
-    desc:'Rolling hills and farms. Harvest crops and train your speed on the open roads.',
-    actions:{ woodcutting:['wc_pine'], harvesting:['hv_wheat','hv_herbs'], speed:['sp_sprint','sp_dash'], construction:['cn_fence'] },
+    desc:'Rolling hills and farms. The public greenhouse is just down the road.',
+    actions:{ woodcutting:['wc_pine'], construction:['cn_fence'] },
+    sawmill:['saw_pine','saw_oak','saw_birch','saw_yew'],
     shop:[],
     connects:['isenvale','coldrun'],
   },
   coldrun:     {
     id:'coldrun',     name:'Coldrun',     pos:[3,1],
     desc:'A cold northern outpost. Ice magic, fast runners and silver miners make their home here.',
-    actions:{ mining:['mn_silver'], fishing:['fi_trout','fi_salmon'], magic:['mg_ice'], speed:['sp_dash','sp_surge'] },
-    shop:['lucky_charm'],
+    spells:true,
+    actions:{ mining:['mn_silver'], fishing:['fi_flounder','fi_haddock','fi_tuna'] },
+    shop:[],
     connects:['thornfield','ashgate','harrowfen'],
   },
   ashgate:     {
     id:'ashgate',     name:'Ashgate',     pos:[1,2],
     desc:'A dark crossroads town built on ancient ruins. Smiths and mages gather here.',
-    actions:{ woodcutting:['wc_birch','wc_yew'], smithing:['sm_silver','sm_gold'], magic:['mg_flame','mg_ice'], crafting:['cr_cloth','cr_silk'] },
-    shop:['iron_hatchet','lucky_charm'],
+    spells:true,
+    actions:{ woodcutting:['wc_birch','wc_yew'], smithing:['sm_silver','sm_gold'], crafting:['cr_cloth','cr_silk'] },
+    forge:['steel_hatchet'],
+    shop:[],
     connects:['stonehaven','coldrun','harrowfen'],
   },
   harrowfen:   {
     id:'harrowfen',   name:'Harrowfen',   pos:[3,3],
     desc:'A misty fen known for yew groves, deep water fishing and ancient magic.',
-    actions:{ woodcutting:['wc_yew'], fishing:['fi_salmon','fi_lobster'], harvesting:['hv_flax','hv_magic'], magic:['mg_flame','mg_arcane'] },
-    shop:['steel_hatchet','lucky_charm'],
+    spells:true,
+    actions:{ woodcutting:['wc_yew'], fishing:['fi_haddock','fi_tuna','fi_shark','fi_oyster','fi_pike'] },
+    baitStation:['bait_mackerel','bait_bass'],
+    tackleShop:[{name:'Lobster Trap',cost:75}],
+    shop:[],
     connects:['ironpeak','coldrun','ashgate','embervale'],
   },
   embervale:   {
     id:'embervale',   name:'Embervale',   pos:[3,4],
     desc:'The legendary endgame vale. Every skill can be trained here at its highest tier.',
+    spells:true,
     actions:{
       woodcutting:['wc_pine','wc_oak','wc_birch','wc_yew'],
-      mining:['mn_copper','mn_iron','mn_silver','mn_gold'],
-      fishing:['fi_shrimp','fi_trout','fi_salmon','fi_lobster'],
-      harvesting:['hv_wheat','hv_herbs','hv_flax','hv_magic'],
-      cooking:['co_bread','co_fish','co_stew','co_feast'],
+      mining:['mn_copper','mn_iron','mn_silver','mn_gold','mn_asterite','mn_arcanium'],
+      fishing:['fi_mackerel','fi_salmon','fi_bass','fi_flounder','fi_haddock','fi_tuna','fi_shark','fi_oyster','fi_pike','fi_lobster','fi_marlin','fi_swordfish','fi_amberjack','fi_barracuda'],
       crafting:['cr_rope','cr_leather','cr_cloth','cr_silk'],
       smithing:['sm_copper','sm_iron','sm_silver','sm_gold'],
       construction:['cn_fence','cn_wall','cn_tower','cn_fort'],
-      magic:['mg_study','mg_flame','mg_ice','mg_arcane'],
       trading:['tr_barter','tr_contract','tr_merchant','tr_grand'],
-      speed:['sp_sprint','sp_dash','sp_surge','sp_swift'],
     },
-    shop:['steel_hatchet','forester_gloves','lucky_charm'],
+    forge:['iron_hatchet','steel_hatchet','asterite_hatchet','arcanium_hatchet'],
+    baitStation:['bait_mackerel','bait_bass'],
+    tackleShop:[{name:'Tuna Lure',cost:50},{name:'Shark Lure',cost:100},{name:'Lobster Trap',cost:75}],
+    shop:[],
     connects:['harrowfen'],
   },
+  greenhouse:  {
+    id:'greenhouse', name:'Public Greenhouse', pos:[1,1],
+    desc:'A large communal greenhouse maintained by the farmers\' guild. Crops rotate every four hours — check back often.',
+    greenhouse:true,
+    shop:[],
+    connects:['isenvale','thornfield'],
+  },
 };
+
+// ============================================================
+//  GREENHOUSE ROTATION
+// ============================================================
+// ============================================================
+//  GREENHOUSE — server-driven state
+// ============================================================
+let ghState    = null;   // { phase, cropId, growEndsAt } or { phase, cropId, picksTotal, picksUsed, picksRemaining }
+let ghFetching = false;
+
+async function fetchGhState() {
+  if (ghFetching) return;
+  ghFetching = true;
+  try {
+    const r = await fetch('/api/greenhouse');
+    ghState = await r.json();
+    updateActionSection();
+  } catch(e) { console.warn('Greenhouse fetch failed', e); }
+  finally { ghFetching = false; }
+}
 
 // ============================================================
 //  TRAVEL TIMES  (Speed level reduces travel time)
 // ============================================================
 const TRAVEL_TIMES = {
-  'isenvale-stonehaven':20,    'isenvale-thornfield':15,
-  'stonehaven-brightwater':20, 'stonehaven-ashgate':25,
-  'brightwater-duskmill':15,   'duskmill-ironpeak':20,
-  'ironpeak-harrowfen':25,     'thornfield-coldrun':20,
-  'coldrun-ashgate':20,        'coldrun-harrowfen':25,
-  'ashgate-harrowfen':15,      'harrowfen-embervale':30,
+  'isenvale-stonehaven':  12,   // short south road
+  'isenvale-thornfield':  30,   // long east road across open land
+  'stonehaven-brightwater':18,  // coastal road south
+  'stonehaven-ashgate':   25,   // trade road east
+  'brightwater-duskmill': 10,   // neighbouring towns, quick hop
+  'duskmill-ironpeak':    22,   // road into the highlands
+  'ironpeak-harrowfen':   15,   // close highland neighbours
+  'thornfield-coldrun':   20,   // north road to the outpost
+  'coldrun-ashgate':      45,   // long diagonal crossing
+  'coldrun-harrowfen':    60,   // gruelling mountain-to-fen trek
+  'ashgate-harrowfen':    50,   // long eastern crossing
+  'harrowfen-embervale':  35,   // final approach to the endgame vale
+  'isenvale-greenhouse':  10,   // short path to the greenhouse
+  'thornfield-greenhouse':12,   // road from the farming town
 };
 
 function getTravelMs(a, b) {
   const base = TRAVEL_TIMES[`${a}-${b}`] || TRAVEL_TIMES[`${b}-${a}`] || 30;
   const speedReduction = Math.floor((skillLevel('speed') - 1) / 4);
-  return Math.max(5, base - speedReduction) * 1000;
+  const buffBonus = (state.activeBuffs && state.activeBuffs.excite) ? 5 : 0;
+  return Math.max(15, base - speedReduction - buffBonus) * 1000;
+}
+
+function getMaxHops() {
+  return 1 + Math.floor(skillLevel('speed') / 10);
+}
+
+// BFS — returns Map of locId -> {hops, path[]}
+function getReachableTowns(from, maxHops) {
+  const result = new Map();
+  const queue  = [{ id:from, hops:0, path:[from] }];
+  const seen   = new Set([from]);
+  while (queue.length) {
+    const { id, hops, path } = queue.shift();
+    if (hops > 0) result.set(id, { hops, path });
+    if (hops < maxHops) {
+      for (const next of LOCATIONS[id].connects) {
+        if (!seen.has(next)) {
+          seen.add(next);
+          queue.push({ id:next, hops:hops+1, path:[...path, next] });
+        }
+      }
+    }
+  }
+  return result;
+}
+
+function getPathTravelMs(path) {
+  let total = 0;
+  for (let i = 0; i < path.length - 1; i++) total += getTravelMs(path[i], path[i+1]);
+  return total;
 }
 
 // ============================================================
@@ -515,8 +1601,11 @@ function getActionMs(skillId) {
   const levelReduction = Math.floor((lv - 1) / 2);
   let gearReduction = 0;
   if (skillId === 'woodcutting') {
-    if (state.equipment.tool)      gearReduction += GEAR[state.equipment.tool].reduce;
-    if (state.equipment.accessory) gearReduction += GEAR[state.equipment.accessory].reduce;
+    for (const gearId of Object.values(state.equipment)) {
+      if (gearId && GEAR[gearId] && GEAR[gearId].skill === 'woodcutting') {
+        gearReduction += GEAR[gearId].reduceTime || 0;
+      }
+    }
   }
   return Math.max(15, 60 - levelReduction - gearReduction) * 1000;
 }
@@ -571,9 +1660,13 @@ function onLoggedIn() {
   updateSkillDetail(selectedSkill);
   updateEquipmentUI();
   updateInventoryUI();
-  updateCharStatsUI();
   document.getElementById('stat-gold').textContent = state.gold;
+  updateHpMpUI();
+  updateCarryUI();
   addLog(`Welcome, ${authUsername}! Select an action on the right to begin.`, 'travel');
+  document.getElementById('header-username-side').textContent = authUsername;
+  document.getElementById('chat-panel').style.display = 'block';
+  chatConnect();
 }
 
 function logout() {
@@ -583,6 +1676,9 @@ function logout() {
   document.getElementById('logout-btn').style.display = 'none';
   document.getElementById('login-overlay').classList.remove('hidden');
   document.getElementById('login-error').textContent = '';
+  document.getElementById('chat-panel').style.display = 'none';
+  document.getElementById('chat-messages').innerHTML = '';
+  chatDisconnect();
   resetState();
 }
 
@@ -599,91 +1695,95 @@ let state = {
   location:  'isenvale',
   skills:    defaultSkills(),
   inventory: {},
-  gold:      100,
-  equipment: {tool:null, accessory:null},
+  gold:      0,
+  equipment: {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null},
   action:    null,
   travel:    null,
-  charXP:    0,
-  charLevel: 1,
-  hp:        5,
-  mp:        1,
+  hp:        { current:100, max:100 },
+  mp:        { current:20,  max:20  },
+  charXp:    0,
+  guildXp:   0,
+  activeBuffs: {},
 };
 
-let charXPBuffer = 0;   // fractional char XP accumulator — runtime only
-let regenTimer   = Date.now(); // HP/MP regen tracker — runtime only
-
 function resetState() {
-  state.location  = 'isenvale';
-  state.skills    = defaultSkills();
-  state.inventory = {};
-  state.gold      = 100;
-  state.equipment = {tool:null, accessory:null};
-  state.action    = null;
-  state.travel    = null;
-  state.charXP    = 0;
-  state.charLevel = 1;
-  state.hp        = 5;
-  state.mp        = 1;
-  charXPBuffer    = 0;
-  regenTimer      = Date.now();
+  state.location   = 'isenvale';
+  state.skills     = defaultSkills();
+  state.inventory  = {};
+  state.gold       = 0;
+  state.equipment  = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null};
+  state.action     = null;
+  state.travel     = null;
+  state.hp         = { current:100, max:100 };
+  state.mp         = { current:20, max:20 };
+  state.charXp     = 0;
+  state.guildXp    = 0;
+  state.activeBuffs = {};
 }
 
 function skillLevel(id) { return (state.skills[id] || {level:1}).level; }
 
-// ============================================================
-//  HP / MP
-// ============================================================
-function getMaxHP() {
-  // Base 3 + Combat Level + Character Level + gear (future) + food (future)
-  return 3 + skillLevel('combat') + state.charLevel;
-}
-function getMaxMP() {
-  // Magic Level + Character Level + 3 + gear (future) + food (future)
-  return skillLevel('magic') + state.charLevel + 3;
-}
-
-function updateCharStatsUI() {
-  const maxHP = getMaxHP(), maxMP = getMaxMP();
-  state.hp = Math.min(state.hp, maxHP);
-  state.mp = Math.min(state.mp, maxMP);
-  document.getElementById('stat-charlevel').textContent = state.charLevel;
-  document.getElementById('stat-hp').textContent        = state.hp;
-  document.getElementById('stat-maxhp').textContent     = maxHP;
-  document.getElementById('stat-mp').textContent        = state.mp;
-  document.getElementById('stat-maxmp').textContent     = maxMP;
-  document.getElementById('hp-fill').style.width = (maxHP > 0 ? (state.hp / maxHP * 100) : 0) + '%';
-  document.getElementById('mp-fill').style.width = (maxMP > 0 ? (state.mp / maxMP * 100) : 0) + '%';
-}
-
-function tickRegen(now) {
-  if (now - regenTimer >= 300000) { // 5 minutes
-    regenTimer = now;
-    const maxHP = getMaxHP(), maxMP = getMaxMP();
-    let changed = false;
-    if (state.hp < maxHP) { state.hp = Math.min(state.hp + 1, maxHP); changed = true; }
-    if (state.mp < maxMP) { state.mp = Math.min(state.mp + 1, maxMP); changed = true; }
-    if (changed) { updateCharStatsUI(); saveGame(); }
-  }
-}
-
 function getStateData() {
-  return {
-    location:state.location, skills:state.skills, inventory:state.inventory,
-    gold:state.gold, equipment:state.equipment,
-    charXP:state.charXP, charLevel:state.charLevel, hp:state.hp, mp:state.mp,
-  };
+  return { location:state.location, skills:state.skills, inventory:state.inventory, gold:state.gold, equipment:state.equipment, hp:state.hp, mp:state.mp, charXp:state.charXp, guildXp:state.guildXp };
+}
+
+function getMpMax()    { return 10 + skillLevel('magic') * 2; }
+function getHpMax()    { return 100; }
+function getCarryMax() { return 1000 + skillLevel('trading') * 50; /* +charLevel*50 later */ }
+
+function getCarryWeight() {
+  let w = 0;
+  for (const [name, count] of Object.entries(state.inventory)) {
+    if (count > 0) w += (ITEM_WEIGHTS[name] || 0) * count;
+  }
+  for (const gearId of Object.values(state.equipment)) {
+    if (gearId && GEAR[gearId]) w += GEAR[gearId].weight || 0;
+  }
+  return w;
+}
+
+function canCarry(itemName, qty) {
+  qty = qty || 1;
+  const w = ITEM_WEIGHTS[itemName] || 0;
+  if (w === 0) return true;
+  return getCarryWeight() + w * qty <= getCarryMax();
+}
+
+function updateCarryUI() {
+  const cur = getCarryWeight(), max = getCarryMax();
+  document.getElementById('stat-carry').textContent     = cur;
+  document.getElementById('stat-carry-max').textContent = max;
+  const fill = document.getElementById('carry-fill');
+  fill.style.width  = Math.min(cur / max * 100, 100) + '%';
+  fill.className    = 'carry-fill' + (cur >= max ? ' overweight' : '');
 }
 
 function applyServerData(d) {
-  state.location  = d.location  || 'isenvale';
-  state.skills    = Object.assign(defaultSkills(), d.skills || {});
-  state.inventory = d.inventory || {};
-  state.gold      = d.gold      !== undefined ? d.gold : 100;
-  state.equipment = d.equipment || {tool:null, accessory:null};
-  state.charXP    = d.charXP    || 0;
-  state.charLevel = d.charLevel || 1;
-  state.hp        = d.hp        !== undefined ? d.hp : 5;
-  state.mp        = d.mp        !== undefined ? d.mp : 1;
+  state.location   = d.location  || 'isenvale';
+  state.skills     = Object.assign(defaultSkills(), d.skills || {});
+  state.inventory  = d.inventory || {};
+  state.gold       = d.gold      || 0;
+  const defaultEquip = {tool:null, rod:null, neck:null, gloves:null, upper_body:null, left_hand:null, head:null};
+  state.equipment  = Object.assign(defaultEquip, d.equipment || {});
+  state.hp         = d.hp        || { current:getHpMax(), max:getHpMax() };
+  state.mp         = d.mp        || { current:getMpMax(), max:getMpMax() };
+  state.charXp     = d.charXp    || 0;
+  state.guildXp    = d.guildXp   || 0;
+  state.activeBuffs = {};
+  if (state.location === 'greenhouse') { ghState = null; fetchGhState(); }
+}
+
+function updateHpMpUI() {
+  const hpMax = getHpMax(), mpMax = getMpMax();
+  state.hp.max = hpMax; state.mp.max = mpMax;
+  state.hp.current = Math.min(state.hp.current, hpMax);
+  state.mp.current = Math.min(state.mp.current, mpMax);
+  document.getElementById('stat-hp').textContent     = Math.floor(state.hp.current);
+  document.getElementById('stat-hp-max').textContent = hpMax;
+  document.getElementById('hp-fill').style.width     = (state.hp.current / hpMax * 100) + '%';
+  document.getElementById('stat-mp').textContent     = Math.floor(state.mp.current);
+  document.getElementById('stat-mp-max').textContent = mpMax;
+  document.getElementById('mp-fill').style.width     = (state.mp.current / mpMax * 100) + '%';
 }
 
 async function saveGame() {
@@ -700,28 +1800,13 @@ async function saveGame() {
 function xpIntoLevel(skillId) { return state.skills[skillId].xp - xpForLevel(state.skills[skillId].level); }
 function xpForNext(skillId)   { return xpForLevel(state.skills[skillId].level+1) - xpForLevel(state.skills[skillId].level); }
 
-function grantCharXP(skillXP) {
-  charXPBuffer += skillXP / 12;
-  const whole = Math.floor(charXPBuffer);
-  if (whole <= 0) return;
-  charXPBuffer -= whole;
-  state.charXP += whole;
-  while (state.charXP >= xpForLevel(state.charLevel + 1)) {
-    state.charLevel++;
-    addLog(`CHARACTER LEVEL UP! You are now character level ${state.charLevel}!`, 'levelup');
-  }
-  updateCharStatsUI();
-}
-
 function grantXP(skillId, amount) {
   if (!state.skills[skillId]) return;
   state.skills[skillId].xp += amount;
-  grantCharXP(amount);
   while (state.skills[skillId].xp >= xpForLevel(state.skills[skillId].level+1)) {
     state.skills[skillId].level++;
     addLog(`LEVEL UP! ${SKILL_DEFS[skillId].name} is now level ${state.skills[skillId].level}!`, 'levelup');
     if (skillId==='woodcutting') updateEquipmentUI();
-    if (skillId==='combat' || skillId==='magic') updateCharStatsUI();
   }
   updateSkillCell(skillId);
   if (skillId === selectedSkill) updateSkillDetail(skillId);
@@ -731,9 +1816,12 @@ function grantXP(skillId, amount) {
 //  INVENTORY & GOLD
 // ============================================================
 function addItem(name) {
-  if (!name) return;
-  state.inventory[name] = (state.inventory[name]||0) + 1;
+  if (!name) return true;
+  if (!canCarry(name)) return false;
+  state.inventory[name] = (state.inventory[name] || 0) + 1;
   updateInventoryUI();
+  updateCarryUI();
+  return true;
 }
 function addGold(amount) {
   state.gold += amount;
@@ -754,26 +1842,175 @@ function addLog(msg, type) {
 }
 
 // ============================================================
-//  MAP
+//  FANTASY MAP
 // ============================================================
+const LOC_POS = {
+  isenvale:    {x:75,  y:95 },
+  thornfield:  {x:295, y:50 },
+  coldrun:     {x:400, y:90 },
+  stonehaven:  {x:105, y:205},
+  ashgate:     {x:248, y:208},
+  brightwater: {x:80,  y:318},
+  duskmill:    {x:218, y:322},
+  ironpeak:    {x:372, y:278},
+  harrowfen:   {x:438, y:338},
+  embervale:   {x:470, y:398},
+  greenhouse:  {x:185, y:138},
+};
+
+// [locA, locB, control-point offset x, offset y from midpoint]
+const MAP_ROADS = [
+  ['isenvale',    'stonehaven',  -25,  5 ],
+  ['isenvale',    'thornfield',   15, -30],
+  ['isenvale',    'greenhouse',   -8,  10],
+  ['thornfield',  'greenhouse',   -8,  15],
+  ['stonehaven',  'brightwater', -22,  8 ],
+  ['stonehaven',  'ashgate',      10, -18],
+  ['brightwater', 'duskmill',      8,  18],
+  ['duskmill',    'ironpeak',     15, -25],
+  ['ironpeak',    'harrowfen',    18,  12],
+  ['thornfield',  'coldrun',      18,  12],
+  ['coldrun',     'ashgate',     -15,  -8],
+  ['coldrun',     'harrowfen',    22,  18],
+  ['ashgate',     'harrowfen',    20,  22],
+  ['harrowfen',   'embervale',     8,  10],
+];
+
 function buildMap() {
-  const grid = document.getElementById('map-grid');
-  grid.innerHTML = '';
-  const cells = Array.from({length:4},()=>Array(5).fill(null));
-  for (const loc of Object.values(LOCATIONS)) cells[loc.pos[0]][loc.pos[1]] = loc;
-  const adj = new Set(LOCATIONS[state.location].connects);
-  for (let r=0;r<4;r++) for (let c=0;c<5;c++) {
-    const div = document.createElement('div');
-    const loc = cells[r][c];
-    if (loc) {
-      div.className = 'map-cell location';
-      if (loc.id===state.location)  div.className += ' current-loc';
-      else if (adj.has(loc.id))     div.className += ' adjacent';
-      div.textContent = loc.name;
-      div.onclick = ()=>onMapClick(loc.id);
-    } else { div.className = 'map-cell empty'; }
-    grid.appendChild(div);
+  const svg = document.getElementById('fantasy-map');
+  svg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg';
+  const cur       = state.location;
+  const adj       = new Set(LOCATIONS[cur].connects);
+  const reachable = getReachableTowns(cur, getMaxHops());
+
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(ns, tag);
+    for (const [k,v] of Object.entries(attrs)) e.setAttribute(k,v);
+    if (parent) parent.appendChild(e);
+    return e;
   }
+
+  // ── Defs ───────────────────────────────────────────────────
+  const defs = el('defs',{},svg);
+
+  const grad = el('radialGradient',{id:'fm-parch',cx:'45%',cy:'38%',r:'72%'},defs);
+  el('stop',{'offset':'0%','stop-color':'#e8d5a3'},grad);
+  el('stop',{'offset':'100%','stop-color':'#b89558'},grad);
+
+  // Vignette
+  const vig = el('radialGradient',{id:'fm-vig',cx:'50%',cy:'50%',r:'70%'},defs);
+  el('stop',{'offset':'60%','stop-color':'transparent'},vig);
+  el('stop',{'offset':'100%','stop-color':'rgba(30,20,5,0.35)'},vig);
+
+  // ── Background ─────────────────────────────────────────────
+  el('rect',{x:0,y:0,width:520,height:430,fill:'url(#fm-parch)',rx:3},svg);
+  // Texture lines
+  for(let i=0;i<430;i+=4) el('line',{x1:0,y1:i,x2:520,y2:i,stroke:'rgba(100,70,20,0.04)','stroke-width':1},svg);
+  // Vignette overlay
+  el('rect',{x:0,y:0,width:520,height:430,fill:'url(#fm-vig)',rx:3},svg);
+  // Border
+  el('rect',{x:3,y:3,width:514,height:424,fill:'none',stroke:'#8b6914','stroke-width':2,rx:2,opacity:0.8},svg);
+  el('rect',{x:7,y:7,width:506,height:416,fill:'none',stroke:'#8b6914','stroke-width':0.5,rx:1,opacity:0.4},svg);
+
+  // ── Roads ──────────────────────────────────────────────────
+  for (const [a,b,ox,oy] of MAP_ROADS) {
+    const pa=LOC_POS[a], pb=LOC_POS[b];
+    const mx=(pa.x+pb.x)/2+ox, my=(pa.y+pb.y)/2+oy;
+    el('path',{
+      d:`M ${pa.x} ${pa.y} Q ${mx} ${my} ${pb.x} ${pb.y}`,
+      fill:'none', stroke:'#7a5520', 'stroke-width':2,
+      'stroke-dasharray':'5 4', opacity:0.65
+    },svg);
+    // Road shadow/border
+    el('path',{
+      d:`M ${pa.x} ${pa.y} Q ${mx} ${my} ${pb.x} ${pb.y}`,
+      fill:'none', stroke:'#4a3010', 'stroke-width':3.5,
+      'stroke-dasharray':'5 4', opacity:0.15
+    },svg);
+  }
+
+  // ── Towns ──────────────────────────────────────────────────
+  for (const [id, loc] of Object.entries(LOCATIONS)) {
+    const pos = LOC_POS[id];
+    if (!pos) continue;
+    const isCur   = id===cur;
+    const isAdj   = adj.has(id);
+    const info    = reachable.get(id);
+    const isFar   = info && info.hops > 1;   // reachable via multi-hop
+    const canVisit = isAdj || isFar;
+
+    // outer: only translation (SVG attr) — CSS transform never touches this
+    const outer = el('g',{transform:`translate(${pos.x},${pos.y})`},svg);
+    // inner: CSS hover scale applied here, no SVG transform attr
+    const g = el('g',{},outer);
+    if (isCur) {
+      g.setAttribute('class','fmap-town');
+      g.setAttribute('cursor','pointer');
+      g.onclick = ()=>onMapClick(id);
+    } else if (canVisit) {
+      g.setAttribute('class','fmap-town');
+      g.setAttribute('cursor','pointer');
+      g.onclick = ()=>onMapClick(id);
+    } else {
+      g.setAttribute('class','fmap-town-far');
+    }
+
+    // Glow ring
+    if (isCur) {
+      el('circle',{cx:0,cy:0,r:16,fill:'#74c69d',opacity:0.22,class:'fmap-ring'},g);
+      el('circle',{cx:0,cy:0,r:13,fill:'none',stroke:'#74c69d','stroke-width':1.5,opacity:0.6},g);
+    } else if (isAdj) {
+      el('circle',{cx:0,cy:0,r:13,fill:'#4a8a6a',opacity:0.15,class:'fmap-ring'},g);
+      el('circle',{cx:0,cy:0,r:10,fill:'none',stroke:'#4a8a6a','stroke-width':1,opacity:0.5},g);
+    } else if (isFar) {
+      el('circle',{cx:0,cy:0,r:13,fill:'#8a6a20',opacity:0.15,class:'fmap-ring'},g);
+      el('circle',{cx:0,cy:0,r:10,fill:'none',stroke:'#c8a050','stroke-width':1,'stroke-dasharray':'3 2',opacity:0.6},g);
+    }
+
+    // Ground shadow
+    el('ellipse',{cx:1,cy:4,rx:9,ry:4,fill:'rgba(30,15,0,0.25)'},g);
+
+    // Castle body
+    const bc = isCur?'#1a4a30':isAdj?'#1a3a28':isFar?'#4a3a10':'#5a3a18';
+    const sc = isCur?'#74c69d':isAdj?'#4a8a6a':isFar?'#c8a050':'#9a7040';
+    el('rect',{x:-7,y:-8,width:14,height:10,fill:bc,stroke:sc,'stroke-width':1,rx:0.5},g);
+    // Turrets
+    for (const tx of [-7,-2,5]) el('rect',{x:tx,y:-12,width:4,height:5,fill:bc,stroke:sc,'stroke-width':1},g);
+    // Gate
+    el('rect',{x:-2,y:-4,width:4,height:4,fill:'rgba(0,0,0,0.4)',rx:1},g);
+
+    // Label with outline for readability
+    const fc = isCur?'#e8fff4':isAdj?'#c8e8d0':isFar?'#e8d880':'#4a3010';
+    const fw = isCur?'bold':'normal';
+    const t = el('text',{
+      x:0, y:16,
+      'text-anchor':'middle',
+      fill:fc,
+      'font-size':isCur?10:9,
+      'font-family':'serif',
+      'font-weight':fw,
+      'stroke':'#1a0f00',
+      'stroke-width':2.5,
+      'paint-order':'stroke'
+    },g);
+    t.textContent = loc.name;
+  }
+
+  // ── Compass rose ───────────────────────────────────────────
+  const cr = el('g',{transform:'translate(476,26)'},svg);
+  el('circle',{cx:0,cy:0,r:14,fill:'rgba(200,170,100,0.4)',stroke:'#8b6914','stroke-width':0.8},cr);
+  // N/S/E/W points
+  const pts=[['N',0,-13],['S',0,13],['E',13,0],['W',-13,0]];
+  for(const [lbl,px,py] of pts){
+    el('text',{x:px,y:py+3.5,'text-anchor':'middle',fill:'#5a3a10','font-size':6,'font-family':'serif','font-weight':'bold'},cr).textContent=lbl;
+  }
+  el('polygon',{points:'0,-11 2.5,-4 0,-7 -2.5,-4',fill:'#8b3010'},cr);
+  el('polygon',{points:'0,11 2.5,4 0,7 -2.5,4',fill:'#8b6914',opacity:0.5},cr);
+  el('circle',{cx:0,cy:0,r:2,fill:'#8b3010'},cr);
+
+  // ── Title ──────────────────────────────────────────────────
+  el('text',{x:26,y:420,'font-size':8,fill:'#6a4a20','font-family':'serif','font-style':'italic',opacity:0.7},svg).textContent='The Known Realm';
 }
 
 // ============================================================
@@ -836,10 +2073,14 @@ function updateSkillDetail(id) {
 //  EQUIPMENT UI
 // ============================================================
 function updateEquipmentUI() {
-  const tool = state.equipment.tool      ? GEAR[state.equipment.tool]      : null;
-  const acc  = state.equipment.accessory ? GEAR[state.equipment.accessory] : null;
-  document.getElementById('equip-tool-name').innerHTML = tool ? `<span class="equipped-tag">${tool.name}</span>` : '<span style="color:#555">None</span>';
-  document.getElementById('equip-acc-name').innerHTML  = acc  ? `<span class="equipped-tag">${acc.name}</span>`  : '<span style="color:#555">None</span>';
+  const slots = ['tool','rod','neck','gloves','upper_body','left_hand','head'];
+  for (const slot of slots) {
+    const gearId = state.equipment[slot];
+    const el = document.getElementById('equip-' + slot);
+    if (el) el.innerHTML = gearId && GEAR[gearId]
+      ? `<span class="equipped-tag">${GEAR[gearId].name}</span>`
+      : '<span style="color:#555">None</span>';
+  }
   document.getElementById('equip-choptime').textContent = getActionSec('woodcutting');
 }
 
@@ -854,7 +2095,14 @@ function updateInventoryUI() {
   for (const [name,count] of items) {
     const row = document.createElement('div');
     row.className = 'inv-row';
-    row.innerHTML = `<span>${name}</span><span style="color:#c8a96e">${count}</span>`;
+    const w = ITEM_WEIGHTS[name] || 0;
+    const wStr = w ? `<span style="color:#6a5030;font-size:10px">${w*count}lb</span>` : '';
+    const hasEffect = !!CONSUMABLE_EFFECTS[name];
+    const safeId = name.replace(/'/g, "\\'");
+    const useBtn = hasEffect
+      ? `<button onclick="consumeItem('${safeId}')" style="padding:1px 5px;background:#1a2a10;border:1px solid #4a7a30;color:#a0d880;cursor:pointer;border-radius:2px;font-family:'Courier New',monospace;font-size:10px;">Use</button>`
+      : '';
+    row.innerHTML = `<span>${name}</span><span style="display:flex;gap:4px;align-items:center">${wStr}<span style="color:#c8a96e">${count}</span>${useBtn}</span>`;
     div.appendChild(row);
   }
 }
@@ -867,15 +2115,47 @@ function updateTravelSection() {
   sec.innerHTML = '';
   if (state.travel) { document.getElementById('travel-timer-div').style.display='block'; return; }
   document.getElementById('travel-timer-div').style.display='none';
-  for (const destId of LOCATIONS[state.location].connects) {
-    const dest = LOCATIONS[destId];
-    const secs = getTravelMs(state.location, destId)/1000;
-    const btn  = document.createElement('button');
-    btn.className   = 'action-btn';
-    btn.textContent = `\u2192 ${dest.name} (${secs}s)`;
-    btn.disabled    = !!state.action;
-    btn.onclick     = ()=>startTravel(destId);
-    sec.appendChild(btn);
+
+  const maxHops  = getMaxHops();
+  const reachable = getReachableTowns(state.location, maxHops);
+
+  // group by hop count
+  const byHop = new Map();
+  for (const [id, info] of reachable) {
+    if (!byHop.has(info.hops)) byHop.set(info.hops, []);
+    byHop.get(info.hops).push({ id, ...info });
+  }
+
+  const hopLabels = { 2:'— Far Reach —', 3:'— Extended Reach —', 4:'— Long Range —' };
+
+  for (let hop = 1; hop <= maxHops; hop++) {
+    const towns = byHop.get(hop) || [];
+    if (!towns.length) continue;
+
+    if (hop >= 2 && hopLabels[hop]) {
+      const lbl = document.createElement('div');
+      lbl.style.cssText = 'color:#a89070;font-size:10px;margin:6px 0 2px;text-transform:uppercase;letter-spacing:1px;border-top:1px solid #2a2a3e;padding-top:5px;';
+      lbl.textContent = hopLabels[hop] || `— ${hop} Hops —`;
+      sec.appendChild(lbl);
+    }
+
+    for (const { id, path } of towns) {
+      const dest = LOCATIONS[id];
+      const ms   = getPathTravelMs(path);
+      const secs = ms / 1000;
+      const btn  = document.createElement('button');
+      btn.className = 'action-btn';
+      if (hop === 1) {
+        btn.textContent = `\u2192 ${dest.name} (${secs}s)`;
+      } else {
+        const via = path.slice(1, -1).map(p => LOCATIONS[p].name).join(' \u2192 ');
+        btn.textContent = `\u21e8 ${dest.name} via ${via} (${secs}s)`;
+        btn.style.borderColor = '#6a5a30';
+        btn.style.color = '#c8b870';
+      }
+      btn.onclick  = () => startTravel(id, path);
+      sec.appendChild(btn);
+    }
   }
 }
 
@@ -921,6 +2201,321 @@ function updateActionSection() {
     sec.appendChild(wrap);
   }
 
+  // Shop
+  if (loc.shop && loc.shop.length) {
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__shop'];
+    hdr.innerHTML = `<span>🏪 Shop</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__shop');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__shop';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const gearId of loc.shop) {
+      const g        = GEAR[gearId];
+      const owned    = !!state.inventory[g.name];
+      const eqpd     = state.equipment[g.slot] === g.id;
+      const wcLv     = skillLevel(g.skill || 'woodcutting');
+      const canUse   = wcLv >= (g.levelReq || 0);
+      const btn      = document.createElement('button');
+      btn.disabled   = !!state.travel;
+
+      // Build stat string
+      const stats = [];
+      if (g.reduceTime) stats.push(`-${g.reduceTime}s`);
+      if (g.attack > 0) stats.push(`+${g.attack} Atk`);
+      if (g.attack < 0) stats.push(`${g.attack} Atk`);
+      if (g.defense > 0) stats.push(`+${g.defense} Def`);
+      if (g.defense < 0) stats.push(`${g.defense} Def`);
+      const statStr = stats.length ? ` (${stats.join(', ')})` : '';
+      const reqStr  = g.levelReq ? ` [Lv${g.levelReq}]` : '';
+
+      if (eqpd) {
+        btn.className   = 'action-btn equip-btn';
+        btn.textContent = `[Equipped] ${g.name}${statStr} — Unequip`;
+        btn.onclick     = ()=>unequipGear(g.slot);
+      } else if (owned) {
+        btn.className   = 'action-btn equip-btn';
+        btn.textContent = canUse
+          ? `[Owned] ${g.name}${statStr} — Equip`
+          : `[Owned] ${g.name}${reqStr} — Need higher level`;
+        btn.disabled = !canUse || !!state.travel;
+        if (canUse) btn.onclick = ()=>equipGear(g.id);
+      } else {
+        btn.className   = 'action-btn shop-btn';
+        btn.textContent = `Buy ${g.name}${reqStr}${statStr} — ${g.cost}g`;
+        btn.onclick     = ()=>buyGear(gearId);
+      }
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Forge
+  if (loc.forge && loc.forge.length) {
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__forge'];
+    hdr.innerHTML = `<span>⚒ Forge</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__forge');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__forge';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const recipeId of loc.forge) {
+      const r     = RECIPES[recipeId];
+      const smLv  = skillLevel(r.skill);
+      const canMake = smLv >= r.levelReq;
+      const owned   = !!state.inventory[GEAR[r.produces].name];
+      const matStr  = Object.entries(r.materials).map(([k,v])=>`${v}x ${k}`).join(', ');
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!canMake) {
+        btn.textContent = `${r.name} — Smithing Lv${r.levelReq} required`;
+        btn.disabled = true;
+      } else if (owned) {
+        btn.textContent = `${r.name} [Owned] — ${matStr}`;
+        btn.disabled = !!state.travel;
+        btn.onclick = ()=>startRecipe(recipeId);
+      } else {
+        btn.textContent = `Forge ${r.name} — ${matStr}`;
+        btn.disabled = !!state.travel;
+        btn.onclick = ()=>startRecipe(recipeId);
+      }
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Sawmill
+  if (loc.sawmill && loc.sawmill.length) {
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__sawmill'];
+    hdr.innerHTML = `<span>🪚 Sawmill</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__sawmill');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__sawmill';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const recipeId of loc.sawmill) {
+      const r      = SAWMILL_RECIPES[recipeId];
+      const wcLv   = skillLevel(r.skill);
+      const canMake = wcLv >= r.levelReq;
+      const hasLog  = (state.inventory[r.input] || 0) >= 1;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!canMake) {
+        btn.textContent = `${r.name} — ${SKILL_DEFS[r.skill].name} Lv${r.levelReq} required`;
+        btn.disabled = true;
+      } else {
+        btn.textContent = `${r.name}: 1x ${r.input} → ${r.qty}x ${r.output} (${r.time}s)`;
+        btn.disabled = !hasLog || !!state.travel;
+        btn.title = hasLog ? `+${r.xp} ${SKILL_DEFS[r.skill].name} xp` : `Need ${r.input}`;
+        if (hasLog) btn.onclick = ()=>startSawmill(recipeId);
+      }
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Greenhouse — server-driven, two phases: growing / ready
+  if (loc.greenhouse) {
+    if (!ghState) { fetchGhState(); }
+
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__greenhouse'];
+    hdr.onclick = ()=>toggleSkillSection('__greenhouse');
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__greenhouse';
+    wrap.style.display = open ? 'block' : 'none';
+
+    if (!ghState) {
+      hdr.innerHTML = `<span>🌿 Greenhouse</span><span>${open?'▼':'▶'}</span>`;
+      const loading = document.createElement('div');
+      loading.style.cssText = 'font-size:11px;color:#556;padding:4px 0;';
+      loading.textContent = 'Loading…';
+      wrap.appendChild(loading);
+    } else if (ghState.phase === 'growing') {
+      const r      = RESOURCES[ghState.cropId];
+      const remMs  = ghState.growEndsAt - Date.now();
+      const h      = Math.floor(remMs / 3600000);
+      const m      = Math.ceil((remMs % 3600000) / 60000);
+      const tStr   = h > 0 ? `${h}h ${m}m` : `${m}m`;
+      hdr.innerHTML = `<span>🌱 Growing: ${r ? r.name : ghState.cropId} (${tStr} left)</span><span>${open?'▼':'▶'}</span>`;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      btn.textContent = `${r ? r.name : ghState.cropId} is still growing — check back in ${tStr}`;
+      btn.disabled = true;
+      wrap.appendChild(btn);
+    } else {
+      // phase === 'ready'
+      const r       = RESOURCES[ghState.cropId];
+      const pct     = Math.round((ghState.picksRemaining / ghState.picksTotal) * 100);
+      const hvLv    = skillLevel('harvesting');
+      hdr.innerHTML = `<span>🌿 Ready: ${r ? r.name : ghState.cropId} — ${ghState.picksRemaining.toLocaleString()} picks left</span><span>${open?'▼':'▶'}</span>`;
+
+      // Picks bar
+      const barWrap = document.createElement('div');
+      barWrap.style.cssText = 'margin:4px 0 6px;';
+      barWrap.innerHTML = `<div style="width:100%;height:8px;background:#0a0a1a;border:1px solid #4a3728;border-radius:2px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#2d6a4f,#74c69d);"></div></div><div style="font-size:9px;color:#a89070;margin-top:2px;">${ghState.picksUsed.toLocaleString()} / ${ghState.picksTotal.toLocaleString()} picked</div>`;
+      wrap.appendChild(barWrap);
+
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!r || hvLv < r.levelReq) {
+        btn.textContent = `${r ? r.name : ghState.cropId} — Harvesting Lv${r ? r.levelReq : '?'} required`;
+        btn.disabled = true;
+      } else if (ghState.picksRemaining <= 0) {
+        btn.textContent = 'Crop is picked out — next crop is growing';
+        btn.disabled = true;
+      } else {
+        btn.textContent = `Harvest ${r.name} (${getActionMs('harvesting')/1000}s) → ${r.product}`;
+        btn.disabled = !!state.travel;
+        btn.title = `+${r.xp} Harvesting xp`;
+        btn.onclick = ()=>startGreenhouseHarvest();
+      }
+      wrap.appendChild(btn);
+    }
+
+    const note = document.createElement('div');
+    note.style.cssText = 'font-size:10px;color:#556;margin-top:4px;';
+    note.textContent = 'Low-level crops plant more often. Shared with all players.';
+    wrap.appendChild(note);
+
+    sec.appendChild(hdr);
+    sec.appendChild(wrap);
+  }
+
+  // Kitchen
+  if (loc.kitchen) {
+    const cookLv = skillLevel('cooking');
+    const fuelOk = hasFuel();
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__kitchen'];
+    hdr.innerHTML = `<span>🍳 Kitchen (Cooking Lv${cookLv})</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__kitchen');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__kitchen';
+    wrap.style.display = open ? 'block' : 'none';
+
+    if (!fuelOk) {
+      const note = document.createElement('div');
+      note.style.cssText = 'font-size:11px;color:#e07070;padding:4px 0 2px;';
+      note.textContent = '⚠ Equip a Lighter or Tinderbox in your left hand to cook.';
+      wrap.appendChild(note);
+    }
+
+    const sorted = Object.values(COOKING_RECIPES)
+      .filter(r => r.guildKitchenReq === 0)
+      .sort((a,b) => a.levelReq - b.levelReq);
+
+    for (const r of sorted) {
+      const canCook = cookLv >= r.levelReq;
+      const ingStr = Object.entries(r.ingredients).map(([k,v])=>`${v}x ${k}`).join(', ');
+      const yieldStr = r.yieldMin === r.yieldMax ? `${r.yieldMax}x` : `${r.yieldMin}–${r.yieldMax}x`;
+      const successTag = r.alwaysSuccess ? '' : ` (${r.successRate}%)`;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!canCook) {
+        btn.textContent = `[Lv${r.levelReq}] ${r.name}: ${ingStr} → ${yieldStr} ${r.output}`;
+        btn.disabled = true;
+      } else {
+        const hasAll = Object.entries(r.ingredients).every(([k,v]) => (state.inventory[k]||0) >= v);
+        btn.textContent = `${r.name} (${r.time}s)${successTag}: ${ingStr} → ${yieldStr} ${r.output}`;
+        btn.disabled = !hasAll || !fuelOk || !!state.travel;
+        btn.title = hasAll ? `+${r.xp} Cooking xp` : `Need: ${ingStr}`;
+        if (hasAll && fuelOk && !state.travel) btn.onclick = ()=>startCooking(r.id);
+      }
+      wrap.appendChild(btn);
+    }
+
+    // Guild Kitchen section
+    const guildRecipes = Object.values(COOKING_RECIPES).filter(r => r.guildKitchenReq > 0).sort((a,b)=>a.guildKitchenReq-b.guildKitchenReq);
+    if (guildRecipes.length) {
+      const gNote = document.createElement('div');
+      gNote.style.cssText = 'font-size:10px;color:#a89070;margin-top:6px;padding-top:4px;border-top:1px solid #2a2a3e;';
+      gNote.textContent = '🏰 Guild Kitchen recipes (requires guild outpost upgrade):';
+      wrap.appendChild(gNote);
+      for (const r of guildRecipes) {
+        const ingStr = Object.entries(r.ingredients).map(([k,v])=>`${v}x ${k}`).join(', ');
+        const btn = document.createElement('button');
+        btn.className = 'action-btn';
+        btn.textContent = `[Guild Lv${r.guildKitchenReq}] ${r.name}: ${ingStr} → ${r.output}`;
+        btn.disabled = true;
+        btn.title = `Requires guild outpost with Kitchen level ${r.guildKitchenReq}`;
+        wrap.appendChild(btn);
+      }
+    }
+
+    sec.appendChild(wrap);
+  }
+
+  // Tackle Shop
+  if (loc.tackleShop && loc.tackleShop.length) {
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__tackle'];
+    hdr.innerHTML = `<span>🪝 Tackle Shop</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__tackle');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__tackle';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const item of loc.tackleShop) {
+      const btn = document.createElement('button');
+      btn.className = 'action-btn shop-btn';
+      btn.textContent = `Buy ${item.name} — ${item.cost}g`;
+      btn.disabled = state.gold < item.cost || !!state.travel;
+      btn.title = `${item.name}: ${item.cost} gold`;
+      btn.onclick = ()=>buyTackle(item.name, item.cost);
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
+  // Bait Station
+  if (loc.baitStation && loc.baitStation.length) {
+    const hdr = document.createElement('div');
+    hdr.className = 'sec-header';
+    const open = !collapsedSkills['__bait'];
+    hdr.innerHTML = `<span>🪱 Bait Station</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__bait');
+    sec.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.id = 'sk-wrap-__bait';
+    wrap.style.display = open ? 'block' : 'none';
+    for (const recipeId of loc.baitStation) {
+      const r     = BAIT_RECIPES[recipeId];
+      const fLv   = skillLevel(r.skill);
+      const canMake = fLv >= r.levelReq;
+      const hasInput = (state.inventory[r.input] || 0) >= 1;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+      if (!canMake) {
+        btn.textContent = `${r.name} — ${SKILL_DEFS[r.skill].name} Lv${r.levelReq} required`;
+        btn.disabled = true;
+      } else {
+        btn.textContent = `${r.name}: 1x ${r.input} → ${r.qty}x ${r.output} (${r.time}s)`;
+        btn.disabled = !hasInput || !!state.travel;
+        btn.title = hasInput ? `+${r.xp} ${SKILL_DEFS[r.skill].name} xp` : `Need ${r.input}`;
+        if (hasInput) btn.onclick = ()=>startBait(recipeId);
+      }
+      wrap.appendChild(btn);
+    }
+    sec.appendChild(wrap);
+  }
+
   // Dynamic Combat (Stonehaven)
   if (loc.dynamicCombat) {
     const combatLv = skillLevel('combat');
@@ -942,81 +2537,48 @@ function updateActionSection() {
     sec.appendChild(wrap);
   }
 
-  // Shop — Buy gear
-  if (loc.shop && loc.shop.length) {
+  // Spells
+  if (loc.spells) {
     const hdr = document.createElement('div');
     hdr.className = 'sec-header';
-    const open = !collapsedSkills['__shop'];
-    hdr.innerHTML = `<span>🏪 Shop</span><span>${open?'▼':'▶'}</span>`;
-    hdr.onclick = ()=>toggleSkillSection('__shop');
+    const open = !collapsedSkills['__spells'];
+    hdr.innerHTML = `<span>✨ Spells (MP: ${Math.floor(state.mp.current)}/${getMpMax()})</span><span>${open?'▼':'▶'}</span>`;
+    hdr.onclick = ()=>toggleSkillSection('__spells');
     sec.appendChild(hdr);
 
     const wrap = document.createElement('div');
-    wrap.id = 'sk-wrap-__shop';
+    wrap.id = 'sk-wrap-__spells';
     wrap.style.display = open ? 'block' : 'none';
-    for (const gearId of loc.shop) {
-      const g       = GEAR[gearId];
-      const cost    = Math.max(1, g.cost - getBuyDiscount());
-      const owned   = !!state.inventory[g.name];
-      const eqpd    = state.equipment[g.slot]===g.id;
-      const btn     = document.createElement('button');
-      btn.disabled  = !!state.travel;
-      if (eqpd) {
-        btn.className   = 'action-btn equip-btn';
-        btn.textContent = `[Equipped] ${g.name} — Unequip`;
-        btn.onclick     = ()=>unequipGear(g.slot);
-      } else if (owned) {
-        btn.className   = 'action-btn equip-btn';
-        btn.textContent = `[Owned] ${g.name} — Equip (-${g.reduce}s)`;
-        btn.onclick     = ()=>equipGear(g.id);
+    const magicLv = skillLevel('magic');
+    const hasCombat = !!(loc.actions && loc.actions.combat) || !!loc.dynamicCombat;
+
+    for (const sp of Object.values(SPELLS)) {
+      const canLearn  = magicLv >= sp.levelReq;
+      const hasMP     = state.mp.current >= sp.mpCost;
+      const combatOk  = sp.type !== 'combat' || hasCombat;
+      const btn = document.createElement('button');
+      btn.className = 'action-btn';
+
+      if (!canLearn) {
+        btn.textContent = `${sp.name} — Magic Lv${sp.levelReq} required`;
+        btn.disabled = true;
+      } else if (!combatOk) {
+        btn.textContent = `${sp.name} — No enemies here`;
+        btn.disabled = true;
       } else {
-        btn.className   = 'action-btn shop-btn';
-        btn.textContent = `Buy ${g.name} — ${cost}g (-${g.reduce}s)`;
-        btn.onclick     = ()=>buyGear(gearId);
+        const mpStr   = `${sp.mpCost} MP`;
+        const typeTag = sp.type === 'combat' ? ' ⚔' : sp.type === 'anytime' ? ' ★' : '';
+        btn.textContent = `${sp.name}${typeTag} (${mpStr}, ${Math.max(15,sp.castTime)}s) — ${sp.desc}`;
+        btn.disabled = !hasMP || !!state.travel;
+        if (!hasMP) btn.title = `Not enough MP (need ${sp.mpCost})`;
+        if (hasMP && !state.travel) btn.onclick = ()=>castSpell(sp.id);
       }
       wrap.appendChild(btn);
     }
     sec.appendChild(wrap);
   }
 
-  // Sell items — available at any shop location
-  if (loc.shop) {
-    const sellable = Object.entries(state.inventory)
-      .filter(([name, qty]) => qty > 0 && ITEM_PRICES[name])
-      .sort(([a],[b]) => getSellPrice(b) - getSellPrice(a));
-
-    const bonus = tradingBonus();
-    const hdr   = document.createElement('div');
-    hdr.className = 'sec-header';
-    const open  = !collapsedSkills['__sell'];
-    hdr.innerHTML = `<span>💰 Sell Items${bonus > 0 ? ' (+'+bonus+'g bonus)' : ''}</span><span>${open?'▼':'▶'}</span>`;
-    hdr.onclick = ()=>toggleSkillSection('__sell');
-    sec.appendChild(hdr);
-
-    const wrap = document.createElement('div');
-    wrap.id = 'sk-wrap-__sell';
-    wrap.style.display = open ? 'block' : 'none';
-
-    if (!sellable.length) {
-      const msg = document.createElement('div');
-      msg.style.cssText = 'color:#555;font-size:11px;padding:3px 0';
-      msg.textContent = 'No items to sell.';
-      wrap.appendChild(msg);
-    } else {
-      for (const [name, qty] of sellable) {
-        const price = getSellPrice(name);
-        const btn   = document.createElement('button');
-        btn.className   = 'action-btn shop-btn';
-        btn.textContent = `Sell ${name} ×${qty} — ${price}g each`;
-        btn.disabled    = !!state.travel;
-        btn.onclick     = ()=>sellItem(name);
-        wrap.appendChild(btn);
-      }
-    }
-    sec.appendChild(wrap);
-  }
-
-  if (!skillsHere.length && !loc.dynamicCombat && (!loc.shop||!loc.shop.length))
+  if (!skillsHere.length && !loc.dynamicCombat && (!loc.shop||!loc.shop.length) && (!loc.forge||!loc.forge.length) && (!loc.sawmill||!loc.sawmill.length) && (!loc.tackleShop||!loc.tackleShop.length) && (!loc.baitStation||!loc.baitStation.length) && !loc.spells && !loc.greenhouse && !loc.kitchen)
     sec.innerHTML = '<div style="color:#555;font-size:11px;">Nothing to do here.</div>';
 }
 
@@ -1026,53 +2588,307 @@ function toggleSkillSection(skillId) {
 }
 
 // ============================================================
-//  TRADING ECONOMY
-// ============================================================
-function tradingBonus()    { return Math.floor(skillLevel('trading') / 5) * 2; }
-function getSellPrice(item){ return Math.max(1, (ITEM_PRICES[item] || 0) + tradingBonus()); }
-function getBuyDiscount()  { return Math.floor(skillLevel('trading') / 5) * 2; }
-
-function sellItem(itemName) {
-  if (!state.inventory[itemName] || state.inventory[itemName] <= 0) return;
-  const price  = getSellPrice(itemName);
-  const tradXP = Math.max(1, Math.floor(price / 2));
-  state.inventory[itemName]--;
-  if (state.inventory[itemName] <= 0) delete state.inventory[itemName];
-  addGold(price);
-  grantXP('trading', tradXP);
-  addLog(`Sold ${itemName} for ${price}g. (+${tradXP} Trading xp)`, 'shop');
-  saveGame();
-  updateInventoryUI();
-  updateActionSection();
-}
-
-// ============================================================
 //  GEAR
 // ============================================================
 function buyGear(gearId) {
-  const g    = GEAR[gearId];
-  const cost = Math.max(1, g.cost - getBuyDiscount());
-  if (state.gold < cost) { addLog(`Not enough gold. Need ${cost}g.`,'error'); return; }
+  const g = GEAR[gearId];
+  const wcLv = skillLevel(g.skill || 'woodcutting');
+  if (g.levelReq && wcLv < g.levelReq) { addLog(`Requires ${SKILL_DEFS[g.skill||'woodcutting'].name} level ${g.levelReq}.`,'error'); return; }
+  if (state.gold < g.cost) { addLog(`Not enough gold. Need ${g.cost}g.`,'error'); return; }
   if (state.inventory[g.name]) { addLog(`You already own ${g.name}.`,'error'); return; }
-  state.gold -= cost;
+  state.gold -= g.cost;
   document.getElementById('stat-gold').textContent = state.gold;
   state.inventory[g.name] = 1;
-  addLog(`Bought ${g.name} for ${cost}g.`,'shop');
+  addLog(`Bought ${g.name} for ${g.cost}g.`,'shop');
   saveGame(); updateInventoryUI(); updateActionSection();
 }
 function equipGear(gearId) {
   const g = GEAR[gearId];
   if (!state.inventory[g.name]) return;
   state.equipment[g.slot] = g.id;
-  addLog(`Equipped ${g.name}. Woodcutting time: ${getActionSec('woodcutting')}s.`,'shop');
-  saveGame(); updateEquipmentUI(); updateActionSection();
+  addLog(`Equipped ${g.name}. Woodcutting time: ${getActionSec('woodcutting')}s.`, 'shop');
+  saveGame(); updateEquipmentUI(); updateActionSection(); updateCarryUI();
 }
 function unequipGear(slot) {
   const g = GEAR[state.equipment[slot]];
   if (!g) return;
   state.equipment[slot] = null;
   addLog(`Unequipped ${g.name}. Woodcutting time: ${getActionSec('woodcutting')}s.`,'shop');
-  saveGame(); updateEquipmentUI(); updateActionSection();
+  saveGame(); updateEquipmentUI(); updateActionSection(); updateCarryUI();
+}
+
+// ============================================================
+//  FORGE / RECIPES
+// ============================================================
+function startRecipe(recipeId) {
+  if (state.action || state.travel) return;
+  const r = RECIPES[recipeId];
+  if (skillLevel(r.skill) < r.levelReq) { addLog(`Requires ${SKILL_DEFS[r.skill].name} level ${r.levelReq}.`, 'error'); return; }
+  // Check materials
+  for (const [item, qty] of Object.entries(r.materials)) {
+    if ((state.inventory[item] || 0) < qty) { addLog(`Need ${qty}x ${item} to forge ${r.name}.`, 'error'); return; }
+  }
+  // Consume materials
+  for (const [item, qty] of Object.entries(r.materials)) state.inventory[item] -= qty;
+  updateInventoryUI();
+  const now = Date.now();
+  state.action = { type:'recipe', recipeId, skillId:r.skill, startTime:now, endTime:now + r.time*1000 };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Forging ${r.name}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Forging ${r.name}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`You begin forging ${r.name}. (${r.time}s)`);
+}
+
+function completeRecipe(recipeId) {
+  const r = RECIPES[recipeId];
+  grantXP(r.skill, r.xp);
+  state.inventory[GEAR[r.produces].name] = (state.inventory[GEAR[r.produces].name] || 0) + 1;
+  updateInventoryUI();
+  addLog(`Forged ${r.name}! (+${r.xp} ${SKILL_DEFS[r.skill].name} xp)`, 'success');
+  saveGame();
+}
+
+// ============================================================
+//  SPELLS
+// ============================================================
+function castSpell(spellId) {
+  if (state.action || state.travel) return;
+  const sp = SPELLS[spellId];
+  const lv = skillLevel('magic');
+  if (lv < sp.levelReq) { addLog(`Requires Magic level ${sp.levelReq}.`, 'error'); return; }
+  if (state.mp.current < sp.mpCost) { addLog(`Not enough MP. (Need ${sp.mpCost}, have ${Math.floor(state.mp.current)})`, 'error'); return; }
+  state.mp.current -= sp.mpCost;
+  updateHpMpUI();
+  const now = Date.now();
+  const castSec = Math.max(15, sp.castTime);
+  state.action = { type:'spell', spellId, skillId:'magic', startTime:now, endTime:now + castSec*1000 };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Casting ${sp.name}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Casting ${sp.name}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`You begin casting ${sp.name}. (${castSec}s)`);
+}
+
+function completeSpell(spellId) {
+  const sp   = SPELLS[spellId];
+  const lv   = skillLevel('magic');
+  grantXP('magic', sp.magicXp);
+  state.charXp  += sp.charXp;
+  state.guildXp += sp.guildXp;
+
+  if (sp.effect === 'heal_self') {
+    const amount = sp.power(lv);
+    const before = state.hp.current;
+    state.hp.current = Math.min(getHpMax(), state.hp.current + amount);
+    const healed = Math.floor(state.hp.current - before);
+    updateHpMpUI();
+    addLog(`${sp.name}: healed ${healed} HP. (+${sp.magicXp} Magic xp)`, 'success');
+  } else if (sp.effect === 'damage') {
+    const minD = sp.minDmg(lv), maxD = sp.maxDmg(lv);
+    const dmg  = Math.floor(Math.random() * (maxD - minD + 1)) + minD;
+    addLog(`${sp.name}: dealt ${dmg} damage to an enemy! (+${sp.magicXp} Magic xp)`, 'success');
+  } else if (sp.effect === 'speed_boost') {
+    state.activeBuffs.excite = { endsAt: Date.now() + sp.duration * 1000 };
+    addLog(`${sp.name}: +${sp.power} Speed for ${sp.duration}s! (+${sp.magicXp} Magic xp)`, 'success');
+  }
+  saveGame();
+}
+
+// ============================================================
+//  SAWMILL
+// ============================================================
+function startSawmill(recipeId) {
+  if (state.action || state.travel) return;
+  const r = SAWMILL_RECIPES[recipeId];
+  if (skillLevel(r.skill) < r.levelReq) { addLog(`Requires ${SKILL_DEFS[r.skill].name} level ${r.levelReq}.`, 'error'); return; }
+  if ((state.inventory[r.input] || 0) < 1) { addLog(`Need 1x ${r.input}.`, 'error'); return; }
+  state.inventory[r.input]--;
+  updateInventoryUI();
+  const now = Date.now();
+  state.action = { type:'sawmill', recipeId, skillId:r.skill, startTime:now, endTime:now + r.time*1000 };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Sawing ${r.input}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Sawing ${r.input}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`You begin sawing ${r.input}. (${r.time}s)`);
+}
+
+function completeSawmill(recipeId) {
+  const r = SAWMILL_RECIPES[recipeId];
+  grantXP(r.skill, r.xp);
+  if (!canCarry(r.output, r.qty)) {
+    addLog(`Can't carry ${r.qty}x ${r.output}! Sawmill stopped. (${getCarryWeight()}/${getCarryMax()} lbs)`, 'error');
+    return false;
+  }
+  state.inventory[r.output] = (state.inventory[r.output] || 0) + r.qty;
+  updateInventoryUI(); updateCarryUI();
+  addLog(`Sawed ${r.input} → ${r.qty}x ${r.output}! (+${r.xp} ${SKILL_DEFS[r.skill].name} xp)`, 'success');
+  saveGame();
+  return true;
+}
+
+// ============================================================
+//  TACKLE SHOP & BAIT STATION
+// ============================================================
+function buyTackle(name, cost) {
+  if (state.gold < cost) { addLog(`Not enough gold! Need ${cost}g.`, 'error'); return; }
+  state.gold -= cost;
+  addItem(name);
+  updateCarryUI();
+  document.getElementById('stat-gold').textContent = state.gold;
+  saveGame();
+  addLog(`Bought ${name} for ${cost}g.`, 'shop');
+  updateActionSection();
+}
+
+// ============================================================
+//  COOKING
+// ============================================================
+function hasFuel() {
+  const lh = state.equipment.left_hand;
+  return lh === 'lighter' || lh === 'tinderbox';
+}
+
+function startCooking(recipeId) {
+  if (state.action || state.travel) return;
+  const r = COOKING_RECIPES[recipeId];
+  if (!hasFuel()) { addLog('Equip a Lighter or Tinderbox in your left hand to cook.', 'error'); return; }
+  if (skillLevel('cooking') < r.levelReq) { addLog(`Requires Cooking level ${r.levelReq}.`, 'error'); return; }
+  if (r.guildKitchenReq > 0) { addLog(`Requires Guild Kitchen level ${r.guildKitchenReq} (not yet available).`, 'error'); return; }
+  for (const [item, qty] of Object.entries(r.ingredients)) {
+    if ((state.inventory[item] || 0) < qty) { addLog(`Need ${qty}x ${item} to cook ${r.name}.`, 'error'); return; }
+  }
+  for (const [item, qty] of Object.entries(r.ingredients)) state.inventory[item] -= qty;
+  updateInventoryUI(); updateCarryUI();
+  const now = Date.now();
+  state.action = { type:'cooking', recipeId, skillId:'cooking', startTime:now, endTime:now + r.time*1000 };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Cooking ${r.name}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Cooking ${r.name}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`You begin cooking ${r.name}. (${r.time}s)`);
+}
+
+function completeCooking(recipeId) {
+  const r = COOKING_RECIPES[recipeId];
+  const success = r.alwaysSuccess || (Math.random() * 100 < (r.successRate || 70));
+  if (!success) {
+    const failXp = Math.max(1, Math.floor(r.xp * 0.2));
+    grantXP('cooking', failXp);
+    addLog(`Cooking failed — ${r.output} burned. (+${failXp} Cooking xp)`, 'error');
+    saveGame();
+    return false;
+  }
+  const qty = r.yieldMin === r.yieldMax ? r.yieldMax
+    : r.yieldMin + Math.floor(Math.random() * (r.yieldMax - r.yieldMin + 1));
+  grantXP('cooking', r.xp);
+  if (r.charXp)  state.charXp  += r.charXp;
+  if (r.guildXp) state.guildXp += r.guildXp;
+  if (qty === 0) {
+    addLog(`Cooked ${r.name} but got nothing useful. (+${r.xp} Cooking xp)`, 'success');
+  } else {
+    let added = 0;
+    for (let i = 0; i < qty; i++) {
+      if (!canCarry(r.output)) { if (i === 0) addLog(`Can't carry ${r.output}! Stopped.`, 'error'); break; }
+      state.inventory[r.output] = (state.inventory[r.output] || 0) + 1;
+      added++;
+    }
+    if (added > 0) {
+      const yieldStr = r.yieldMin === r.yieldMax ? '' : ` ×${added}`;
+      addLog(`Cooked ${r.name}${yieldStr}! (+${r.xp} Cooking xp) → ${r.output}`, 'success');
+      updateInventoryUI(); updateCarryUI();
+    }
+  }
+  saveGame();
+  return true;
+}
+
+function consumeItem(itemName) {
+  if (!(state.inventory[itemName] > 0)) return;
+  const effect = CONSUMABLE_EFFECTS[itemName];
+  if (!effect) { addLog(`You use the ${itemName} but nothing happens.`); return; }
+  state.inventory[itemName]--;
+  updateInventoryUI(); updateCarryUI();
+  if (effect.type === 'heal_hp') {
+    const hpMax = getHpMax();
+    const before = state.hp.current;
+    state.hp.current = Math.min(hpMax, state.hp.current + effect.amount);
+    const healed = Math.floor(state.hp.current - before);
+    updateHpMpUI();
+    addLog(`You eat the ${itemName} and recover ${healed} HP.`, 'success');
+  } else if (effect.type === 'heal_mp') {
+    const mpMax = getMpMax();
+    const before = state.mp.current;
+    state.mp.current = Math.min(mpMax, state.mp.current + effect.amount);
+    const healed = Math.floor(state.mp.current - before);
+    updateHpMpUI();
+    addLog(`You drink the ${itemName} and recover ${healed} MP.`, 'success');
+  } else if (effect.type === 'speed_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.excite = { endsAt };
+    addLog(`You use the ${itemName}: +${effect.amount} Speed for ${effect.duration}s!`, 'success');
+  }
+  saveGame();
+}
+
+function startGreenhouseHarvest() {
+  if (state.action || state.travel) return;
+  if (!ghState || ghState.phase !== 'ready' || ghState.picksRemaining <= 0) {
+    addLog('Nothing ready to harvest right now.', 'error'); return;
+  }
+  const r = RESOURCES[ghState.cropId];
+  if (!r || skillLevel('harvesting') < r.levelReq) {
+    addLog(`Requires Harvesting Lv${r ? r.levelReq : '?'}.`, 'error'); return;
+  }
+  if (r.product && !canCarry(r.product)) {
+    addLog(`Can't carry any more ${r.product}!`, 'error'); return;
+  }
+  const now = Date.now(), ms = getActionMs('harvesting');
+  state.action = { type:'greenhouse', resourceId:ghState.cropId, skillId:'harvesting', startTime:now, endTime:now+ms };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Harvesting ${r.name}…`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = r.name;
+  updateActionSection(); updateTravelSection();
+  addLog(`You begin harvesting ${r.name}. (${ms/1000}s)`);
+}
+
+function startBait(recipeId) {
+  if (state.action || state.travel) return;
+  const r = BAIT_RECIPES[recipeId];
+  if (skillLevel(r.skill) < r.levelReq) { addLog(`Requires ${SKILL_DEFS[r.skill].name} level ${r.levelReq}.`, 'error'); return; }
+  if ((state.inventory[r.input] || 0) < 1) { addLog(`Need 1x ${r.input}.`, 'error'); return; }
+  state.inventory[r.input]--;
+  updateInventoryUI();
+  const now = Date.now();
+  state.action = { type:'bait', recipeId, skillId:r.skill, startTime:now, endTime:now + r.time*1000 };
+  botCheck.lastCheck = now;
+  document.getElementById('action-label').textContent = `Making ${r.output}...`;
+  document.getElementById('action-timer-div').style.display = 'block';
+  document.getElementById('stat-status').textContent = `Making ${r.output}`;
+  updateActionSection(); updateTravelSection();
+  addLog(`You begin making bait from ${r.input}. (${r.time}s)`);
+}
+
+function completeBait(recipeId) {
+  const r = BAIT_RECIPES[recipeId];
+  grantXP(r.skill, r.xp);
+  if (r.charXp)  state.charXp  += r.charXp;
+  if (r.guildXp) state.guildXp += r.guildXp;
+  if (!canCarry(r.output, r.qty)) {
+    addLog(`Can't carry ${r.qty}x ${r.output}! Stopped. (${getCarryWeight()}/${getCarryMax()} lbs)`, 'error');
+    return false;
+  }
+  state.inventory[r.output] = (state.inventory[r.output] || 0) + r.qty;
+  updateInventoryUI(); updateCarryUI();
+  addLog(`Made ${r.qty}x ${r.output} from ${r.input}! (+${r.xp} ${SKILL_DEFS[r.skill].name} xp)`, 'success');
+  saveGame();
+  return true;
 }
 
 // ============================================================
@@ -1081,6 +2897,24 @@ function unequipGear(slot) {
 function startAction(skillId, resourceId) {
   if (state.action||state.travel) return;
   const r  = RESOURCES[resourceId];
+  if (skillId === 'woodcutting' && !state.equipment.tool) {
+    addLog('You need a hatchet equipped to cut wood.', 'error'); return;
+  }
+  if (skillId === 'fishing') {
+    if (r.needsRod && !state.equipment.rod) {
+      addLog('You need a Fishing Rod equipped to catch ' + r.name + '.', 'error'); return;
+    }
+    if (r.needsItem && !(state.inventory[r.needsItem] > 0)) {
+      addLog(`You need a ${r.needsItem} to catch ${r.name}.`, 'error'); return;
+    }
+    if (r.consumesItem) {
+      if (!(state.inventory[r.consumesItem] > 0)) {
+        addLog(`You need Bait to catch ${r.name}.`, 'error'); return;
+      }
+      state.inventory[r.consumesItem]--;
+      updateInventoryUI(); updateCarryUI();
+    }
+  }
   const lv = skillLevel(skillId);
   if (lv < r.levelReq) { addLog(`Requires ${SKILL_DEFS[skillId].name} level ${r.levelReq}.`,'error'); return; }
   const now = Date.now();
@@ -1108,17 +2942,25 @@ function startDynamicCombat() {
   addLog(`A ${mob.name} appears! (HP:${mob.hp}, ${ms/1000}s)`);
 }
 
-function startTravel(destId) {
-  if (state.travel||state.action) return;
-  const ms   = getTravelMs(state.location, destId);
+function startTravel(destId, path) {
+  if (state.travel) return;
+  if (state.action) {
+    // cancel current action silently before travelling
+    state.action = null;
+    document.getElementById('action-timer-div').style.display = 'none';
+    addLog('Action cancelled — setting off.', 'travel');
+  }
+  if (!path) path = [state.location, destId];
+  const ms   = getPathTravelMs(path);
   const dest = LOCATIONS[destId];
   const now  = Date.now();
-  state.travel = {from:state.location, to:destId, startTime:now, endTime:now+ms};
+  state.travel = { from:state.location, to:destId, path, startTime:now, endTime:now+ms };
   document.getElementById('travel-label').textContent = `To ${dest.name}...`;
   document.getElementById('travel-timer-div').style.display = 'block';
   document.getElementById('stat-status').textContent = `Travelling to ${dest.name}`;
   updateTravelSection(); updateActionSection();
-  addLog(`You set off for ${dest.name}. (${ms/1000}s)`,'travel');
+  const via = path.length > 2 ? ` via ${path.slice(1,-1).map(p=>LOCATIONS[p].name).join(' \u2192 ')}` : '';
+  addLog(`You set off for ${dest.name}${via}. (${ms/1000}s)`, 'travel');
 }
 
 function cancelAction() {
@@ -1139,11 +2981,18 @@ function cancelTravel() {
 }
 
 function onMapClick(locId) {
-  if (locId===state.location) return;
-  if (!LOCATIONS[state.location].connects.includes(locId)) { addLog(`Can't travel directly to ${LOCATIONS[locId].name}.`,'error'); return; }
-  if (state.travel) { addLog('Already travelling.','error'); return; }
-  if (state.action) { addLog('Cancel your action first.','error'); return; }
-  startTravel(locId);
+  if (locId === state.location) {
+    if (state.travel) cancelTravel();
+    return;
+  }
+  if (state.travel) { addLog('Already travelling.', 'error'); return; }
+  const reachable = getReachableTowns(state.location, getMaxHops());
+  if (!reachable.has(locId)) {
+    addLog(`${LOCATIONS[locId].name} is too far. Raise your Speed level to reach it.`, 'error');
+    return;
+  }
+  const { path } = reachable.get(locId);
+  startTravel(locId, path);
 }
 
 // ============================================================
@@ -1194,22 +3043,210 @@ function tickBotCheck(now) {
 }
 
 // ============================================================
+//  BIG TIMER
+// ============================================================
+function updateBigTimer(now) {
+  const numEl    = document.getElementById('big-timer-num');
+  const labelEl  = document.getElementById('big-timer-label');
+  const barEl    = document.getElementById('big-timer-bar');
+  const fillEl   = document.getElementById('big-timer-fill');
+  const cancelEl = document.getElementById('big-timer-cancel');
+  const btnA     = document.getElementById('big-cancel-action');
+  const btnT     = document.getElementById('big-cancel-travel');
+
+  if (state.action) {
+    const total  = state.action.endTime - state.action.startTime;
+    const remain = Math.max(0, state.action.endTime - now);
+    const pct    = Math.min((now - state.action.startTime) / total * 100, 100);
+    numEl.textContent   = Math.ceil(remain / 1000);
+    numEl.className     = '';
+    labelEl.textContent = document.getElementById('action-label').textContent || 'Working...';
+    barEl.style.display = 'block';
+    fillEl.style.width  = pct + '%';
+    fillEl.className    = 'timer-fill action';
+    cancelEl.style.display = 'flex';
+    btnA.style.display  = 'block';
+    btnT.style.display  = 'none';
+  } else if (state.travel) {
+    const total  = state.travel.endTime - state.travel.startTime;
+    const remain = Math.max(0, state.travel.endTime - now);
+    const pct    = Math.min((now - state.travel.startTime) / total * 100, 100);
+    numEl.textContent   = Math.ceil(remain / 1000);
+    numEl.className     = 'is-travel';
+    labelEl.textContent = document.getElementById('travel-label').textContent || 'Travelling...';
+    barEl.style.display = 'block';
+    fillEl.style.width  = pct + '%';
+    fillEl.className    = 'timer-fill travel';
+    cancelEl.style.display = 'flex';
+    btnA.style.display  = 'none';
+    btnT.style.display  = 'block';
+  } else {
+    numEl.textContent      = '--';
+    numEl.className        = '';
+    labelEl.textContent    = 'Idle';
+    barEl.style.display    = 'none';
+    cancelEl.style.display = 'none';
+  }
+}
+
+// ============================================================
 //  GAME TICK
 // ============================================================
+let _lastMpRegen = Date.now();
+let _lastHpRegen = Date.now();
+
 function tick() {
   const now = Date.now();
+
+  // MP regen: 1 MP per 20s
+  if (now - _lastMpRegen >= 20000) {
+    const mpMax = getMpMax();
+    if (state.mp.current < mpMax) {
+      state.mp.current = Math.min(mpMax, state.mp.current + 1);
+      updateHpMpUI();
+      updateActionSection(); // refresh MP display in spells header
+    }
+    _lastMpRegen = now;
+  }
+
+  // HP regen: 1 HP per 60s
+  if (now - _lastHpRegen >= 60000) {
+    const hpMax = getHpMax();
+    if (state.hp.current < hpMax) {
+      state.hp.current = Math.min(hpMax, state.hp.current + 1);
+      updateHpMpUI();
+    }
+    _lastHpRegen = now;
+  }
+
+  // Expire active buffs
+  if (state.activeBuffs.excite && now >= state.activeBuffs.excite.endsAt) {
+    delete state.activeBuffs.excite;
+    addLog('Excite buff has worn off.', 'travel');
+  }
+
   tickBotCheck(now);
-  tickRegen(now);
+  updateBigTimer(now);
 
   if (state.action) {
     const total=state.action.endTime-state.action.startTime, elapsed=now-state.action.startTime;
     document.getElementById('action-fill').style.width       = Math.min(elapsed/total*100,100)+'%';
     document.getElementById('action-time-label').textContent = Math.max(0,Math.ceil((state.action.endTime-now)/1000))+'s';
     if (now>=state.action.endTime) {
-      if (state.action.type === 'dynamicCombat') {
+      if (state.action.type === 'recipe') {
+        const {recipeId} = state.action;
+        completeRecipe(recipeId);
+        const r = RECIPES[recipeId];
+        const hasMats = Object.entries(r.materials).every(([item,qty]) => (state.inventory[item]||0) >= qty);
+        if (hasMats) {
+          for (const [item,qty] of Object.entries(r.materials)) state.inventory[item] -= qty;
+          updateInventoryUI();
+          const restart = Date.now();
+          state.action = { type:'recipe', recipeId, skillId:r.skill, startTime:restart, endTime:restart+r.time*1000 };
+        } else {
+          state.action = null;
+          document.getElementById('action-timer-div').style.display = 'none';
+          document.getElementById('stat-status').textContent = 'Idle';
+          updateActionSection(); updateTravelSection();
+        }
+      } else if (state.action.type === 'spell') {
+        const {spellId} = state.action;
+        completeSpell(spellId);
+        state.action = null;
+        document.getElementById('action-timer-div').style.display = 'none';
+        document.getElementById('stat-status').textContent = 'Idle';
+        updateActionSection(); updateTravelSection();
+      } else if (state.action.type === 'sawmill') {
+        const {recipeId} = state.action;
+        const sawOk = completeSawmill(recipeId);
+        const r = SAWMILL_RECIPES[recipeId];
+        const hasLog = sawOk && (state.inventory[r.input] || 0) >= 1;
+        if (hasLog) {
+          state.inventory[r.input]--;
+          updateInventoryUI();
+          const restart = Date.now();
+          state.action = { type:'sawmill', recipeId, skillId:r.skill, startTime:restart, endTime:restart+r.time*1000 };
+        } else {
+          state.action = null;
+          document.getElementById('action-timer-div').style.display = 'none';
+          document.getElementById('stat-status').textContent = 'Idle';
+          updateActionSection(); updateTravelSection();
+        }
+      } else if (state.action.type === 'bait') {
+        const {recipeId} = state.action;
+        const baitOk = completeBait(recipeId);
+        const r = BAIT_RECIPES[recipeId];
+        const hasInput = baitOk && (state.inventory[r.input] || 0) >= 1;
+        if (hasInput) {
+          state.inventory[r.input]--;
+          updateInventoryUI();
+          const restart = Date.now();
+          state.action = { type:'bait', recipeId, skillId:r.skill, startTime:restart, endTime:restart+r.time*1000 };
+        } else {
+          state.action = null;
+          document.getElementById('action-timer-div').style.display = 'none';
+          document.getElementById('stat-status').textContent = 'Idle';
+          updateActionSection(); updateTravelSection();
+        }
+      } else if (state.action.type === 'cooking') {
+        const {recipeId} = state.action;
+        const cookOk = completeCooking(recipeId);
+        const r = COOKING_RECIPES[recipeId];
+        const hasMats = Object.entries(r.ingredients).every(([item,qty]) => (state.inventory[item]||0) >= qty);
+        if (hasMats && hasFuel()) {
+          for (const [item,qty] of Object.entries(r.ingredients)) state.inventory[item] -= qty;
+          updateInventoryUI();
+          const restart = Date.now();
+          state.action = { type:'cooking', recipeId, skillId:'cooking', startTime:restart, endTime:restart + r.time*1000 };
+        } else {
+          state.action = null;
+          document.getElementById('action-timer-div').style.display = 'none';
+          document.getElementById('stat-status').textContent = 'Idle';
+          updateActionSection(); updateTravelSection();
+        }
+      } else if (state.action.type === 'greenhouse') {
+        const { resourceId } = state.action;
+        const r = RESOURCES[resourceId];
+        // Clear action first to prevent double-fire while awaiting server
+        state.action = null;
+        document.getElementById('action-timer-div').style.display = 'none';
+        document.getElementById('stat-status').textContent = 'Idle';
+        fetch('/api/greenhouse/pick', { method:'POST', headers:{ Authorization:'Bearer '+authToken } })
+          .then(res => res.json())
+          .then(newState => {
+            ghState = newState;
+            if (newState.error) {
+              addLog(newState.error, 'error');
+            } else {
+              grantXP('harvesting', r.xp);
+              if (!canCarry(r.product)) {
+                addLog(`Can't carry more ${r.product}! Stopping.`, 'error');
+              } else {
+                addItem(r.product);
+                addLog(`Harvested ${r.name}. (+${r.xp} Harvesting xp) → ${r.product}`, 'success');
+                updateInventoryUI(); updateCarryUI(); saveGame();
+                if (newState.phase === 'ready' && newState.picksRemaining > 0) {
+                  const restart = Date.now(), ms = getActionMs('harvesting');
+                  state.action = { type:'greenhouse', resourceId, skillId:'harvesting', startTime:restart, endTime:restart+ms };
+                  document.getElementById('action-timer-div').style.display = 'block';
+                  document.getElementById('stat-status').textContent = r.name;
+                } else {
+                  addLog('This crop is all picked out! The next crop is now growing.', 'travel');
+                  fetchGhState();
+                }
+              }
+            }
+            updateActionSection(); updateTravelSection();
+          })
+          .catch(() => {
+            addLog('Greenhouse connection error.', 'error');
+            updateActionSection(); updateTravelSection();
+          });
+      } else if (state.action.type === 'dynamicCombat') {
         const { mob } = state.action;
         grantXP('combat', mob.xp);
-        addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp)`, 'success');
+        state.charXp += mob.charXp;
+        addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp, +${mob.charXp} Char xp)`, 'success');
         saveGame();
         const next = rollMob();
         const now2 = Date.now(), ms2 = Math.max(15000, next.hp * 3000);
@@ -1222,11 +3259,48 @@ function tick() {
         const {skillId,resourceId} = state.action;
         const r = RESOURCES[resourceId];
         grantXP(skillId, r.xp);
-        if (r.product) addItem(r.product);
-        addLog(`${r.name} complete. (+${r.xp} ${SKILL_DEFS[skillId].name} xp)${r.product?' → '+r.product:''}`, 'success');
-        saveGame();
-        const restart=Date.now(), ms=getActionMs(skillId);
-        state.action = {skillId, resourceId, startTime:restart, endTime:restart+ms};
+        if (r.charXp)  state.charXp  += r.charXp;
+        if (r.guildXp) state.guildXp += r.guildXp;
+        if (r.product && !canCarry(r.product)) {
+          addLog(`You can't carry any more ${r.product}! Action stopped. (${getCarryWeight()}/${getCarryMax()} lbs)`, 'error');
+          state.action = null;
+          document.getElementById('action-timer-div').style.display = 'none';
+          document.getElementById('stat-status').textContent = 'Idle';
+          updateActionSection(); updateTravelSection();
+        } else {
+          if (r.product) addItem(r.product);
+          addLog(`${r.name} complete. (+${r.xp} ${SKILL_DEFS[skillId].name} xp)${r.product?' → '+r.product:''}`, 'success');
+          saveGame();
+          // Check fishing requirements for next cast
+          if (skillId === 'fishing') {
+            if (r.needsRod && !state.equipment.rod) {
+              addLog('Fishing Rod unequipped — stopping.', 'error');
+              state.action = null;
+              document.getElementById('action-timer-div').style.display = 'none';
+              document.getElementById('stat-status').textContent = 'Idle';
+              updateActionSection(); updateTravelSection();
+            } else if (r.consumesItem) {
+              if (!(state.inventory[r.consumesItem] > 0)) {
+                addLog(`Out of ${r.consumesItem}! Fishing stopped.`, 'error');
+                state.action = null;
+                document.getElementById('action-timer-div').style.display = 'none';
+                document.getElementById('stat-status').textContent = 'Idle';
+                updateActionSection(); updateTravelSection();
+              } else {
+                state.inventory[r.consumesItem]--;
+                updateInventoryUI(); updateCarryUI();
+                const restart=Date.now(), ms=getActionMs(skillId);
+                state.action = {skillId, resourceId, startTime:restart, endTime:restart+ms};
+              }
+            } else {
+              const restart=Date.now(), ms=getActionMs(skillId);
+              state.action = {skillId, resourceId, startTime:restart, endTime:restart+ms};
+            }
+          } else {
+            const restart=Date.now(), ms=getActionMs(skillId);
+            state.action = {skillId, resourceId, startTime:restart, endTime:restart+ms};
+          }
+        }
       }
     }
   }
@@ -1245,6 +3319,7 @@ function tick() {
       document.getElementById('stat-status').textContent='Idle';
       addLog(`You arrive in ${dest.name}. (+${travelXP} Speed xp)`,'travel');
       saveGame(); buildMap(); updateLocationUI();
+      if (state.location === 'greenhouse') { ghState = null; fetchGhState(); }
     }
   }
 }
@@ -1274,6 +3349,93 @@ document.addEventListener('keydown', e=>{
 
 setInterval(tick, 100);
 setInterval(saveGame, 15000);
+// Poll greenhouse every 30s while player is there
+setInterval(() => { if (state.location === 'greenhouse' && !state.action) fetchGhState(); }, 30000);
+
+// ============================================================
+//  CHAT / WEBSOCKET
+// ============================================================
+let chatWs = null;
+let activeChannel = 'world';
+const CHANNELS = ['world', 'trade', 'help', 'guild'];
+const chatHistory = { world: [], trade: [], help: [], guild: [] };
+const CHANNEL_COLORS = { world: '#a89070', trade: '#c8a0e8', help: '#74c69d', guild: '#f4a460' };
+
+function switchChannel(ch) {
+  activeChannel = ch;
+  CHANNELS.forEach(c => {
+    const tab = document.getElementById('tab-' + c);
+    if (tab) tab.classList.toggle('active', c === ch);
+  });
+  const box = document.getElementById('chat-messages');
+  box.innerHTML = '';
+  for (const line of chatHistory[ch]) box.appendChild(line.cloneNode(true));
+  box.scrollTop = box.scrollHeight;
+  document.getElementById('chat-input').placeholder = `Say something in ${ch}...`;
+}
+
+function makeChatLine(msg) {
+  const line = document.createElement('div');
+  if (msg.type === 'system') {
+    line.className = 'chat-line system';
+    line.textContent = msg.text;
+  } else {
+    const ch = msg.channel || 'world';
+    const own = msg.username === authUsername;
+    line.className = 'chat-line' + (own ? ' own' : '');
+    const color = CHANNEL_COLORS[ch] || '#a89070';
+    line.innerHTML = `<span style="color:${color};font-size:9px;text-transform:uppercase">[${ch}]</span> <span class="chat-who">${escHtml(msg.username)}</span>: ${escHtml(msg.text)}`;
+  }
+  return line;
+}
+
+function chatConnect() {
+  if (chatWs) chatWs.close();
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  chatWs = new WebSocket(`${proto}://${location.host}/ws?token=${encodeURIComponent(authToken)}`);
+
+  chatWs.onmessage = (e) => {
+    let msg;
+    try { msg = JSON.parse(e.data); } catch(err) { return; }
+
+    const ch = msg.channel || 'world';
+    if (!chatHistory[ch]) return; // unknown channel
+
+    const line = makeChatLine(msg);
+    chatHistory[ch].push(line);
+    if (chatHistory[ch].length > 100) chatHistory[ch].shift();
+
+    if (ch === activeChannel) {
+      const box = document.getElementById('chat-messages');
+      box.appendChild(line.cloneNode(true));
+      while (box.children.length > 100) box.removeChild(box.firstChild);
+      box.scrollTop = box.scrollHeight;
+    }
+  };
+
+  chatWs.onclose = () => { chatWs = null; };
+}
+
+function chatDisconnect() {
+  if (chatWs) { chatWs.close(); chatWs = null; }
+  CHANNELS.forEach(c => chatHistory[c] = []);
+}
+
+function chatSend() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || !chatWs || chatWs.readyState !== WebSocket.OPEN) return;
+  chatWs.send(JSON.stringify({ text, channel: activeChannel }));
+  input.value = '';
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+document.getElementById('chat-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') chatSend();
+});
 </script>
 </body>
 </html>
