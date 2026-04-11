@@ -1743,7 +1743,7 @@ function getStateData() {
 
 function getMpMax()    { return skillLevel('magic') + getCharLevel() + 3; } // magic_lv + char_lv + 3
 function getHpMax()    { return skillLevel('combat') + getCharLevel(); } // +1 per combat lv, +1 per char lv
-function getCarryMax() { return 1000 + skillLevel('trading') * 50; }
+function getCarryMax() { return 1000 + skillLevel('trading') * 50 + getCharLevel() * 50; }
 
 // ============================================================
 //  COMBAT STATS
