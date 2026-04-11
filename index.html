@@ -2973,13 +2973,13 @@ function startDynamicCombat() {
   const mob = rollMob();
   const now = Date.now();
   const ms  = getCombatMs();
-  state.action = { type:'dynamicCombat', mob, skillId:'combat', startTime:now, endTime:now+ms };
+  state.action = { type:'dynamicCombat', mob, mobHp:mob.hp, skillId:'combat', startTime:now, endTime:now+ms };
   botCheck.lastCheck = now;
-  document.getElementById('action-label').textContent = `Fighting ${mob.name}...`;
+  document.getElementById('action-label').textContent = `Fighting ${mob.name}... (HP:${mob.hp})`;
   document.getElementById('action-timer-div').style.display = 'block';
   document.getElementById('stat-status').textContent = `Fighting ${mob.name}`;
   updateActionSection(); updateTravelSection();
-  addLog(`A ${mob.name} appears! (HP:${mob.hp}, ${ms/1000}s)`);
+  addLog(`A ${mob.name} appears! (HP:${mob.hp})  — Attack to defeat it.`);
 }
 
 function startTravel(destId, path) {
@@ -3284,31 +3284,44 @@ function tick() {
           });
       } else if (state.action.type === 'dynamicCombat') {
         const { mob } = state.action;
-        // --- mob deals damage to player ---
-        // hit chance: mob agility vs player agility (mob agility 5-10 vs player starting ~1)
+        let { mobHp } = state.action;
+
+        // --- player attacks mob ---
+        const playerAtk  = getAttack();
+        const playerRoll = Math.floor(Math.random() * 4); // 0-3 variance
+        const playerDmg  = Math.max(0, playerAtk - (mob.defense || 0) + playerRoll);
+        mobHp = Math.max(0, mobHp - playerDmg);
+        state.action.mobHp = mobHp;
+
+        // --- mob attacks player ---
         const playerAgility = getAgility();
         const mobAgility    = mob.agility || 5;
-        const hitChance     = mobAgility / (mobAgility + playerAgility) * 100; // e.g. 7/(7+1)*100 = 87.5%
+        const hitChance     = mobAgility / (mobAgility + playerAgility) * 100;
         const hit = Math.random() * 100 < hitChance;
         let dmgTaken = 0;
         if (hit) {
-          const variance = Math.floor(Math.random() * 5); // 0-4 extra damage
+          const variance = Math.floor(Math.random() * 5);
           dmgTaken = Math.max(1, mob.attack - getDefense() + variance);
           state.hp.current = Math.max(0, state.hp.current - dmgTaken);
           updateHpMpUI();
         }
-        // --- victory / blackout ---
+
+        const playerDmgStr = playerDmg > 0 ? `You hit ${mob.name} for ${playerDmg}.` : `Your attack glances off ${mob.name}.`;
+        const mobDmgStr    = !hit ? `${mob.name} misses.` : `${mob.name} hits you for ${dmgTaken}.`;
+        addLog(`${playerDmgStr} ${mobDmgStr} (${mob.name} HP: ${mobHp}/${mob.hp})`);
+
+        // --- check blackout ---
         if (state.hp.current <= 0) {
           state.hp.current = 1;
           updateHpMpUI();
           state.action = null;
           document.getElementById('action-timer-div').style.display = 'none';
           document.getElementById('stat-status').textContent = 'Idle';
-          addLog(`The ${mob.name} knocks you out! You wake up dazed... (HP: 1)`, 'error');
+          addLog(`You are knocked out by the ${mob.name}! You wake up dazed... (HP: 1)`, 'error');
           saveGame();
           updateActionSection(); updateTravelSection();
-        } else {
-          // --- normal victory ---
+        } else if (mobHp <= 0) {
+          // --- mob defeated ---
           grantXP('combat', mob.xp);
           state.charXp += mob.charXp;
           const dropMsgs = [];
@@ -3318,17 +3331,23 @@ function tick() {
             }
           }
           const dropStr = dropMsgs.length ? ` → ${dropMsgs.join(', ')}` : '';
-          const dmgStr  = !hit ? ' (dodged!)' : ` (-${dmgTaken} HP)`;
-          addLog(`You defeat the ${mob.name}!${dmgStr} (+${mob.xp} Combat xp, +${mob.charXp} Char xp)${dropStr}`, 'success');
+          addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp, +${mob.charXp} Char xp)${dropStr}`, 'success');
           updateCombatStatsUI();
           saveGame();
           const next = rollMob();
           const now2 = Date.now(), ms2 = getCombatMs();
-          state.action = { type:'dynamicCombat', mob:next, skillId:'combat', startTime:now2, endTime:now2+ms2 };
+          state.action = { type:'dynamicCombat', mob:next, mobHp:next.hp, skillId:'combat', startTime:now2, endTime:now2+ms2 };
           botCheck.lastCheck = now2;
-          document.getElementById('action-label').textContent = `Fighting ${next.name}...`;
+          document.getElementById('action-label').textContent = `Fighting ${next.name}... (HP:${next.hp})`;
           document.getElementById('stat-status').textContent = `Fighting ${next.name}`;
-          addLog(`A ${next.name} appears! (HP:${next.hp}, ${ms2/1000}s)`);
+          addLog(`A ${next.name} appears! (HP:${next.hp})`);
+        } else {
+          // --- mob still alive, continue next round ---
+          const now2 = Date.now(), ms2 = getCombatMs();
+          state.action.startTime = now2;
+          state.action.endTime   = now2 + ms2;
+          botCheck.lastCheck = now2;
+          document.getElementById('action-label').textContent = `Fighting ${mob.name}... (HP:${mobHp})`;
         }
       } else {
         const {skillId,resourceId} = state.action;
