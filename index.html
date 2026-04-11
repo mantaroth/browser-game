@@ -16,8 +16,8 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
 .panel h3 { color:#c8a96e; border-bottom:1px solid #4a3728; padding-bottom:4px; margin-bottom:8px; font-size:11px; text-transform:uppercase; letter-spacing:1px; }
 
 /* Map */
-#map-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-bottom:4px; }
-.map-cell { aspect-ratio:1; border:1px solid #333; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:9px; text-align:center; cursor:pointer; transition:all 0.15s; padding:3px; min-height:52px; line-height:1.3; }
+#map-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:3px; margin-bottom:4px; }
+.map-cell { aspect-ratio:1; border:1px solid #333; border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:7px; text-align:center; cursor:pointer; transition:all 0.15s; padding:2px; min-height:36px; line-height:1.2; }
 .map-cell.location       { background:#0f3460; border-color:#4a3728; color:#c8a96e; }
 .map-cell.location:hover { background:#1a4a80; border-color:#c8a96e; }
 .map-cell.current-loc    { background:#2d6a4f; border-color:#74c69d; color:#fff; font-weight:bold; }
@@ -1636,6 +1636,58 @@ const LOCATIONS = {
     shop:[],
     connects:['harrowfen'],
   },
+  // ── New world locations (placeholder positions — will be updated from map screenshots) ──
+  ashia:           { id:'ashia',           name:'Ashia',            pos:[0,5], desc:'A remote settlement in the highlands.', shop:[], connects:[] },
+  awaru:           { id:'awaru',           name:'Awaru',            pos:[1,5], desc:'A coastal fishing village.',            shop:[], connects:[] },
+  barin_plains:    { id:'barin_plains',    name:'Barin Plains',     pos:[2,5], desc:'Open grassland stretching to the horizon.', shop:[], connects:[] },
+  baron_plains:    { id:'baron_plains',    name:'Baron Plains',     pos:[3,5], desc:'Rolling plains once ruled by a great baron.', shop:[], connects:[] },
+  bulbas:          { id:'bulbas',          name:'Bulbas',           pos:[4,5], desc:'A small inland market town.',           shop:[], connects:[] },
+  cardina:         { id:'cardina',         name:'Cardina',          pos:[5,5], desc:'A prosperous city at the crossroads.',  shop:[], connects:[] },
+  cardina_valley:  { id:'cardina_valley',  name:'Cardina Valley',   pos:[6,5], desc:'A lush valley south of Cardina.',      shop:[], connects:[] },
+  cythe:           { id:'cythe',           name:'Cythe',            pos:[7,5], desc:'A mysterious town shrouded in fog.',   shop:[], connects:[] },
+  danycia:         { id:'danycia',         name:'Danycia',          pos:[8,5], desc:'A warm port with exotic traders.',     shop:[], connects:[] },
+  droesar:         { id:'droesar',         name:'Droesar',          pos:[9,5], desc:'A rugged northern outpost.',           shop:[], connects:[] },
+  echtin:          { id:'echtin',          name:'Echtin',           pos:[0,6], desc:'An ancient walled city.',              shop:[], connects:[] },
+  eptile:          { id:'eptile',          name:'Eptile',           pos:[1,6], desc:'A swampy delta town.',                 shop:[], connects:[] },
+  essrom:          { id:'essrom',          name:'Essrom',           pos:[2,6], desc:'A mining hub deep in the mountains.',  shop:[], connects:[] },
+  galawi:          { id:'galawi',          name:'Galawi',           pos:[3,6], desc:'A desert trading post.',               shop:[], connects:[] },
+  garando_mines:   { id:'garando_mines',   name:'Garando Mines',    pos:[4,6], desc:'Rich ore veins and dangerous depths.', shop:[], connects:[] },
+  giroc:           { id:'giroc',           name:'Giroc',            pos:[5,6], desc:'A fortified highland fortress.',       shop:[], connects:[] },
+  haldos_outpost:  { id:'haldos_outpost',  name:'Haldos Outpost',   pos:[6,6], desc:'A remote military outpost.',          shop:[], connects:[] },
+  hevalus_jungle:  { id:'hevalus_jungle',  name:'Hevalus Jungle',   pos:[7,6], desc:'Dense jungle teeming with wildlife.', shop:[], connects:[] },
+  hikori:          { id:'hikori',          name:'Hikori',           pos:[8,6], desc:'A clifftop village with sea views.',   shop:[], connects:[] },
+  hms_halieutika:  { id:'hms_halieutika',  name:'HMS Halieutika',   pos:[9,6], desc:'A grand warship anchored offshore.',  shop:[], connects:[] },
+  irotho:          { id:'irotho',          name:'Irotho',           pos:[0,7], desc:'A volcanic island settlement.',        shop:[], connects:[] },
+  jiroka:          { id:'jiroka',          name:'Jiroka',           pos:[1,7], desc:'A mountain pass trading town.',        shop:[], connects:[] },
+  kimdar:          { id:'kimdar',          name:'Kimdar',           pos:[2,7], desc:'A shipbuilding rival to Ferboi.', shipyard:true, actions:{ construction:['cn_wall'] }, shop:[], connects:[] },
+  kolar_post:      { id:'kolar_post',      name:'Kolar Trading Post',pos:[3,7], desc:'A bustling trade waypoint.',         shop:[], connects:[] },
+  kudzum:          { id:'kudzum',          name:'Kudzum',           pos:[4,7], desc:'A jungle border town.',               shop:[], connects:[] },
+  lake_essdar:     { id:'lake_essdar',     name:'Lake Essdar',      pos:[5,7], desc:'A peaceful lakeside retreat.',        shop:[], connects:[] },
+  lake_trand:      { id:'lake_trand',      name:'Lake Trand',       pos:[6,7], desc:'Deep cold waters, rich in pike.',     shop:[], connects:[] },
+  marossa:         { id:'marossa',         name:'Marossa',          pos:[7,7], desc:'A sprawling port capital.',           shop:[], connects:[] },
+  martral:         { id:'martral',         name:'Martral',          pos:[8,7], desc:'A city of craftsmen and scholars.',   shop:[], connects:[] },
+  moskim:          { id:'moskim',          name:'Moskim',           pos:[9,7], desc:'A windswept coastal settlement.',     shop:[], connects:[] },
+  mount_pharos:    { id:'mount_pharos',    name:'Mount Pharos',     pos:[0,8], desc:'A sacred mountain peak.',             shop:[], connects:[] },
+  nalurn_woods:    { id:'nalurn_woods',    name:'Nalurn Woods',     pos:[1,8], desc:'Ancient forest, famed for yew.',     actions:{ woodcutting:['wc_yew'] }, shop:[], connects:[] },
+  naton:           { id:'naton',           name:'Naton',            pos:[2,8], desc:'A grey industrial town.',             shop:[], connects:[] },
+  odude:           { id:'odude',           name:'Odude',            pos:[3,8], desc:'A frontier settlement on the plains.',shop:[], connects:[] },
+  onnix:           { id:'onnix',           name:'Onnix',            pos:[4,8], desc:'A hidden valley town.',               shop:[], connects:[] },
+  pharos_peak:     { id:'pharos_peak',     name:'Pharos Peak',      pos:[5,8], desc:'The summit above Mount Pharos.',      shop:[], connects:[] },
+  ponat:           { id:'ponat',           name:'Ponat',            pos:[6,8], desc:'A river town known for its market.',  shop:[], connects:[] },
+  ponat_pier:      { id:'ponat_pier',      name:'Ponat Pier',       pos:[7,8], desc:'The waterfront docks of Ponat.',     shop:[], connects:[] },
+  port_barin:      { id:'port_barin',      name:'Port Barin',       pos:[8,8], desc:'A busy western harbour.',             shop:[], connects:[] },
+  port_baron:      { id:'port_baron',      name:'Port Baron',       pos:[9,8], desc:'Gateway port to the baron lands.',    shop:[], connects:[] },
+  port_schow:      { id:'port_schow',      name:'Port Schow',       pos:[0,9], desc:'A quiet fishing port.',               shop:[], connects:[] },
+  radom_woods:     { id:'radom_woods',     name:'Radom Woods',      pos:[1,9], desc:'Dense forest, home to woodcutters.', actions:{ woodcutting:['wc_oak','wc_birch'] }, shop:[], connects:[] },
+  rissdra:         { id:'rissdra',         name:'Rissdra',          pos:[2,9], desc:'A timber town famed for its wood shop.', actions:{ woodcutting:['wc_pine','wc_oak'] }, shop:[], connects:[] },
+  sepas:           { id:'sepas',           name:'Sepas',            pos:[3,9], desc:'A southern coastal resort town.',     shop:[], connects:[] },
+  therusia:        { id:'therusia',        name:'Therusia',         pos:[4,9], desc:'An island nation capital.',           shop:[], connects:[] },
+  tropi:           { id:'tropi',           name:'Tropi',            pos:[5,9], desc:'A tropical island settlement.',       shop:[], connects:[] },
+  unopos_mesa:     { id:'unopos_mesa',     name:'Unopos Mesa',      pos:[6,9], desc:'A high desert plateau town.',         shop:[], connects:[] },
+  uzlea:           { id:'uzlea',           name:'Uzlea',            pos:[7,9], desc:'A secretive mage city.',              spells:true, shop:[], connects:[] },
+  yisildor_bay:    { id:'yisildor_bay',    name:'Yisildor Bay',     pos:[8,9], desc:'A sheltered bay with coral reefs.',   shop:[], connects:[] },
+  zhyack:          { id:'zhyack',          name:'Zhyack',           pos:[9,9], desc:'The edge of the known world.',        shop:[], connects:[] },
+
   ferboi: {
     id:'ferboi', name:'Ferboi', pos:[4,3],
     desc:'A bustling port town on the southern coast. The shipyard here builds everything from skiffs to leviathans.',
