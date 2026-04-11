@@ -2210,78 +2210,75 @@ function addLog(msg, type) {
 //  FANTASY MAP
 // ============================================================
 const LOC_POS = {
-  // Row 0
-  isenvale:       {x:15,  y:15 },
-  nalurn_woods:   {x:65,  y:15 },
-  kimdar:         {x:115, y:15 },
-  ravel:          {x:165, y:15 },
-  thornfield:     {x:215, y:15 },
-  greenhouse:     {x:265, y:15 },
-  danycia:        {x:415, y:15 },
-  // Row 1
-  zhyack:         {x:15,  y:58 },
-  naton:          {x:65,  y:58 },
-  therusia:       {x:115, y:58 },
-  giroc:          {x:165, y:58 },
-  coldrun:        {x:215, y:58 },
-  radom_woods:    {x:265, y:58 },
-  galawi:         {x:315, y:58 },
-  rissdra:        {x:365, y:58 },
-  uzlea:          {x:465, y:58 },
-  // Row 2
-  onnix:          {x:15,  y:101},
-  sepas:          {x:65,  y:101},
-  cardina_valley: {x:115, y:101},
-  garando_mines:  {x:165, y:101},
-  barin_plains:   {x:215, y:101},
-  ponat:          {x:265, y:101},
-  port_schow:     {x:315, y:101},
-  lake_essdar:    {x:365, y:101},
-  stonehaven:     {x:415, y:101},
-  essrom:         {x:465, y:101},
-  // Row 3
-  pharos_peak:    {x:15,  y:144},
-  mount_pharos:   {x:65,  y:144},
-  haldos_outpost: {x:115, y:144},
-  baron_plains:   {x:165, y:144},
-  ferboi:         {x:215, y:144},
-  ponat_pier:     {x:265, y:144},
-  port_barin:     {x:315, y:144},
-  echtin:         {x:365, y:144},
-  moskim:         {x:415, y:144},
-  ashgate:        {x:465, y:144},
-  // Row 4
-  brightwater:    {x:15,  y:187},
-  cardina:        {x:65,  y:187},
-  ironpeak:       {x:115, y:187},
-  embervale:      {x:165, y:187},
-  kolar_post:     {x:215, y:187},
-  duskmill:       {x:265, y:187},
-  harrowfen:      {x:315, y:187},
-  port_baron:     {x:365, y:187},
-  droesar:        {x:415, y:187},
-  // Row 5
-  jiroka:         {x:65,  y:230},
-  kudzum:         {x:115, y:230},
-  hevalus_jungle: {x:165, y:230},
-  hikori:         {x:215, y:230},
-  hms_halieutika: {x:315, y:230},
-  lake_trand:     {x:365, y:230},
-  // Row 6
-  bulbas:         {x:65,  y:273},
-  cythe:          {x:115, y:273},
-  tropi:          {x:165, y:273},
-  unopos_mesa:    {x:265, y:273},
-  marossa:        {x:315, y:273},
-  yisildor_bay:   {x:365, y:273},
-  martral:        {x:415, y:273},
-  // Row 8
-  skull_island: {x:310, y:338},
-  irotho:         {x:15,  y:359},
-  awaru:          {x:65,  y:359},
-  ashia:          {x:115, y:359},
-  eptile:         {x:165, y:359},
-  odude:          {x:215, y:359},
+  // ── Orin (large western island, anchor 20,20) ────────────────────
+  isenvale:       {x:20,  y:20 },
+  nalurn_woods:   {x:70,  y:20 },
+  kimdar:         {x:120, y:20 },
+  ravel:          {x:170, y:20 },
+  thornfield:     {x:220, y:20 },
+  zhyack:         {x:20,  y:63 },
+  naton:          {x:70,  y:63 },
+  therusia:       {x:120, y:63 },
+  giroc:          {x:170, y:63 },
+  coldrun:        {x:220, y:63 },
+  onnix:          {x:20,  y:106},
+  sepas:          {x:70,  y:106},
+  cardina_valley: {x:120, y:106},
+  garando_mines:  {x:170, y:106},
+  barin_plains:   {x:220, y:106},
+  pharos_peak:    {x:20,  y:149},
+  mount_pharos:   {x:70,  y:149},
+  haldos_outpost: {x:120, y:149},
+  baron_plains:   {x:170, y:149},
+  ferboi:         {x:220, y:149},
+  brightwater:    {x:20,  y:192},
+  cardina:        {x:70,  y:192},
+  ironpeak:       {x:120, y:192},
+  embervale:      {x:170, y:192},
+  kolar_post:     {x:220, y:192},
+  // ── Gardan (large eastern island, anchor 650,20) ─────────────────
+  greenhouse:     {x:650, y:20 },
+  danycia:        {x:800, y:20 },
+  radom_woods:    {x:650, y:63 },
+  galawi:         {x:700, y:63 },
+  rissdra:        {x:750, y:63 },
+  uzlea:          {x:850, y:63 },
+  ponat:          {x:650, y:106},
+  port_schow:     {x:700, y:106},
+  lake_essdar:    {x:750, y:106},
+  stonehaven:     {x:800, y:106},
+  essrom:         {x:850, y:106},
+  ponat_pier:     {x:650, y:149},
+  port_barin:     {x:700, y:149},
+  echtin:         {x:750, y:149},
+  moskim:         {x:800, y:149},
+  ashgate:        {x:850, y:149},
+  duskmill:       {x:650, y:192},
+  harrowfen:      {x:700, y:192},
+  port_baron:     {x:750, y:192},
+  droesar:        {x:800, y:192},
+  // ── Jiru (SW island, anchor 70,580) ──────────────────────────────
+  jiroka:         {x:70,  y:580},
+  kudzum:         {x:120, y:580},
+  hevalus_jungle: {x:170, y:580},
+  hikori:         {x:220, y:580},
+  bulbas:         {x:70,  y:623},
+  cythe:          {x:120, y:623},
+  tropi:          {x:170, y:623},
+  // ── Marros (SE island, anchor 650,580) ───────────────────────────
+  hms_halieutika: {x:700, y:580},
+  lake_trand:     {x:750, y:580},
+  unopos_mesa:    {x:650, y:623},
+  marossa:        {x:700, y:623},
+  yisildor_bay:   {x:750, y:623},
+  martral:        {x:800, y:623},
+  // ── South Isles (bottom chain, anchor 20,950) ─────────────────────
+  skull_island:   {x:430, y:420},
+  irotho:         {x:20,  y:950},
+  awaru:          {x:70,  y:950},
+  ashia:          {x:120, y:950},
+  eptile:         {x:170, y:950},
+  odude:          {x:220, y:950},
 };
 
 
@@ -2442,12 +2439,12 @@ function buildMap() {
   world.style.transition = 'none'; // disable during build
 
   // ── Ocean background ──────────────────────────────────────
-  el('rect',{x:-200,y:-200,width:900,height:900,fill:'url(#fm-ocean)'},world);
+  el('rect',{x:-600,y:-600,width:2400,height:2400,fill:'url(#fm-ocean)'},world);
 
   // Ocean wave texture
-  for(let wt=0; wt<6; wt++) {
-    const wy = -150 + wt*120;
-    for(let wx=-150; wx<700; wx+=60) {
+  for(let wt=0; wt<18; wt++) {
+    const wy = -500 + wt*120;
+    for(let wx=-500; wx<1300; wx+=60) {
       const w = el('path',{d:`M ${wx} ${wy} Q ${wx+15} ${wy-4} ${wx+30} ${wy}`,
         fill:'none', stroke:'rgba(100,180,240,0.06)', 'stroke-width':1.5}, world);
     }
@@ -2457,8 +2454,7 @@ function buildMap() {
   const islandStyle = {fill:'url(#fm-land)', stroke:'#8ab870', 'stroke-width':1.5, opacity:0.9};
   const islandCoast = {fill:'none', stroke:'#c8e890', 'stroke-width':0.5, opacity:0.4};
 
-  // Orin — large western landmass (towns x:15-215, y:15-187)
-  // Organic shape: bumpy west coast, straight ocean-facing east coast
+  // Orin — large western island (towns x:20-220, y:20-192)
   const orinPath = [
     'M 4,212',
     'C -8,202 -16,182 -16,155',
@@ -2476,67 +2472,64 @@ function buildMap() {
   el('path',{d:orinPath, ...islandStyle},world);
   el('path',{d:orinPath, ...islandCoast},world);
 
-  // Gardan — large eastern landmass (towns x:265-465, y:15-187)
-  // Irregular north coast, NE extension for danycia/uzlea/ashgate
+  // Gardan — large eastern island (towns x:650-850, y:20-192)
   const gardanPath = [
-    'M 258,212',
-    'C 252,200 250,178 253,150',
-    'C 253,120 250,88 255,58',
-    'C 258,30 268,4 285,-8',
-    'C 302,-18 335,-20 368,-16',
-    'C 400,-16 432,-10 460,2',
-    'C 485,12 500,35 502,65',
-    'C 504,95 502,125 500,155',
-    'C 500,182 498,200 485,210',
-    'C 468,220 440,220 405,218',
-    'C 368,218 325,218 292,218',
-    'C 272,218 260,215 258,212 Z'
+    'M 628,212',
+    'C 620,200 618,178 621,150',
+    'C 621,120 618,88 623,58',
+    'C 626,30 636,4 653,-8',
+    'C 670,-18 703,-20 736,-16',
+    'C 768,-16 800,-10 828,2',
+    'C 853,12 868,35 870,65',
+    'C 872,95 870,125 868,155',
+    'C 868,182 866,200 853,210',
+    'C 836,220 808,220 773,218',
+    'C 736,218 693,218 660,218',
+    'C 640,218 628,215 628,212 Z'
   ].join(' ');
   el('path',{d:gardanPath, ...islandStyle},world);
   el('path',{d:gardanPath, ...islandCoast},world);
 
-  // Jiru — SW island (towns x:65-215, y:230-273)
-  // Rounded tropical island; sits in the sea south-west
+  // Jiru — SW island (towns x:70-220, y:580-623)
   const jiruPath = [
-    'M 46,265',
-    'C 38,280 40,300 52,314',
-    'C 65,328 90,335 122,334',
-    'C 155,336 185,332 210,320',
-    'C 232,308 238,288 236,268',
-    'C 234,248 222,234 202,228',
-    'C 180,222 150,220 118,220',
-    'C 85,220 62,228 50,244',
-    'C 44,252 45,260 46,265 Z'
+    'M 46,615',
+    'C 38,630 40,650 52,664',
+    'C 65,678 90,685 122,684',
+    'C 155,686 185,682 210,670',
+    'C 232,658 238,638 236,618',
+    'C 234,598 222,584 202,578',
+    'C 180,572 150,570 118,570',
+    'C 85,570 62,578 50,594',
+    'C 44,602 45,610 46,615 Z'
   ].join(' ');
   el('path',{d:jiruPath, ...islandStyle},world);
   el('path',{d:jiruPath, ...islandCoast},world);
 
-  // Marros — SE island (towns x:265-415, y:230-273)
-  // Across the sea from Gardan; slightly elongated
+  // Marros — SE island (towns x:650-800, y:580-623)
   const marrosPath = [
-    'M 250,265',
-    'C 244,280 247,300 260,314',
-    'C 272,326 295,333 325,334',
-    'C 358,336 390,330 415,318',
-    'C 438,306 450,288 448,268',
-    'C 446,248 432,232 408,226',
-    'C 382,220 350,218 318,218',
-    'C 285,218 258,228 250,248',
-    'C 246,256 249,262 250,265 Z'
+    'M 630,615',
+    'C 622,630 624,650 636,664',
+    'C 649,678 674,685 706,684',
+    'C 739,686 769,682 794,670',
+    'C 816,658 822,638 820,618',
+    'C 818,598 806,584 786,578',
+    'C 764,572 734,570 702,570',
+    'C 669,570 646,578 634,594',
+    'C 628,602 629,610 630,615 Z'
   ].join(' ');
   el('path',{d:marrosPath, ...islandStyle},world);
   el('path',{d:marrosPath, ...islandCoast},world);
 
-  // South Isles — bottom island chain (towns x:15-215, y:359)
+  // South Isles — bottom chain (towns x:20-220, y:950)
   const southPath = [
-    'M 4,350',
-    'C -8,360 -12,378 -3,394',
-    'C 8,410 42,418 88,416',
-    'C 130,418 175,414 215,402',
-    'C 240,394 252,378 249,360',
-    'C 246,344 228,337 196,335',
-    'C 160,333 115,334 72,340',
-    'C 38,344 12,348 4,350 Z'
+    'M 4,940',
+    'C -8,950 -12,968 -3,982',
+    'C 8,995 42,1002 88,1000',
+    'C 130,1001 175,997 215,986',
+    'C 240,978 252,962 249,944',
+    'C 246,928 228,921 196,919',
+    'C 160,917 115,918 72,924',
+    'C 38,928 12,936 4,940 Z'
   ].join(' ');
   el('path',{d:southPath, ...islandStyle},world);
   el('path',{d:southPath, ...islandCoast},world);
@@ -2544,10 +2537,10 @@ function buildMap() {
   // ── Skull Island (hidden, fog-shrouded) ───────────────────
   const skulldefs = el('filter',{id:'skull-fog',x:'-30%',y:'-30%',width:'160%',height:'160%'},defs);
   el('feGaussianBlur',{stdDeviation:'3.5',result:'blur'},skulldefs);
-  const skullPath = 'M 275,312 C 268,320 266,338 272,353 C 280,368 298,375 318,373 C 338,371 352,360 353,345 C 354,330 342,316 326,311 C 310,306 285,308 275,312 Z';
+  const skullPath = 'M 393,406 C 386,414 384,432 390,447 C 398,462 416,469 436,467 C 456,465 470,454 471,439 C 472,424 460,410 444,405 C 428,400 403,402 393,406 Z';
   el('path',{d:skullPath, fill:'#2a3a2a', stroke:'#4a5a3a','stroke-width':1, opacity:0.5, filter:'url(#skull-fog)'},world);
   // Skull icon
-  const sk = el('g',{transform:'translate(312,338)',opacity:0.35, filter:'url(#skull-fog)'},world);
+  const sk = el('g',{transform:'translate(430,425)',opacity:0.35, filter:'url(#skull-fog)'},world);
   el('circle',{cx:0,cy:-3,r:6,fill:'#e0e0d0',stroke:'none'},sk);
   el('rect',{x:-4,y:2,width:8,height:4,fill:'#e0e0d0',rx:1},sk);
   el('circle',{cx:-2.5,cy:-4,r:1.8,fill:'#1a1a1a'},sk);
@@ -2558,7 +2551,7 @@ function buildMap() {
   el('text',{x:0,y:18,'text-anchor':'middle',fill:'rgba(180,180,140,0.4)','font-size':7,'font-family':'serif','font-style':'italic','stroke':'none'},world).textContent='? ? ?';
 
   // ── Vignette overlay ──────────────────────────────────────
-  el('rect',{x:-200,y:-200,width:900,height:900,fill:'url(#fm-vig)'},world);
+  el('rect',{x:-600,y:-600,width:2400,height:2400,fill:'url(#fm-vig)'},world);
 
   // ── Sea routes ────────────────────────────────────────────
   for (const [a,b] of MAP_SEA_ROUTES) {
