@@ -449,9 +449,9 @@ const RESOURCES = {
 //  STONEHAVEN DYNAMIC COMBAT MOBS
 // ============================================================
 const STONEHAVEN_MOBS = [
-  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, weight:50 },
-  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, weight:30 },
-  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, weight:20 },
+  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, weight:50, drops:['Rat Tail','Raw Meat','Animal Skin'] },
+  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, weight:30, drops:['Raw Meat','Animal Skin'] },
+  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, weight:20, drops:['Raw Meat','Animal Skin'] },
 ];
 
 function rollMob() {
@@ -3253,7 +3253,14 @@ function tick() {
         const { mob } = state.action;
         grantXP('combat', mob.xp);
         state.charXp += mob.charXp;
-        addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp, +${mob.charXp} Char xp)`, 'success');
+        const dropMsgs = [];
+        if (mob.drops) {
+          for (const item of mob.drops) {
+            if (canCarry(item)) { addItem(item); dropMsgs.push(item); }
+          }
+        }
+        const dropStr = dropMsgs.length ? ` → ${dropMsgs.join(', ')}` : '';
+        addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp, +${mob.charXp} Char xp)${dropStr}`, 'success');
         saveGame();
         const next = rollMob();
         const now2 = Date.now(), ms2 = getCombatMs();
