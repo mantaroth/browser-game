@@ -1752,7 +1752,7 @@ function getCharLevel() {
   while (state.charXp >= xpForLevel(lv + 1)) lv++;
   return lv;
 }
-function getAttack()      { return 5 + skillLevel('combat') * 2; }
+function getAttack()      { return skillLevel('combat') - 1; } // 0 at lv1, +1 per level
 function getDefense()     { return 3 + Math.floor(skillLevel('combat') / 2) + Math.floor(getCharLevel() / 2); }
 function getAgility()     { return skillLevel('combat') + Math.floor(getCharLevel() / 2); }
 function getMagicDefense(){ return 3 + skillLevel('magic') * 2; }
