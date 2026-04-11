@@ -385,12 +385,26 @@ const RESOURCES = {
   wc_birch:   {skill:'woodcutting',  name:'Birch Tree',     levelReq:10, xp:90,  product:'Birch Log'    },
   wc_yew:     {skill:'woodcutting',  name:'Yew Tree',       levelReq:20, xp:150, product:'Yew Log'      },
   // Mining
-  mn_copper:   {skill:'mining',      name:'Copper Rock',    levelReq:1,  xp:15,  product:'Copper Ore'   },
-  mn_iron:     {skill:'mining',      name:'Iron Rock',      levelReq:10, xp:35,  product:'Iron Ore'     },
-  mn_silver:   {skill:'mining',      name:'Silver Rock',    levelReq:20, xp:65,  product:'Silver Ore'   },
-  mn_gold:     {skill:'mining',      name:'Gold Rock',      levelReq:30, xp:110, product:'Gold Ore'     },
-  mn_asterite: {skill:'mining',      name:'Asterite Rock',  levelReq:40, xp:150, product:'Asterite Ore' },
-  mn_arcanium: {skill:'mining',      name:'Arcanium Rock',  levelReq:50, xp:200, product:'Arcanium Ore' },
+  mn_tin:        {skill:'mining', name:'Tin Rock',        levelReq:1,  xp:10,  charXp:7,  guildXp:5,  product:'Tin Ore'        },
+  mn_copper:     {skill:'mining', name:'Copper Rock',     levelReq:1,  xp:10,  charXp:7,  guildXp:5,  product:'Copper Ore'     },
+  mn_sandstone:  {skill:'mining', name:'Sandstone Rock',  levelReq:3,  xp:12,  charXp:8,  guildXp:5,  product:'Sandstone'      },
+  mn_stone:      {skill:'mining', name:'Stone Rock',      levelReq:5,  xp:14,  charXp:9,  guildXp:6,  product:'Stone'          },
+  mn_iron:       {skill:'mining', name:'Iron Rock',       levelReq:10, xp:15,  charXp:10, guildXp:7,  product:'Iron Ore'       },
+  mn_coal:       {skill:'mining', name:'Coal Seam',       levelReq:15, xp:20,  charXp:11, guildXp:7,  product:'Coal'           },
+  mn_silver:     {skill:'mining', name:'Silver Rock',     levelReq:20, xp:25,  charXp:13, guildXp:8,  product:'Silver Ore'     },
+  mn_bauxite:    {skill:'mining', name:'Bauxite Rock',    levelReq:22, xp:27,  charXp:14, guildXp:9,  product:'Bauxite'        },
+  mn_gold:       {skill:'mining', name:'Gold Rock',       levelReq:30, xp:35,  charXp:16, guildXp:10, product:'Gold Ore'       },
+  mn_mythral:    {skill:'mining', name:'Mythral Rock',    levelReq:35, xp:42,  charXp:18, guildXp:12, product:'Mythral Ore'    },
+  mn_asterite:   {skill:'mining', name:'Asterite Rock',   levelReq:40, xp:50,  charXp:20, guildXp:13, product:'Asterite Ore'   },
+  mn_adamantite: {skill:'mining', name:'Adamantite Rock', levelReq:42, xp:54,  charXp:21, guildXp:14, product:'Adamantite Ore' },
+  mn_titanium:   {skill:'mining', name:'Titanium Rock',   levelReq:45, xp:58,  charXp:22, guildXp:15, product:'Titanium Ore'   },
+  mn_duranium:   {skill:'mining', name:'Duranium Rock',   levelReq:48, xp:62,  charXp:22, guildXp:15, product:'Duranium Ore'   },
+  mn_arcanium:   {skill:'mining', name:'Arcanium Rock',   levelReq:50, xp:65,  charXp:22, guildXp:16, product:'Arcanium Ore'   },
+  mn_hexamine:   {skill:'mining', name:'Hexamine Rock',   levelReq:55, xp:70,  charXp:23, guildXp:16, product:'Hexamine Ore'   },
+  mn_trinite:    {skill:'mining', name:'Trinite Rock',    levelReq:60, xp:74,  charXp:24, guildXp:17, product:'Trinite Ore'    },
+  mn_nelgite:    {skill:'mining', name:'Nelgite Rock',    levelReq:65, xp:76,  charXp:24, guildXp:17, product:'Nelgite Ore'    },
+  mn_unixide:    {skill:'mining', name:'Unixide Rock',    levelReq:70, xp:77,  charXp:25, guildXp:17, product:'Unixide Ore'    },
+  mn_biridium:   {skill:'mining', name:'Biridium Rock',   levelReq:75, xp:78,  charXp:25, guildXp:17, product:'Biridium Ore'   },
   // Fishing
   fi_mackerel:  {skill:'fishing', name:'Mackerel',      levelReq:1,  xp:10, charXp:7,  guildXp:5,  product:'Mackerel',       needsRod:true },
   fi_salmon:    {skill:'fishing', name:'Salmon',         levelReq:1,  xp:20, charXp:10, guildXp:8,  product:'Salmon'          },
@@ -530,6 +544,36 @@ const GEAR = {
   leather_gloves:        {id:'leather_gloves',        name:'Leather Gloves',        slot:'gloves',      skill:'cooking',    levelReq:0,  reduceTime:1, reducePlanting:0, defense:1, attack:0, cost:15,   weight:1, mudCrabSet:true },
   ring_of_speed:         {id:'ring_of_speed',         name:'Ring of Speed',         slot:'ring',        skill:'combat',     levelReq:0,  reduceTime:0, reducePlanting:0, defense:0, attack:0, speed:1,  cost:50,   weight:0, mudCrabSet:true },
   nagaromi_pickaxe:      {id:'nagaromi_pickaxe',      name:'Nagaromi Pickaxe',      slot:'tool',        skill:'mining',     levelReq:5,  reduceTime:0, reducePlanting:0, defense:1, attack:0, cost:50,   weight:2, mudCrabSet:true },
+  // ── Mining tools (pickaxes) ────────────────────────────────
+  bronze_pickaxe:    {id:'bronze_pickaxe',    name:'Bronze Pickaxe',    slot:'tool',       skill:'mining', levelReq:0,  reduceTime:0, gemFinding:0, attack:1,  defense:0, cost:10,   weight:2 },
+  iron_pickaxe:      {id:'iron_pickaxe',      name:'Iron Pickaxe',      slot:'tool',       skill:'mining', levelReq:10, reduceTime:1, gemFinding:0, attack:1,  defense:0, cost:100,  weight:4 },
+  steel_pickaxe:     {id:'steel_pickaxe',     name:'Steel Pickaxe',     slot:'tool',       skill:'mining', levelReq:20, reduceTime:2, gemFinding:0, attack:1,  defense:0, cost:300,  weight:5 },
+  lucky_pick:        {id:'lucky_pick',        name:'Lucky Pick',        slot:'tool',       skill:'mining', levelReq:20, reduceTime:1, gemFinding:1, attack:0,  defense:0, cost:350,  weight:4 },
+  titanium_pickaxe:  {id:'titanium_pickaxe',  name:'Titanium Pickaxe',  slot:'tool',       skill:'mining', levelReq:30, reduceTime:3, gemFinding:0, attack:1,  defense:0, cost:600,  weight:6 },
+  elven_pickaxe:     {id:'elven_pickaxe',     name:'Elven Pickaxe',     slot:'tool',       skill:'mining', levelReq:35, reduceTime:4, gemFinding:0, attack:0,  defense:1, cost:800,  weight:4 },
+  dwarven_pickaxe:   {id:'dwarven_pickaxe',   name:'Dwarven Pickaxe',   slot:'tool',       skill:'mining', levelReq:35, reduceTime:4, gemFinding:0, attack:1,  defense:1, cost:850,  weight:7 },
+  diamond_pickaxe:   {id:'diamond_pickaxe',   name:'Diamond Pickaxe',   slot:'tool',       skill:'mining', levelReq:40, reduceTime:5, gemFinding:1, attack:2,  defense:0, cost:1000, weight:5 },
+  aliki_pickaxe:     {id:'aliki_pickaxe',     name:'Aliki Pickaxe',     slot:'tool',       skill:'mining', levelReq:45, reduceTime:5, gemFinding:1, attack:1,  defense:0, cost:0,    weight:6 },
+  polathurn_pickaxe: {id:'polathurn_pickaxe', name:'Polathurn Pickaxe', slot:'tool',       skill:'mining', levelReq:55, reduceTime:6, gemFinding:0, attack:0,  defense:3, cost:0,    weight:8 },
+  tinran_pickaxe:    {id:'tinran_pickaxe',    name:'Tinran Pickaxe',    slot:'tool',       skill:'mining', levelReq:60, reduceTime:6, gemFinding:2, attack:0,  defense:2, cost:0,    weight:7 },
+  // ── Mining accessories ──────────────────────────────────
+  mining_talisman:   {id:'mining_talisman',   name:'Mining Talisman',   slot:'neck',       skill:'mining', levelReq:0,  reduceTime:2, gemFinding:0, attack:0,  defense:0, cost:15,   weight:1 },
+  mining_ring:       {id:'mining_ring',       name:'Mining Ring',       slot:'ring',       skill:'mining', levelReq:5,  reduceTime:1, gemFinding:0, attack:0,  defense:0, cost:150,  weight:0 },
+  torch:             {id:'torch',             name:'Torch',             slot:'left_hand',  skill:'mining', levelReq:0,  reduceTime:1, gemFinding:0, attack:0,  defense:0, cost:20,   weight:1 },
+  mining_charm:      {id:'mining_charm',      name:'Mining Charm',      slot:'neck',       skill:'mining', levelReq:15, reduceTime:3, gemFinding:0, attack:0,  defense:0, cost:200,  weight:1 },
+  headlamp:          {id:'headlamp',          name:'Headlamp',          slot:'head',       skill:'mining', levelReq:10, reduceTime:2, gemFinding:1, attack:0,  defense:1, cost:200,  weight:1 },
+  mining_band:       {id:'mining_band',       name:'Mining Band',       slot:'ring',       skill:'mining', levelReq:25, reduceTime:2, gemFinding:1, attack:0,  defense:0, cost:400,  weight:0 },
+  bracelet_of_stone: {id:'bracelet_of_stone', name:'Bracelet of Stone', slot:'left_hand',  skill:'mining', levelReq:30, reduceTime:3, gemFinding:1, attack:0,  defense:2, cost:600,  weight:2, charLvlReq:30 },
+  mining_tiara:      {id:'mining_tiara',      name:'Mining Tiara',      slot:'head',       skill:'mining', levelReq:40, reduceTime:3, gemFinding:2, attack:0,  defense:2, cost:1200, weight:2, charLvlReq:30 },
+  lantern:           {id:'lantern',           name:'Lantern',           slot:'left_hand',  skill:'mining', levelReq:55, reduceTime:4, gemFinding:2, attack:0,  defense:0, cost:0,    weight:2 },
+  marossan_ring:     {id:'marossan_ring',     name:'Marossan Ring',     slot:'ring',       skill:'mining', levelReq:60, reduceTime:3, gemFinding:2, attack:0,  defense:0, cost:0,    weight:0 },
+  marossan_necklace: {id:'marossan_necklace', name:'Marossan Necklace', slot:'neck',       skill:'mining', levelReq:60, reduceTime:4, gemFinding:2, attack:0,  defense:0, cost:0,    weight:1 },
+  // ── Bearded Burrower set items ─────────────────────────
+  sjirkomi_mask:     {id:'sjirkomi_mask',     name:'Sjirkomi Mask',     slot:'face',       skill:'mining', levelReq:0,  reduceTime:0, gemFinding:0, attack:0,  defense:1,  cost:0,    weight:1, combatLvlReq:5,       beardedBurrowerSet:true },
+  large_backpack:    {id:'large_backpack',    name:'Large Backpack',    slot:'upper_body', skill:'mining', levelReq:0,  reduceTime:0, gemFinding:0, attack:-1, defense:-1, carry:300, cost:0,   weight:5, beardedBurrowerSet:true },
+  tuba:              {id:'tuba',              name:'Tuba',              slot:'accessory',  skill:'mining', levelReq:0,  reduceTime:2, gemFinding:0, attack:0,  defense:0,  cost:5000, weight:3, miningLvlReq:70,      beardedBurrowerSet:true },
+  steel_drums:       {id:'steel_drums',       name:'Steel Drums',       slot:'accessory',  skill:'mining', levelReq:0,  reduceTime:3, gemFinding:0, attack:0,  defense:0,  cost:5000, weight:5, combatLvlReq:15,      beardedBurrowerSet:true },
+  oboe:              {id:'oboe',              name:'Oboe',              slot:'accessory',  skill:'mining', levelReq:0,  reduceTime:2, gemFinding:0, attack:0,  defense:0,  cost:5000, weight:1, woodcuttingLvlReq:70, beardedBurrowerSet:true },
   // ── Tools (hatchets) ───────────────────────────────────────
   bronze_hatchet:      {id:'bronze_hatchet',      name:'Bronze Hatchet',        slot:'tool',       skill:'woodcutting', levelReq:0,  reduceTime:0, attack:1,  defense:0,  cost:10,   weight:2  },
   nagaromi_hatchet:    {id:'nagaromi_hatchet',     name:'Nagaromi Hatchet',      slot:'tool',       skill:'woodcutting', levelReq:5,  reduceTime:0, attack:2,  defense:0,  cost:50,   weight:3  },
@@ -653,6 +697,23 @@ const ITEM_WEIGHTS = {
   'Iron Saw':3, 'Steel Saw':4, 'Hardened Saw':5, 'Inspico Gloves':1, 'Carpenters Helmet':2,
   // Construction foods
   'Fried Steak':1,
+  // Mining ores (new)
+  'Tin Ore':3, 'Sandstone':3, 'Stone':4, 'Coal':3, 'Bauxite':4,
+  'Mythral Ore':7, 'Adamantite Ore':8, 'Titanium Ore':9, 'Duranium Ore':10,
+  'Hexamine Ore':11, 'Trinite Ore':12, 'Nelgite Ore':13, 'Unixide Ore':14, 'Biridium Ore':15,
+  // Gems
+  'Amber':0, 'Jade':0, 'Amethyst':0, 'Sapphire':0, 'Ruby':0,
+  'Emerald':0, 'Diamond':0, 'Opal':0, 'Star Ruby':0, 'Black Diamond':0,
+  // Mining pickaxes
+  'Bronze Pickaxe':2, 'Iron Pickaxe':4, 'Steel Pickaxe':5, 'Lucky Pick':4,
+  'Titanium Pickaxe':6, 'Elven Pickaxe':4, 'Dwarven Pickaxe':7, 'Diamond Pickaxe':5,
+  'Aliki Pickaxe':6, 'Polathurn Pickaxe':8, 'Tinran Pickaxe':7,
+  // Mining accessories
+  'Mining Talisman':1, 'Mining Ring':0, 'Torch':1, 'Mining Charm':1, 'Headlamp':1,
+  'Mining Band':0, 'Bracelet of Stone':2, 'Mining Tiara':2, 'Lantern':2,
+  'Marossan Ring':0, 'Marossan Necklace':1,
+  // Bearded Burrower set
+  'Sjirkomi Mask':1, 'Large Backpack':5, 'Tuba':3, 'Steel Drums':5, 'Oboe':1,
   // Weapons
   'Heavy Catapult':20, 'Super Catapult':25, 'Trebuchet':30, 'Heavy Trebuchet':35,
 };
@@ -872,7 +933,7 @@ const CONSUMABLE_EFFECTS = {
   'Cooked Salmon':           { type:'heal_hp', amount:20 },
   'Shark Steak':             { type:'heal_hp', amount:30 },
   'Bottle of Soup':          { type:'fishing_boost', amount:2, duration:1200 },           // -2 fishing time 20min
-  'Seafood Platter':         { type:'heal_hp', amount:50 },
+  'Seafood Platter':         { type:'mining_boost', amount:2, duration:1800 },           // -2 mining time 30min
   'Stew':                    { type:'heal_hp', amount:40 },
   'Pizza':                   { type:'heal_hp', amount:45 },
   'Spaghetti Platter':       { type:'heal_hp', amount:55 },
@@ -881,7 +942,7 @@ const CONSUMABLE_EFFECTS = {
   'Cooked Pike':             { type:'heal_hp', amount:22 },
   'Muffin':                  { type:'heal_hp', amount:22 },
   'Beetle Goulash':          { type:'heal_hp', amount:30 },
-  'Tuna Casserole':          { type:'heal_hp', amount:35 },
+  'Tuna Casserole':          { type:'gem_finding_boost', amount:2, duration:1800 },       // +2 gem finding 30min
   'Meat Pie':                { type:'heal_hp', amount:40 },
   'Shark Squibs':            { type:'heal_hp', amount:35 },
   'Fish Kabob':              { type:'planting_boost', amount:3, duration:1800 },           // -3 planting time 30min
@@ -910,6 +971,7 @@ const CONSUMABLE_EFFECTS = {
   'Tuna Salad':              { type:'magic_fish_boost',   amount:2, duration:1800 }, // +2 magic fish finding 30min
   'Spicy Burger':            { type:'bait_boost',         amount:1, duration:1200 }, // -1 bait-making time 20min
   'Barracuda Stew':          { type:'heal_hp', amount:80 },
+  'Amberjack Verde':          { type:'mining_boost', amount:3, duration:1200 },           // -3 mining time 20min
   'Roasted Vegetables':      { type:'heal_hp', amount:70 },
   // MP healers
   'Magic Fishstick':         { type:'heal_mp', amount:25 },
@@ -955,7 +1017,7 @@ const CONSUMABLES = {
   'Bottle of Water': { type:'drink', weight:1 },
   'Bottle of Wine':  { type:'drink', weight:1 },
   'Fine Whiskey':    { type:'drink', weight:1 },
-  'Hard Cider':      { type:'drink', weight:1 },
+  'Hard Cider':      { type:'mining_boost', amount:3, duration:1500, gemFindingPenalty:5, gemFindingPenaltyDuration:1800 }, // -3 mining 25min, -5 gem finding 30min
   'Herbal Tea':      { type:'drink', weight:1 },
   'Mint Tea':        { type:'drink', weight:1 },
   'Peach Brandy':    { type:'drink', weight:1 },
@@ -1706,23 +1768,23 @@ const LOCATIONS = {
   nalurn_woods:    { id:'nalurn_woods',    name:'Nalurn Woods',      pos:[1,0], desc:'Ancient forest, famed for yew.',      actions:{ woodcutting:['wc_yew'] }, shop:[], connects:['isenvale','kimdar','naton'] },
   kimdar:          { id:'kimdar',          name:'Kimdar',            pos:[2,0], desc:'A shipbuilding rival to Ferboi. Amberjack fished from player docks (boat required). Mackerel after "Mack Daddy" quest.', shipyard:true, actions:{ construction:['cn_wall'], fishing:['fi_amberjack'] }, shop:[], connects:['nalurn_woods','ravel','therusia'] },
   danycia:         { id:'danycia',         name:'Danycia',           pos:[8,0], desc:'A warm port with exotic traders.',    shop:[], connects:['rissdra','moskim'] },
-  zhyack:          { id:'zhyack',          name:'Zhyack',            pos:[0,1], desc:'The edge of the known world.',        shop:[], connects:['isenvale','naton','onnix'] },
-  naton:           { id:'naton',           name:'Naton',             pos:[1,1], desc:'A grey industrial town.',             shop:[], connects:['zhyack','nalurn_woods','therusia','sepas'] },
+  zhyack:          { id:'zhyack',          name:'Zhyack',            pos:[0,1], desc:'The edge of the known world.',        shop:[], actions:{ mining:['mn_tin','mn_copper','mn_bauxite','mn_coal','mn_unixide'] }, connects:['isenvale','naton','onnix'] },
+  naton:           { id:'naton',           name:'Naton',             pos:[1,1], desc:'A grey industrial town.',             shop:[], actions:{ mining:['mn_stone','mn_iron'] }, connects:['zhyack','nalurn_woods','therusia','sepas'] },
   therusia:        { id:'therusia',        name:'Therusia',          pos:[2,1], desc:'An island nation capital.',           shop:[], connects:['naton','kimdar','giroc','cardina_valley','port_barin'] },
   giroc:           { id:'giroc',           name:'Giroc',             pos:[3,1], desc:'A fortified highland fortress.',      shop:[], connects:['therusia','ravel','coldrun','garando_mines'] },
   radom_woods:     { id:'radom_woods',     name:'Radom Woods',       pos:[5,1], desc:'Dense forest, home to woodcutters.', actions:{ woodcutting:['wc_oak','wc_birch'] }, shop:[], connects:['coldrun','galawi','ponat'] },
   galawi:          { id:'galawi',          name:'Galawi',            pos:[6,1], desc:'A desert trading post.',              shop:[], connects:['radom_woods','rissdra','port_schow'] },
   rissdra:         { id:'rissdra',         name:'Rissdra',           pos:[7,1], desc:'A timber town famed for its wood shop.', actions:{ woodcutting:['wc_pine','wc_oak'] }, shop:[], connects:['galawi','danycia','lake_essdar'] },
-  uzlea:           { id:'uzlea',           name:'Uzlea',             pos:[9,1], desc:'A secretive mage city.',              spells:true, shop:[], connects:['essrom'] },
+  uzlea:           { id:'uzlea',           name:'Uzlea',             pos:[9,1], desc:'A secretive mage city.',              spells:true, shop:[], actions:{ mining:['mn_copper','mn_coal','mn_adamantite'] }, connects:['essrom'] },
   onnix:           { id:'onnix',           name:'Onnix',             pos:[0,2], desc:'A hidden valley town.',               shop:[], tackleShop:[{name:'Lobster Trap',cost:75}], actions:{ fishing:['fi_lobster'] }, connects:['zhyack','sepas','pharos_peak'] },
   sepas:           { id:'sepas',           name:'Sepas',             pos:[1,2], desc:'A southern coastal resort town.',     shop:[], connects:['onnix','naton','cardina_valley','mount_pharos'] },
-  cardina_valley:  { id:'cardina_valley',  name:'Cardina Valley',    pos:[2,2], desc:'A lush valley south of Cardina.',     shop:[], connects:['sepas','therusia','garando_mines','haldos_outpost'] },
-  garando_mines:   { id:'garando_mines',   name:'Garando Mines',     pos:[3,2], desc:'Rich ore veins and dangerous depths.',shop:[], connects:['cardina_valley','giroc','barin_plains','baron_plains'] },
+  cardina_valley:  { id:'cardina_valley',  name:'Cardina Valley',    pos:[2,2], desc:'A lush valley south of Cardina.',     shop:[], actions:{ mining:['mn_tin','mn_copper','mn_bauxite','mn_duranium'] }, connects:['sepas','therusia','garando_mines','haldos_outpost'] },
+  garando_mines:   { id:'garando_mines',   name:'Garando Mines',     pos:[3,2], desc:'Rich ore veins and dangerous depths.',shop:[], actions:{ mining:['mn_stone','mn_iron','mn_titanium'] }, connects:['cardina_valley','giroc','barin_plains','baron_plains'] },
   barin_plains:    { id:'barin_plains',    name:'Barin Plains',      pos:[4,2], desc:'Open grassland stretching to the horizon.', shop:[], connects:['garando_mines','coldrun','ponat','ferboi'] },
   ponat:           { id:'ponat',           name:'Ponat',             pos:[5,2], desc:'A river town known for its market.',  shop:[], connects:['barin_plains','radom_woods','port_schow','ponat_pier'] },
   port_schow:      { id:'port_schow',      name:'Port Schow',        pos:[6,2], desc:'A quiet fishing port.',              shop:[], connects:['ponat','galawi','lake_essdar','port_barin'] },
   lake_essdar:     { id:'lake_essdar',     name:'Lake Essdar',       pos:[7,2], desc:'A peaceful lakeside retreat.',        shop:[], actions:{ fishing:['fi_bass','fi_flounder'] }, connects:['port_schow','rissdra','stonehaven','echtin'] },
-  essrom:          { id:'essrom',          name:'Essrom',            pos:[9,2], desc:'A mining hub deep in the mountains.', shop:[], connects:['uzlea','stonehaven'] },
+  essrom:          { id:'essrom',          name:'Essrom',            pos:[9,2], desc:'A mining hub deep in the mountains.', shop:[], actions:{ mining:['mn_sandstone','mn_iron','mn_duranium','mn_hexamine','mn_biridium'] }, connects:['uzlea','stonehaven'] },
   pharos_peak:     { id:'pharos_peak',     name:'Pharos Peak',       pos:[0,3], desc:'The summit above Mount Pharos.',      shop:[], connects:['onnix','mount_pharos','brightwater'] },
   mount_pharos:    { id:'mount_pharos',    name:'Mount Pharos',      pos:[1,3], desc:'A sacred mountain peak.',             shop:[], connects:['pharos_peak','sepas','haldos_outpost','cardina'] },
   haldos_outpost:  { id:'haldos_outpost',  name:'Haldos Outpost',    pos:[2,3], desc:'A remote military outpost.',          shop:[], connects:['mount_pharos','cardina_valley','baron_plains','ironpeak'] },
@@ -1734,13 +1796,13 @@ const LOCATIONS = {
   cardina:         { id:'cardina',         name:'Cardina',           pos:[1,4], desc:'A prosperous city at the crossroads.',shop:[], connects:['mount_pharos','ironpeak','kolar_post','jiroka'] },
   kolar_post:      { id:'kolar_post',      name:'Kolar Trading Post',pos:[4,4], desc:'A bustling trade waypoint.',          shop:[], connects:['ponat_pier','cardina','duskmill','embervale','hikori'] },
   port_baron:      { id:'port_baron',      name:'Port Baron',        pos:[7,4], desc:'Gateway port to the baron lands.',    shop:[], connects:['port_barin','harrowfen','droesar','yisildor_bay'] },
-  droesar:         { id:'droesar',         name:'Droesar',           pos:[8,4], desc:'A rugged northern outpost.',          shop:[], connects:['port_baron','moskim','martral'] },
+  droesar:         { id:'droesar',         name:'Droesar',           pos:[8,4], desc:'A rugged northern outpost.',          shop:[], actions:{ mining:['mn_tin','mn_copper','mn_stone','mn_iron'] }, connects:['port_baron','moskim','martral'] },
   jiroka:          { id:'jiroka',          name:'Jiroka',            pos:[1,5], desc:'A mountain pass trading town.',       shop:[], connects:['cardina','kudzum','bulbas'] },
   kudzum:          { id:'kudzum',          name:'Kudzum',            pos:[2,5], desc:'A jungle border town.',               shop:[], connects:['jiroka','hevalus_jungle','cythe'] },
   hevalus_jungle:  { id:'hevalus_jungle',  name:'Hevalus Jungle',    pos:[3,5], desc:'Dense jungle teeming with wildlife.', shop:[], connects:['kudzum','hikori','tropi'] },
   hikori:          { id:'hikori',          name:'Hikori',            pos:[4,5], desc:'A clifftop village with sea views.',  shop:[], connects:['hevalus_jungle','kolar_post','hms_halieutika','odude'] },
   hms_halieutika:  { id:'hms_halieutika',  name:'HMS Halieutika',    pos:[6,5], desc:"Captain Fred's deep-sea fishing vessel. Buy a ticket at Port Barin (~120 vessi). Fish over Side (Mackerel/Flounder/Haddock/Salmon) or Stern (Tuna/Shark/Salmon/Marlin) — no rod needed on board.", shop:[], tackleShop:[{name:'Tuna Lure',cost:50},{name:'Shark Lure',cost:100}], actions:{ fishing:['fi_mackerel','fi_salmon','fi_flounder','fi_haddock','fi_tuna','fi_shark','fi_marlin'] }, connects:['hikori','lake_trand'] },
-  lake_trand:      { id:'lake_trand',      name:'Lake Trand',        pos:[7,5], desc:'Deep cold waters, rich in pike.',    shop:[], actions:{ fishing:['fi_bass','fi_flounder','fi_oyster'] }, connects:['hms_halieutika','harrowfen','marossa'] },
+  lake_trand:      { id:'lake_trand',      name:'Lake Trand',        pos:[7,5], desc:'Deep cold waters, rich in pike.',    shop:[], actions:{ fishing:['fi_bass','fi_flounder','fi_oyster'], mining:['mn_sandstone'] }, connects:['hms_halieutika','harrowfen','marossa'] },
   bulbas:          { id:'bulbas',          name:'Bulbas',            pos:[1,6], desc:'A small inland market town.',        shop:[], connects:['jiroka','cythe','awaru'] },
   cythe:           { id:'cythe',           name:'Cythe',             pos:[2,6], desc:'A mysterious town shrouded in fog.', shop:[], connects:['bulbas','kudzum','tropi','ashia'] },
   tropi:           { id:'tropi',           name:'Tropi',             pos:[3,6], desc:'A tropical island settlement.',      shop:[], connects:['cythe','hevalus_jungle','eptile'] },
@@ -2032,6 +2094,21 @@ function getMudCrabSetBonus() {
   }
   return MUD_CRAB_SET_BONUSES.filter(b => b.pieces <= count).pop() || { reducePlanting:0 };
 }
+// ── Bearded Burrower Mining Set ──────────────────────────
+// Pieces: Sjirkomi Mask, Large Backpack, Tuba, Steel Drums, Oboe
+const BEARDED_BURROWER_SET_BONUSES = [
+  { pieces:3, reduceMining:1 },
+  { pieces:4, reduceMining:2 },
+  { pieces:5, reduceMining:3 },
+];
+function getBeardedBurrowerSetBonus() {
+  let count = 0;
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (g && g.beardedBurrowerSet) count++;
+  }
+  return BEARDED_BURROWER_SET_BONUSES.filter(b => b.pieces <= count).pop() || { reduceMining:0 };
+}
 
 function getTotalMagicFishFinding() {
   let mff = 0;
@@ -2043,6 +2120,40 @@ function getTotalMagicFishFinding() {
   if (state.activeBuffs.magic_fish_boost)   mff += state.activeBuffs.magic_fish_boost.amount   || 0;
   if (state.activeBuffs.magic_fish_penalty) mff += state.activeBuffs.magic_fish_penalty.amount  || 0; // negative
   return mff;
+}
+
+const GEM_DROPS = {
+  mn_tin:        ['Amber', 'Jade'],
+  mn_copper:     ['Amber', 'Jade'],
+  mn_sandstone:  ['Amber'],
+  mn_stone:      ['Jade'],
+  mn_iron:       ['Jade', 'Amethyst'],
+  mn_coal:       ['Amethyst'],
+  mn_silver:     ['Amethyst', 'Sapphire'],
+  mn_bauxite:    ['Sapphire'],
+  mn_gold:       ['Sapphire', 'Ruby'],
+  mn_mythral:    ['Ruby'],
+  mn_asterite:   ['Ruby', 'Emerald'],
+  mn_adamantite: ['Emerald'],
+  mn_titanium:   ['Emerald', 'Diamond'],
+  mn_duranium:   ['Diamond'],
+  mn_arcanium:   ['Diamond', 'Opal'],
+  mn_hexamine:   ['Opal'],
+  mn_trinite:    ['Opal', 'Star Ruby'],
+  mn_nelgite:    ['Star Ruby'],
+  mn_unixide:    ['Star Ruby', 'Black Diamond'],
+  mn_biridium:   ['Black Diamond'],
+};
+
+function getGemFinding() {
+  let gf = 0;
+  for (const gearId of Object.values(state.equipment)) {
+    const g = gearId && GEAR[gearId];
+    if (g) gf += g.gemFinding || 0;
+  }
+  if (state.activeBuffs.gem_finding_boost)   gf += state.activeBuffs.gem_finding_boost.amount   || 0;
+  if (state.activeBuffs.gem_finding_penalty) gf += state.activeBuffs.gem_finding_penalty.amount  || 0; // negative
+  return Math.min(50, Math.max(0, gf));
 }
 
 // ============================================================
@@ -2057,6 +2168,7 @@ function getActionMs(skillId, isSawmill) {
     if (!g) continue;
     if (skillId === 'woodcutting'  && g.skill === 'woodcutting')  gearReduction += g.reduceTime || 0;
     if (skillId === 'fishing'      && g.skill === 'fishing')      gearReduction += g.reduceTime || 0;
+    if (skillId === 'mining'       && g.skill === 'mining')       gearReduction += g.reduceTime || 0;
     if (skillId === 'harvesting'   && g.skill === 'harvesting')   gearReduction += g.reduceTime || 0;
     if (skillId === 'cooking'      && g.skill === 'cooking')      gearReduction += g.reduceTime || 0;
     if (isSawmill)                                               gearReduction += g.reduceSawmill || 0;
@@ -2071,6 +2183,10 @@ function getActionMs(skillId, isSawmill) {
   if (skillId === 'harvesting') {
     gearReduction += getAngryBirdsSetBonus().reduceTime;
     if (state.activeBuffs.harvesting_boost) gearReduction += state.activeBuffs.harvesting_boost.amount || 0;
+  }
+  if (skillId === 'mining') {
+    gearReduction += getBeardedBurrowerSetBonus().reduceMining;
+    if (state.activeBuffs.mining_boost) gearReduction += state.activeBuffs.mining_boost.amount || 0;
   }
   return Math.max(15, 60 - levelReduction - gearReduction) * 1000;
 }
@@ -3871,6 +3987,17 @@ function consumeItem(itemName) {
       state.activeBuffs.planting_failure = { endsAt: Date.now() + effect.plantingFailureDuration * 1000, amount: effect.plantingFailurePenalty };
     }
     addLog(`You eat the ${itemName}: -${effect.amount}s Planting time for ${Math.floor(effect.duration/60)}min!`, 'success');
+  } else if (effect.type === 'mining_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.mining_boost = { endsAt, amount: effect.amount };
+    if (effect.gemFindingPenalty) {
+      state.activeBuffs.gem_finding_penalty = { endsAt: Date.now() + effect.gemFindingPenaltyDuration * 1000, amount: -effect.gemFindingPenalty };
+    }
+    addLog(`You use the ${itemName}: -${effect.amount}s Mining time for ${Math.floor(effect.duration/60)}min!`, 'success');
+  } else if (effect.type === 'gem_finding_boost') {
+    const endsAt = Date.now() + effect.duration * 1000;
+    state.activeBuffs.gem_finding_boost = { endsAt, amount: effect.amount };
+    addLog(`You use the ${itemName}: +${effect.amount} Gem Finding for ${Math.floor(effect.duration/60)}min!`, 'success');
   }
   saveGame();
 }
@@ -4320,6 +4447,17 @@ function tick() {
   }
   if (state.activeBuffs.planting_failure && now >= state.activeBuffs.planting_failure.endsAt) {
     delete state.activeBuffs.planting_failure;
+  }
+  if (state.activeBuffs.mining_boost && now >= state.activeBuffs.mining_boost.endsAt) {
+    delete state.activeBuffs.mining_boost;
+    addLog('Mining time boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.gem_finding_boost && now >= state.activeBuffs.gem_finding_boost.endsAt) {
+    delete state.activeBuffs.gem_finding_boost;
+    addLog('Gem Finding boost has worn off.', 'travel');
+  }
+  if (state.activeBuffs.gem_finding_penalty && now >= state.activeBuffs.gem_finding_penalty.endsAt) {
+    delete state.activeBuffs.gem_finding_penalty;
   }
 
   tickBotCheck(now);
