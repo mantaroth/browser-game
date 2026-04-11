@@ -461,6 +461,12 @@ function rollMob() {
   return STONEHAVEN_MOBS[STONEHAVEN_MOBS.length - 1];
 }
 
+function getCombatMs() {
+  const speedLv   = skillLevel('speed');
+  const reduction = Math.floor((speedLv - 1) / 2);  // -1s per odd level: 3,5,7...
+  return Math.max(2, 27 - reduction) * 1000;
+}
+
 // ============================================================
 //  GEAR  (slot: tool | neck | gloves | upper_body | left_hand | head)
 //        reduceTime = seconds off woodcutting timer
@@ -2932,7 +2938,7 @@ function startDynamicCombat() {
   if (state.action || state.travel) return;
   const mob = rollMob();
   const now = Date.now();
-  const ms  = Math.max(15000, mob.hp * 3000);
+  const ms  = getCombatMs();
   state.action = { type:'dynamicCombat', mob, skillId:'combat', startTime:now, endTime:now+ms };
   botCheck.lastCheck = now;
   document.getElementById('action-label').textContent = `Fighting ${mob.name}...`;
@@ -3249,7 +3255,7 @@ function tick() {
         addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp, +${mob.charXp} Char xp)`, 'success');
         saveGame();
         const next = rollMob();
-        const now2 = Date.now(), ms2 = Math.max(15000, next.hp * 3000);
+        const now2 = Date.now(), ms2 = getCombatMs();
         state.action = { type:'dynamicCombat', mob:next, skillId:'combat', startTime:now2, endTime:now2+ms2 };
         botCheck.lastCheck = now2;
         document.getElementById('action-label').textContent = `Fighting ${next.name}...`;
