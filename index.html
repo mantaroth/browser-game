@@ -255,6 +255,12 @@ body { background:#1a1a2e; color:#e0d8c8; font-family:'Courier New',monospace; f
       <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
       <div class="stat-row"><span class="stat-label">MP</span><span class="stat-value"><span id="stat-mp">20</span> / <span id="stat-mp-max">20</span></span></div>
       <div class="mp-bar"><div class="mp-fill" id="mp-fill" style="width:100%"></div></div>
+      <div class="stat-row"><span class="stat-label">Char Lv</span><span class="stat-value"><span id="stat-charlevel">1</span></span></div>
+      <div style="border-top:1px solid #2a2a3e;margin:4px 0 2px"></div>
+      <div class="stat-row"><span class="stat-label">Attack</span><span class="stat-value"><span id="stat-attack">7</span></span></div>
+      <div class="stat-row"><span class="stat-label">Defense</span><span class="stat-value"><span id="stat-defense">3</span></span></div>
+      <div class="stat-row"><span class="stat-label">Agility</span><span class="stat-value"><span id="stat-agility">1</span></span></div>
+      <div class="stat-row"><span class="stat-label">Magic Def</span><span class="stat-value"><span id="stat-magicdef">3</span></span></div>
     </div>
 
     <div class="panel">
@@ -449,9 +455,9 @@ const RESOURCES = {
 //  STONEHAVEN DYNAMIC COMBAT MOBS
 // ============================================================
 const STONEHAVEN_MOBS = [
-  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, weight:50, drops:[{name:'Rat Tail',chance:0.75},{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
-  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, weight:30, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
-  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, weight:20, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'rat',   name:'Rat',   levelReq:1, xp:4, charXp:1, hp:5, attack:3, defense:1, weight:50, drops:[{name:'Rat Tail',chance:0.75},{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'crab',  name:'Crab',  levelReq:1, xp:4, charXp:2, hp:7, attack:5, defense:2, weight:30, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
+  { id:'gnome', name:'Gnome', levelReq:1, xp:7, charXp:3, hp:9, attack:8, defense:3, weight:20, drops:[{name:'Raw Meat',chance:0.50},{name:'Animal Skin',chance:0.40}] },
 ];
 
 function rollMob() {
@@ -1736,7 +1742,29 @@ function getStateData() {
 
 function getMpMax()    { return 10 + skillLevel('magic') * 2; }
 function getHpMax()    { return 100; }
-function getCarryMax() { return 1000 + skillLevel('trading') * 50; /* +charLevel*50 later */ }
+function getCarryMax() { return 1000 + skillLevel('trading') * 50; }
+
+// ============================================================
+//  COMBAT STATS
+// ============================================================
+function getCharLevel() {
+  let lv = 1;
+  while (state.charXp >= xpForLevel(lv + 1)) lv++;
+  return lv;
+}
+function getAttack()      { return 5 + skillLevel('combat') * 2; }
+function getDefense()     { return 3 + Math.floor(skillLevel('combat') / 2) + Math.floor(getCharLevel() / 2); }
+function getAgility()     { return skillLevel('combat') + Math.floor(getCharLevel() / 2); }
+function getMagicDefense(){ return 3 + skillLevel('magic') * 2; }
+
+function updateCombatStatsUI() {
+  const el = id => document.getElementById(id);
+  if (el('stat-attack'))    el('stat-attack').textContent    = getAttack();
+  if (el('stat-defense'))   el('stat-defense').textContent   = getDefense();
+  if (el('stat-agility'))   el('stat-agility').textContent   = getAgility();
+  if (el('stat-magicdef'))  el('stat-magicdef').textContent  = getMagicDefense();
+  if (el('stat-charlevel')) el('stat-charlevel').textContent = getCharLevel();
+}
 
 function getCarryWeight() {
   let w = 0;
@@ -1791,6 +1819,7 @@ function updateHpMpUI() {
   document.getElementById('stat-mp').textContent     = Math.floor(state.mp.current);
   document.getElementById('stat-mp-max').textContent = mpMax;
   document.getElementById('mp-fill').style.width     = (state.mp.current / mpMax * 100) + '%';
+  updateCombatStatsUI();
 }
 
 async function saveGame() {
@@ -3255,24 +3284,50 @@ function tick() {
           });
       } else if (state.action.type === 'dynamicCombat') {
         const { mob } = state.action;
-        grantXP('combat', mob.xp);
-        state.charXp += mob.charXp;
-        const dropMsgs = [];
-        if (mob.drops) {
-          for (const drop of mob.drops) {
-            if (Math.random() < drop.chance && canCarry(drop.name)) { addItem(drop.name); dropMsgs.push(drop.name); }
-          }
+        // --- mob deals damage to player ---
+        const agility  = getAgility();
+        const dodgeChance = Math.min(50, agility); // 1 agility = 1% dodge, cap 50%
+        const dodged = Math.random() * 100 < dodgeChance;
+        let dmgTaken = 0;
+        if (!dodged) {
+          const variance = Math.floor(Math.random() * 3); // 0-2 extra damage
+          dmgTaken = Math.max(1, mob.attack - getDefense() + variance);
+          state.hp.current = Math.max(0, state.hp.current - dmgTaken);
+          updateHpMpUI();
         }
-        const dropStr = dropMsgs.length ? ` → ${dropMsgs.join(', ')}` : '';
-        addLog(`You defeat the ${mob.name}! (+${mob.xp} Combat xp, +${mob.charXp} Char xp)${dropStr}`, 'success');
-        saveGame();
-        const next = rollMob();
-        const now2 = Date.now(), ms2 = getCombatMs();
-        state.action = { type:'dynamicCombat', mob:next, skillId:'combat', startTime:now2, endTime:now2+ms2 };
-        botCheck.lastCheck = now2;
-        document.getElementById('action-label').textContent = `Fighting ${next.name}...`;
-        document.getElementById('stat-status').textContent = `Fighting ${next.name}`;
-        addLog(`A ${next.name} appears! (HP:${next.hp}, ${ms2/1000}s)`);
+        // --- victory / blackout ---
+        if (state.hp.current <= 0) {
+          state.hp.current = 1;
+          updateHpMpUI();
+          state.action = null;
+          document.getElementById('action-timer-div').style.display = 'none';
+          document.getElementById('stat-status').textContent = 'Idle';
+          addLog(`The ${mob.name} knocks you out! You wake up dazed... (HP: 1)`, 'error');
+          saveGame();
+          updateActionSection(); updateTravelSection();
+        } else {
+          // --- normal victory ---
+          grantXP('combat', mob.xp);
+          state.charXp += mob.charXp;
+          const dropMsgs = [];
+          if (mob.drops) {
+            for (const drop of mob.drops) {
+              if (Math.random() < drop.chance && canCarry(drop.name)) { addItem(drop.name); dropMsgs.push(drop.name); }
+            }
+          }
+          const dropStr = dropMsgs.length ? ` → ${dropMsgs.join(', ')}` : '';
+          const dmgStr  = dodged ? ' (dodged!)' : ` (-${dmgTaken} HP)`;
+          addLog(`You defeat the ${mob.name}!${dmgStr} (+${mob.xp} Combat xp, +${mob.charXp} Char xp)${dropStr}`, 'success');
+          updateCombatStatsUI();
+          saveGame();
+          const next = rollMob();
+          const now2 = Date.now(), ms2 = getCombatMs();
+          state.action = { type:'dynamicCombat', mob:next, skillId:'combat', startTime:now2, endTime:now2+ms2 };
+          botCheck.lastCheck = now2;
+          document.getElementById('action-label').textContent = `Fighting ${next.name}...`;
+          document.getElementById('stat-status').textContent = `Fighting ${next.name}`;
+          addLog(`A ${next.name} appears! (HP:${next.hp}, ${ms2/1000}s)`);
+        }
       } else {
         const {skillId,resourceId} = state.action;
         const r = RESOURCES[resourceId];
