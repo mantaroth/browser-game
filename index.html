@@ -2274,6 +2274,7 @@ function updateActionSection() {
     wrap.style.display = open ? 'block' : 'none';
     for (const recipeId of loc.forge) {
       const r     = RECIPES[recipeId];
+      if (r.levelReq > 10) continue;
       const smLv  = skillLevel(r.skill);
       const canMake = smLv >= r.levelReq;
       const owned   = !!state.inventory[GEAR[r.produces].name];
@@ -2311,6 +2312,7 @@ function updateActionSection() {
     wrap.style.display = open ? 'block' : 'none';
     for (const recipeId of loc.sawmill) {
       const r      = SAWMILL_RECIPES[recipeId];
+      if (r.levelReq > 10) continue;
       const wcLv   = skillLevel(r.skill);
       const canMake = wcLv >= r.levelReq;
       const hasLog  = (state.inventory[r.input] || 0) >= 1;
@@ -2426,6 +2428,7 @@ function updateActionSection() {
       .sort((a,b) => a.levelReq - b.levelReq);
 
     for (const r of sorted) {
+      if (r.levelReq > 10) continue;
       const canCook = cookLv >= r.levelReq;
       const ingStr = Object.entries(r.ingredients).map(([k,v])=>`${v}x ${k}`).join(', ');
       const yieldStr = r.yieldMin === r.yieldMax ? `${r.yieldMax}x` : `${r.yieldMin}–${r.yieldMax}x`;
@@ -2504,6 +2507,7 @@ function updateActionSection() {
     wrap.style.display = open ? 'block' : 'none';
     for (const recipeId of loc.baitStation) {
       const r     = BAIT_RECIPES[recipeId];
+      if (r.levelReq > 10) continue;
       const fLv   = skillLevel(r.skill);
       const canMake = fLv >= r.levelReq;
       const hasInput = (state.inventory[r.input] || 0) >= 1;
